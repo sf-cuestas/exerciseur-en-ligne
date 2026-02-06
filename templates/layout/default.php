@@ -23,9 +23,9 @@
             <?= $this->Html->link('Espace Professeurs',['controller' => 'Pages', 'action' => 'teachersSpace'], ['class' => 'btn']) ?>
             <?php
             if (empty($_SESSION['user'])){
-                echo '<a  class="btn" href="../login.php">Se connecter/Creer compte</a>';
+                echo '<a  class="btn" href="/users/login">Se connecter/Creer compte</a>';
             }else{
-                echo '<a  class="btn" href="../profile.php">Profil</a>';
+                echo '<a  class="btn" href="/users/profile.php">Profil</a>';
                 echo '<a  class="btn" href="../processing-forms/processing-logout.php">Déconnexion </a>';
             }
             ?>
