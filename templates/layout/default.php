@@ -8,7 +8,9 @@
     <?= $this->Html->css(['style']) ?>
     <?= $this->fetch('css') ?>
     <?= $this->Html->meta('favicon.ico', '/img/icon.png', ['type' => 'icon'])?>
+    <!-- MODIFIER LA LOGIQUE DES TITRES PLZZZZ -->
     <title><?php if(isset($_TITLE)){echo $_TITLE;}else{echo "Exerciseur en ligne";} ?></title>
+    <!-- PLZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 
