@@ -1,0 +1,870 @@
+@font-face {
+    font-family: 'Luciole Regular';
+    src: url('/font/Luciole-Regular.ttf') format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    --main-color:#F1ECCE ;
+    --secondary-color: #A5D8FF;
+    --dark-blue-color: #022F40;
+    --font-white-color: #ffffff;
+    --font-largest: 60px;
+    --font-larger: 50px;
+    --font-large: 40px;
+    --radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Luciole Regular", serif;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+a {
+    text-decoration: underline;
+    color: black;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 2em;
+    width: fit-content;
+}
+
+textarea {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.section-title {
+    font-size: calc(var(--font-largest)*1.1);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+*[data-type="title1"]  {
+    font-size: var(--font-largest);
+    font-weight: bold;
+}
+
+*[data-type="title2"]  {
+    font-size: var(--font-larger);
+    font-weight: bold;
+}
+
+*[data-type="title3"]  {
+    font-size: var(--font-large);
+    font-weight: bold;
+    font-style: italic;
+}
+
+*[data-type="title4"]  {
+    font-size: var(--font-large);
+    font-weight: normal;
+}
+
+*[data-type="title5"]  {
+    font-size: var(--font-large);
+    font-weight: normal;
+    font-style: italic;
+}
+
+.btn {
+    background-color: var(--main-color);
+    padding: 5%;
+    border-radius: var(--radius);
+    overflow-wrap: break-word;
+}
+
+.btn a {
+    width: max-content;
+    height: max-content;
+}
+
+.btn:active {
+    background-color: rgba(141, 63, 18, 0.801);
+}
+
+header {
+    background: var(--secondary-color);
+    width: 100%;
+}
+
+header > div.barHeader {
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--dark-blue-color);
+    color: var(--font-white-color);
+}
+
+.barHeader > a {
+    max-width: 6em;
+}
+
+.barHeader > a >img{
+    height: 100%;
+    width: 100%;
+}
+
+.barHeader > div.buttonsHeader{
+    margin: 15px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+    justify-content: right;
+}
+
+#menu {
+    padding: 0.5%;
+}
+
+nav > ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    list-style: none;
+}
+
+#main-profile {
+    display: flex;
+    flex-direction: row;
+}
+
+#main-profile > div {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+}
+
+#main-profile > div > .btn {
+    width: fit-content;
+    padding: 2%;
+    margin-top: 2%;
+}
+
+#account-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-left: 5%;
+}
+
+#account-buttons > * {
+    padding: 1%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+#home-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    min-height: 60vh;
+}
+
+#home-page > * {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+    border-radius: var(--radius);
+    align-items: center;
+    padding: 1%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+.titleSearchBar{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.subTitle3{
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+.recent-exercises, .popular-exercises {
+    width: 15%;
+}
+
+.recent-exercises > *, .popular-exercises > * {
+    width: 100%;
+}
+
+.searching-section {
+    width: 40%;
+}
+
+.searching-section input[type="search"] {
+    width: 22em;
+    margin-right: 3%;
+}
+
+.searching-section > * {
+    max-width: 100%;
+    padding: 6%;
+}
+
+.searching-section > form > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searching-section > form > div > div {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+}
+
+aside {
+    width: 40%;
+}
+
+aside img {
+    width: 200px;
+    height: 200px;
+    margin: 1%;
+    border: 2px solid black;
+    border-radius: 100%;
+}
+
+#login{
+    margin: 5%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+
+#login > form > fieldset{
+    border: 0 none;
+}
+
+#signup{
+    margin: 5%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+
+#signup > form > fieldset{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0 none;
+}
+#signup > form > fieldset > fieldset{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border: 0 none;
+
+}
+
+#profile {
+    display: flex;
+    flex-direction: row;
+}
+
+#profile > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+#profile > div > * {
+    margin: 1%;
+}
+
+#profile-details * {
+    overflow-wrap: break-word;
+}
+
+#profile-details > div {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding: 1%;
+    margin: 3%;
+}
+
+#profile-details > div > h2 {
+    margin: 0;
+}
+
+#profile-details > div > ul {
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+#profile-details > div li {
+    border: 1px solid black;
+    border-radius: var(--radius);
+    margin: 0.5em;
+    padding: 1em;
+}
+
+input[type="search"] {
+    width: 90%;
+}
+
+#teacher-space .search {
+    display: flex;
+    flex-direction: row;
+}
+
+#teacher-space > form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50em;
+}
+
+#teacher-space > form > div {
+    text-align: center;
+    margin: 5%;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+}
+
+#teacher-space > form > div > div {
+    border: 2px solid black;
+    border-radius: var(--radius);
+    margin-bottom: 5%;
+    background-color: var(--secondary-color);
+    padding: 6%;
+    height: 28em;
+}
+
+#teacher-space h2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 0;
+}
+
+#teacher-space h2 > a {
+    border: 2px solid black;
+    border-radius: var(--radius);
+    width: 100%;
+}
+
+#teacher-space ul {
+    padding: 0;
+    margin-top: 5%;
+    height: 70%;
+    overflow-y: auto;
+}
+
+#teacher-space li {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+#teacher-space li > a {
+    border: 1px solid black;
+    border-radius: var(--radius);
+    width: 100%;
+}
+
+#settings-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#settings {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--secondary-color);
+    border-radius: var(--radius);
+    margin: 2% 3%;
+    padding: 3%;
+}
+
+#settings > *:nth-child(2) {
+    border-left: 5px solid var(--dark-blue-color);
+    padding-left: 2%;
+}
+
+#settings > * {
+    width: 50%;
+    padding: 1%;
+}
+
+#settings > div > div {
+    display: flex;
+    flex-direction: column;
+}
+
+#settings-form > input {
+    width: 33%;
+    padding: 1%;
+}
+
+#chapter-creation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#chapter-creation > * {
+    background-color: var(--secondary-color);
+    border-radius: var(--radius);
+    padding: 1%;
+    margin: 2% 2% 2% 0.5%;
+}
+
+
+#chapter-creation > form, #chapter > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2%;
+    width: 90%;
+}
+
+#chapter-creation > form * {
+    max-width: 100%;
+}
+
+#chapter-creation > form > fieldset {
+    background-color: var(--main-color);
+    border-radius: var(--radius);
+    width: 100%;
+}
+
+#chapter-creation > form > fieldset > input[type="textarea"] {
+    background-color: var(--secondary-color);
+    padding: 0.5%;
+    border-radius: var(--radius);
+}
+
+#chapter-creation > form > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 66.6%;
+    padding: 2%;
+}
+
+#chapter-creation > form > div > *{
+    width: 40%;
+    padding: 4%;
+}
+
+#chapter-creation form ul {
+    display: flex;
+    flex-direction: column;
+}
+
+#chapter-creation li {
+    display: flex;
+    flex-direction: row;
+}
+:not(#tries[type="checkbox"]:checked) ~ span {
+    display: none;
+}
+
+#tries[type="checkbox"]:checked ~ span {
+    display: flex;
+}
+
+.chapter-creation-aside > form {
+    display: flex;
+    flex-direction: column;
+    top: 2em;
+}
+
+.chapter-creation-aside{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.chapter-creation-aside img {
+    height: 15px;
+    width: 15px;
+}
+
+.chapter-creation-aside form :not(input[type="checkbox"]:checked) ~ div {
+    display: none;
+}
+
+.chapter-creation-aside form input[type="checkbox"]:checked ~ div {
+    display: flex;
+    flex-direction: column;
+}
+
+.chapter-creation-aside form :not(input[type="checkbox"]:checked) ~ label img {
+    transform: rotateX(180deg);
+    transition: transform 0.75s ease;
+
+}
+.chapter-creation-aside form input[type="checkbox"]:checked ~ label img {
+    transform: rotateX(0deg);
+    transition: transform 0.75s ease;
+}
+
+
+#symbols > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#symbols > div > * {
+    width: calc(100% / 6);
+    aspect-ratio: 1 / 1;
+    font-size: x-large;
+}
+
+#chapter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#chapter > form {
+    background-color: var(--secondary-color);
+    margin: 3%;
+    padding: 0.5%;
+    border-radius: var(--radius);
+}
+
+#chapter > form > *:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+}
+
+#chapter button {
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 10em;
+}
+
+#login {
+    margin: 1%;
+}
+
+#login > div {
+    padding-top: 2%;
+}
+
+#login .btn {
+    padding: 1%;
+}
+
+#main-create-class .btn {
+    padding: 1%;
+}
+
+#main-about {
+    margin: 1%;
+}
+
+#main-contact {
+    margin: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-contact * {
+    margin: 0;
+}
+
+#main-contact a, #main-about a{
+    color: var(--main-color);
+}
+
+#main-contact a:visited, #main-about a:visited {
+    color:rgba(141, 63, 18, 0.801);
+}
+
+#main-contact ul {
+    list-style-type:disc;
+    margin-left: 2%;
+}
+
+#main-editor-class .btn {
+    padding: 0.25em 1em;
+}
+
+#main-editor-class ul {
+    display: flex;
+    flex-direction: column;
+}
+
+#main-editor-class ul div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#main-editor-class ul div > * {
+    margin: 0.5em;
+}
+#main-class {
+    width: 92%;
+    height: 90%;
+    background-color: var(--secondary-color);
+    margin: 2%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radius);
+}
+
+#main-class > section {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#class-students {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding: 1%;
+    background-color: var(--main-color);
+}
+.display-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 92%;
+}
+#class-responsable{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding: 1%;
+    background-color: var(--main-color);
+}
+#class-chapitres{
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding: 1%;
+    background-color: var(--main-color);
+}
+#class-codes{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+#class-codes > div{
+    width: 100%;
+    border-left: 2px solid var(--dark-blue-color);;
+    padding: 2%;
+}
+#main-class > div > .btn{
+    overflow-wrap:revert;
+}
+#class-codes > form{
+    height: min-content;
+    margin: 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    white-space: nowrap;
+}
+#class-codes > div > ul > li > div{
+    width: 100%;
+    margin: 2%;
+    display: flex;
+    flex-direction: row;
+    gap: 15%;
+}
+#chapter-search .btn, #class-search .btn {
+    padding: 0.5em;
+}
+
+#chapter-search ol, #class-search ol {
+    display: flex;
+    flex-direction: column;
+}
+#main-create-class{
+    margin: 5%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+#main-create-class > form > fieldset{
+    border: 0 none;
+}
+
+#class-description {
+    margin: 5%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+#class-description > form > fieldset{
+    border: 0 none;
+}
+#class-description > form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.class-adding {
+    margin: 1%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    padding-block: 2%;
+    padding-inline: 5%;
+    background-color: var(--main-color);
+}
+.class-adding > form{
+    display: flex;
+    flex-direction: row;
+    gap: 1%;
+}
+.class-adding > ul{
+    margin: 5%;
+}
+.class-adding > ul > li{
+    margin: 5%;
+}
+
+.class-adding > ul > li > div{
+    display: flex;
+    flex-direction: row ;
+    gap: 5%;
+}
+#class-delete-students{
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+}
+
+#modif-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1% 0%;
+}
+
+#modif-selection .btn {
+    padding: 1%;
+}
+
+#modif-selection > ul {
+    width: 70%;
+    height: fit-content;
+    padding: 1% 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--secondary-color);
+    border-radius: var(--radius);
+}
+
+#modif-selection > a {
+    background-color: red;
+    border: 2px solid var(--dark-blue-color);
+    border-radius: var(--radius);
+}
+
+#modif-selection ul > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1%;
+    min-width: 100%;
+}
+
+#modif-selection ul h3 {
+    padding: 2% 10%;
+    border: 2px solid var(--dark-blue-color);
+    background-color: var(--main-color);
+    border-radius: var(--radius);
+}
+
+textarea{
+    resize: vertical;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--main-color);
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: auto;
+}
+
+footer * {
+    margin: 0;
+}
+
+footer > * {
+    margin: 0.5%;
+}
+
+#sidebar{
+    float: left;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    max-height: 100vh;
+    transition: 0.6s;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.columnSideBar{
+    display: flex;
+    height: 5%;
+    max-height: 100vh;
+    max-width: 15%;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+}
+#add-symbols-btn{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+}
+#add-symbols-btn > *{
+    margin-block: 0.5%;
+}
