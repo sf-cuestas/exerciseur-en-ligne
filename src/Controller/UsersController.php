@@ -125,7 +125,6 @@ class UsersController extends AppController
     {
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
-            $this->Flash->success(__('Login successful'));
             $redirect = $this->Authentication->getLoginRedirect() ?? '/';
             if ($redirect) {
                 return $this->redirect($redirect);
@@ -139,7 +138,7 @@ class UsersController extends AppController
     public function logout()
     {
         $this->Authentication->logout();
-        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
     }
     public function signup(){
 
