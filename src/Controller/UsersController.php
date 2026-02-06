@@ -123,7 +123,6 @@ class UsersController extends AppController
      */
     public function login()
     {
-        $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
             $this->Flash->success(__('Login successful'));
@@ -132,7 +131,6 @@ class UsersController extends AppController
                 return $this->redirect($redirect);
             }
         }
-
         // Display error if user submitted and authentication failed
         if ($this->request->is('post')) {
             $this->Flash->error(__('Invalid username or password'));
