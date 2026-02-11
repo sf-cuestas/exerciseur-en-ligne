@@ -25,7 +25,7 @@
             <?= $this->Html->link('Espace Professeurs',['controller' => 'Pages', 'action' => 'teachersSpace'], ['class' => 'btn']) ?>
             <?php
             if ($this->Identity->isLoggedIn()){
-                echo $this->Html->link('Profil',['controller' => 'Users', 'action' => 'profile'], ['class' => 'btn']);
+                echo $this->Form->postLink('Profil',['controller' => 'Users', 'action' => 'profile',$this->Identity->get('id')], ['class' => 'btn']);
                 echo $this->Html->link('Déconnexion',['controller' => 'Users', 'action' => 'logout'], ['class' => 'btn']);
             }else{
                 echo $this->Html->link('Se connecter/Créer compte',['controller' => 'Users', 'action' => 'login'], ['class' => 'btn']);

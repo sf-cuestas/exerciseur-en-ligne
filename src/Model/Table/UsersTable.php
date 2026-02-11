@@ -40,6 +40,7 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+        $this->hasMany('Inclass');
     }
 
     /**
@@ -61,11 +62,11 @@ class UsersTable extends Table
             ->allowEmptyString('surname');
 
         $validator
-            ->scalar('mail')
-            ->maxLength('mail', 100)
-            ->requirePresence('mail', 'create')
-            ->notEmptyString('mail')
-            ->add('mail', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->scalar('email')
+            ->maxLength('email', 100)
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email')
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('password')
@@ -102,7 +103,7 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['mail']), ['errorField' => 'mail']);
+        $rules->add($rules->isUnique(['email']), ['errorField' => 'mail']);
 
         return $rules;
     }
