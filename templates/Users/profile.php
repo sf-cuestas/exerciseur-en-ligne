@@ -1,9 +1,8 @@
-
 <main id="main-profile">
     <aside>
         <div id="profile">
             <!-- image placeholder A CHANGER -->
-            <?= $this->Html->image('profile-pic.jpg',['alt' => 'photo de profil'])?>
+            <?= $this->Html->image('profile-pic.jpg', ['alt' => 'photo de profil']) ?>
             <div>
                 <h2>
                     <?= $this->Identity->get('name') . " " . $this->Identity->get('surname') ?>
@@ -18,13 +17,13 @@
                     <li>
                         <p>
                             <strong>Identifiant : </strong>
-                            <?= $this->Identity->get('schoolId') ?? ''?>
+                            <?= $this->Identity->get('schoolId') ?? '' ?>
                         </p>
                     </li>
                     <li>
                         <p>
                             <strong>Adresse mail : </strong>
-                            <?= $this->Identity->get('email')?>
+                            <?= $this->Identity->get('email') ?>
                         </p>
                     </li>
                 </ul>
@@ -37,7 +36,9 @@
                 <ul>
                     <?php
                     foreach ($listClasses as $class) { ?>
-                        <li class="btn"><?= $this->Html->link($class['name'], ['controller' => 'Classes', 'action' => 'view', $class['id']])?><a href="class.php?id-class=<?= $class['id'] ?>"><?= $class['name'] ?></a></li>
+                        <li class="btn">
+                            <?= $this->Html->link($class->name, ['controller' => 'Classes', 'action' => 'view', $class->id]) ?>
+                        </li>
                     <?php } ?>
                 </ul>
                 <form action="" method="post">
