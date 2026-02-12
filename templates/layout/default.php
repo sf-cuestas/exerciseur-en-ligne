@@ -22,7 +22,7 @@
         <?= $this->Html->image('exercisor3000.png', ['alt' => 'logo de la page', 'url' => ['controller' => 'Pages', 'action' => 'index']]) ?>
         <h1><?php if(isset($_TITLE)){echo $_TITLE;}else{echo "Exerciseur en ligne";} ?></h1>
         <div class="buttonsHeader">
-            <?= $this->Html->link('Espace Professeurs',['controller' => 'Pages', 'action' => 'teachersSpace'], ['class' => 'btn']) ?>
+            <?= $this->Html->link('Espace Professeurs',['controller' => 'Classses', 'action' => 'teachersSpace'], ['class' => 'btn']) ?>
             <?php
             if ($this->Identity->isLoggedIn()){
                 echo $this->Form->postLink('Profil',['controller' => 'Users', 'action' => 'profile',$this->Identity->get('id')], ['class' => 'btn']);
