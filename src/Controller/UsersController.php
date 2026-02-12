@@ -48,10 +48,17 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function profile()
     {
-        $user = $this->Users->get($id, contain: []);
-        $this->set(compact('user'));
+        $user = $this->Authentication->getResult()->getData();
+        $grades = [];//$this->Results->find()->where(['user_id' => $user])->all() ?? [];
+        $idsClasses = $this->Users->UsersClassses->find()->where(['id_user' => $user->id])->all();
+        $listClasses = [];
+        foreach ($idsClasses as $idClass) {
+            $listClasses[] = $this->Users->UsersClassses->Classses->find()->where(['id' => $idClass->id_class])->first();
+        }
+        $this->set('grades', $grades);
+        $this->set('listClasses', $listClasses);
     }
 
     /**
