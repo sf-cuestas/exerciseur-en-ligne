@@ -6,24 +6,15 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Exercise Entity
+ * Classs Entity
  *
  * @property string $id
- * @property string|null $title
- * @property bool $random
- * @property int|null $coef
- * @property int|null $timesec
- * @property string|null $tries
- * @property string $content
- * @property int $type
- * @property bool $ansdef
- * @property bool|null $showans
- * @property float|null $grade
- * @property string $id_chapter
+ * @property string $name
+ * @property string|null $description
  * @property \Cake\I18n\DateTime $created_at
  * @property \Cake\I18n\DateTime $updated_at
  */
-class Exercise extends Entity
+class Classs extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -35,17 +26,8 @@ class Exercise extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'title' => true,
-        'random' => true,
-        'coef' => true,
-        'timesec' => true,
-        'tries' => true,
-        'content' => true,
-        'type' => true,
-        'ansdef' => true,
-        'showans' => true,
-        'grade' => true,
-        'id_chapter' => true,
+        'name' => true,
+        'description' => true,
         'created_at' => true,
         'updated_at' => true,
     ];

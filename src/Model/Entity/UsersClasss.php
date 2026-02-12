@@ -6,15 +6,14 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Tag Entity
+ * UsersClasss Entity
  *
- * @property string $id
- * @property string|null $tag
- * @property int|null $weight
- *
- * @property \App\Model\Entity\Tagged[] $tagged
+ * @property string $id_user
+ * @property string $id_class
+ * @property bool $responsible
+ * @property \Cake\I18n\DateTime $joined_at
  */
-class Tag extends Entity
+class UsersClasss extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -26,8 +25,7 @@ class Tag extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'tag' => true,
-        'weight' => true,
-        'tagged' => true,
+        'responsible' => true,
+        'joined_at' => true,
     ];
 }

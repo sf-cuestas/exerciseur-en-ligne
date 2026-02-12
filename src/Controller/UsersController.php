@@ -52,7 +52,7 @@ class UsersController extends AppController
     {
         $user = $this->Authentication->getResult()->getData();
         $grades = [];//$this->Results->find()->where(['user_id' => $user])->all() ?? [];
-        $listClasses = $this->Users->Inclas->find()->all();
+        $listClasses = $this->Users->UsersClassses->find()->all();
         dd($listClasses);
         $this->set('grades', $grades);
         $this->set('listClasses', $listClasses);
