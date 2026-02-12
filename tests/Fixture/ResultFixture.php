@@ -30,7 +30,7 @@ class ResultFixture extends TestFixture
                 'id_user' => '',
                 'id_exercise' => '',
                 'id_class' => '',
-                'created_at' => 1770827390,
+                'created_at' => 1770889827,
                 'grade' => 1,
             ],
         ];

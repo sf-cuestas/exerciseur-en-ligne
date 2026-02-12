@@ -35,11 +35,13 @@
                 <h2>Classes</h2>
                 <ul>
                     <?php
-                    foreach ($listClasses as $class) { ?>
-                        <li class="btn">
-                            <?= $this->Html->link($class->name, ['controller' => 'Classes', 'action' => 'view', $class->id]) ?>
-                        </li>
-                    <?php } ?>
+                    if (!empty($listClasses)) {
+                        foreach ($listClasses as $class) { ?>
+                            <li class="btn">
+                                <?= $this->Html->link($class->name, ['controller' => 'Classes', 'action' => 'view', $class->id]) ?>
+                            </li>
+                        <?php }
+                    } ?>
                 </ul>
                 <form action="" method="post">
                     <label>
@@ -56,27 +58,22 @@
     <div>
         <h2>Tableau de notes</h2>
         <?php
-
-        if (count($grades) > 0) {
-            echo "<table>";
-
-            foreach ($grades as $g) {
-                echo "<tr> \n";
-                echo "<th>" . $g["id"] . "</th>";
-                echo "<td>" . $g["title"] . "</td>";
-                echo "<td>" . $g["grade"] . "</td>";
-                echo "<td>" . $g["created_at"] . "</td>";
-
-                echo "</tr>";
-            }
-
-            echo "</table>";
-
-            echo "<a class='btn' href='/download-grades.php'>Télécharger notes en .csv</a>";
+        if (!empty($grades)) { ?>
+            <table>
+                <?php foreach ($grades as $g) { ?>
+                    <tr>
+                        <th><?= $g->id ?></th>
+                        <td><?= $g->title ?></td>
+                        <td><?= $g->grade ?></td>
+                        <td><?= $g->created_at ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <?php
+            echo $this->Html->link("Télécharger notes en .csv", ['controller' => 'Users', 'action' => 'downloadGrades'], ['class' => 'btn']);
         } else {
             echo "<p>Vous n'avez pas encore de notes. Complétez des exercices pour obtenir des notes.</p>";
         }
-
         ?>
     </div>
 </main>

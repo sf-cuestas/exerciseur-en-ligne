@@ -41,6 +41,7 @@ class UsersTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
         $this->hasMany('UsersClassses');
+        $this->hasMany('Results');
     }
 
     /**

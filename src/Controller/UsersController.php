@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Table\UsersTable;
 use Cake\Event\EventInterface;
 
 /**
  * Users Controller
  *
- * @property \App\Model\Table\UsersTable $Users
+ * @property UsersTable $Users
  */
 class UsersController extends AppController
 {
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated(['login', 'signup']);
@@ -51,7 +52,7 @@ class UsersController extends AppController
     public function profile()
     {
         $user = $this->Authentication->getResult()->getData();
-        $grades = [];//$this->Results->find()->where(['user_id' => $user])->all() ?? [];
+        $grades = $this->Users->Results->find()->where(['id_user' => $user->id] )->all()->toArray() ?? [];
         $idsClasses = $this->Users->UsersClassses->find()->where(['id_user' => $user->id])->all();
         $listClasses = [];
         foreach ($idsClasses as $idClass) {
