@@ -30,25 +30,21 @@
                 <h2>Gérer mes chapitres</h2>
 
                 <div class="search">
-                    <label for="chapter-search"></label><input class="btn" type="search" id="chapter-search" name="chapter-search" placeholder="Rechercher chapitre" value="<?=$chapterSearch ?>">
-                    <button type="submit" class="btn">Rechercher</button>
+                    <?= $this->Form->control('chapter-search',['class'=>'btn', 'placeholder' => 'Rechercher chapitre', 'value' => $chapterSearch])?>
+                    <?=$this->Form->button("Rechercher", ['class' => 'btn'])?>
                 </div>
-
-
                 <ul>
                     <?php
 
                     foreach ($listChapters as $chapter) { ?>
-
-                        <li><a class="btn"
-                               href="modif-selection.php?id-chapter=<?= $chapter['id'] ?>"><?= $chapter['title'] ?></a>
+                        <li>
+                            <?= $this->Html->link($chapter->title, ['controller' => 'Classses', 'action' => 'viewChapter', $chapter->id], ['class' => 'btn'])?>
                         </li>
                     <?php }
                     ?>
                 </ul>
             </div>
-
-            <h2><a class="btn" href="chapter-creation.php">Créer chapitres</a></h2>
+            <h2><?= $this->Html->link('Créer chapitres',['controller' => 'Classses', 'action' => 'addChapitre'], ['class' => 'btn'])?></h2>
         </div>
     <?= $this->Form->end()?>
     <div <?= $_SESSION["user"]["type"] == "admin" ? "" : "hidden" ?>>

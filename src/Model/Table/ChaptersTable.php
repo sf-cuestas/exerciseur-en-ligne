@@ -46,6 +46,7 @@ class ChaptersTable extends Table
         $this->hasMany('Tagged', [
             'foreignKey' => 'chapter_id',
         ]);
+        $this->hasMany('UsersChapters');
     }
 
     /**
