@@ -40,7 +40,7 @@ class ClasssesTable extends Table
         $this->setTable('classses');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-        $this->hasMany('UsersClasss');
+        $this->hasMany('UsersClassses');
     }
 
     /**

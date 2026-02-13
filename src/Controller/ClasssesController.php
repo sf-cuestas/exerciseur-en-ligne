@@ -10,26 +10,24 @@ namespace App\Controller;
  */
 class ClasssesController extends AppController
 {
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $classs = $this->Classses->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $classs = $this->Classses->patchEntity($classs, $this->request->getData());
-            if ($this->Classses->save($classs)) {
-                $this->Flash->success(__('The classs has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The classs could not be saved. Please, try again.'));
-        }
-        $this->set(compact('classs'));
-    }
-
     public function teachersSpace(){
+        $teacher = $this->Authentication->getResult()->getData();
+        $classSearch = $this->getRequest()->getData('class-search') ?? "";
+        $listClasses = [];
+        $listIdsClasses = $this->Classses->UsersClassses->find()->where(['id_user' => $teacher->id, 'responsible' => 1])->all()->toArray();
+        foreach ($listIdsClasses as $idClass) {
+            $listClasses[] = $this->Classses->find()->where(['id' => $idClass->id_class])->first();
+        }
+        if (!empty($classSearch)){
+            $listClassesAux = [];
+            foreach ($listClasses as $class) {
+                if (str_contains($class->name, $classSearch)){
+                    $listClassesAux[] = $class;
+                }
+            }
+            $listClasses = $listClassesAux;
+        }
+        $this->set('classSearch', $classSearch);
+        $this->set('listClasses', $listClasses);
     }
 }
