@@ -47,13 +47,18 @@
             <h2><?= $this->Html->link('Créer chapitres',['controller' => 'Classses', 'action' => 'addChapitre'], ['class' => 'btn'])?></h2>
         </div>
     <?= $this->Form->end()?>
-    <div <?= $_SESSION["user"]["type"] == "admin" ? "" : "hidden" ?>>
-        <form method="post" action="/processing-forms/processing-creation-code-teacher.php">
-            <input class="btn" type="submit" value="Créer code pour professeur" name="create-code">
-        </form>
-        <div <?= empty($code) ? "hidden" : "" ?>>
-            <p>Code créé <?= $code ?></p>
+    <div <?= $isAdmin ? "" : "hidden" ?>>
+        <?= $this->Form->create()?>
+        <?= $this->Form->control('create-code',['type'=>'hidden', 'value'=> true])?>
+        <?= $this->Form->button('Créer code pour professeur', ['class' => 'btn', 'value' => 'create-teacher-code'])?>
+        <?= $this->Form->end()?>
+        <div <?= empty($codes) ? "hidden" : "" ?>>
+            <p>Codes</p>
+            <?php
+                foreach ($codes as $code) {
+                    echo '<p>'. $code->code . '</p>';
+                }
+            ?>
         </div>
-
     </div>
 </main>
