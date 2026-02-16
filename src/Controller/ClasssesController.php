@@ -12,11 +12,15 @@ class ClasssesController extends AppController
 {
     public function teachersSpace()
     {
+        $teacher = $this->Authentication->getResult()->getData();
+        if ($teacher->type == "student") {
+            $this->Flash->error("Vous n'etes pas un professeur");
+            $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+        }
         $isAdmin = false;
         $codesCreationTeacher = [];
         $this->UsersChapters = $this->fetchTable('UsersChapters');
         $this->Chapters = $this->fetchTable('Chapters');
-        $teacher = $this->Authentication->getResult()->getData();
         $classSearch = $this->getRequest()->getData('class-search') ?? "";
         $chapterSearch = $this->getRequest()->getData('chapter-search') ?? "";
         $listClasses = [];
