@@ -5,7 +5,7 @@
         <?= $this->Form->control('email') ?>
         <?= $this->Form->control('password', ['label' => 'Mot de passe']) ?>
     </fieldset>
-    <?= $this->Form->button(__('Login'), ['class' => 'btn'])?>
+    <?= $this->Form->button(__('Se connecter'), ['class' => 'btn'])?>
     <?= $this->Form->end() ?>
     <div>
         <?= $this->Html->link('Créer compte',['controller'=>'Users', 'action' =>'signup'])?>

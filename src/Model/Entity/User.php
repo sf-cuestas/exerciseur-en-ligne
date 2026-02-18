@@ -12,7 +12,7 @@ use Authentication\PasswordHasher\DefaultPasswordHasher;
  * @property string $id
  * @property string|null $name
  * @property string|null $surname
- * @property string $mail
+ * @property string $email
  * @property string $password
  * @property string $type
  * @property \Cake\I18n\DateTime $created_at
@@ -33,7 +33,7 @@ class User extends Entity
     protected array $_accessible = [
         'name' => true,
         'surname' => true,
-        'mail' => true,
+        'email' => true,
         'password' => true,
         'type' => true,
         'created_at' => true,

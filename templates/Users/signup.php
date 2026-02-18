@@ -1,34 +1,21 @@
 <main id="signup">
-    <form action="/processing-forms/processing-form-signup.php" method="post">
-        <h3>Inscription</h3>
+    <?= $this->Form->create($user) ?>
+    <h3>Inscription</h3>
+    <fieldset>
         <fieldset>
-            <fieldset>
-                <legend>Statut</legend>
-                <input type="radio" id="statusTeacher" name="status" value="teacher"/><label for="statusTeacher">Enseignant(e)</label>
-                <input type="radio" id="statusStudent" name="status" value="student" checked/><label
-                    for="statusStudent">Étudiant(e)</label>
-            </fieldset>
-            <fieldset>
-                <legend>Identité</legend>
-                <label for="lastname">NOM *</label>
-                <input id="lastname" type="text" name="lastname" required>
-
-                <label for="surname">Prénom *</label>
-                <input id="surname" type="text" name="surname" required>
-
-                <label for="email">adresse mail *</label>
-                <input id="email" type="email" name="email" required>
-
-                <label for="password">Mot de passe *</label>
-                <input id="password" type="password" name="password" required>
-
-                <label for="userSchoolId">Numero universitaire</label>
-                <input id="userSchoolId" type="text" name="userSchoolId">
-
-                <label id="labelTeacherCode" for="teacherCode">Code de creation *</label>
-                <input id="teacherCode" type="text" name="teacherCode">
-            </fieldset>
-            <input class="btn" type="submit" value="Valider">
+            <legend>Statut</legend>
+            <?= $this->Form->radio('status', ['student' => 'Étudiant(e)', 'teacher' => 'Enseignant(e)', ], ['value' => 'student']) ?>
         </fieldset>
-    </form>
+        <fieldset>
+            <legend>Identité</legend>
+            <?= $this->Form->control('name', ['placeholder' => 'Nom', 'label' => 'Nom']) ?>
+            <?= $this->Form->control('surname', ['placeholder' => 'Prenom', 'label' => 'Prenom']) ?>
+            <?= $this->Form->control('email', ['placeholder' => 'Email', 'label' => 'Email']) ?>
+            <?= $this->Form->control('password', ['placeholder' => 'Mot de passe', 'label' => 'Mot de passe']) ?>
+            <?= $this->Form->control('schoolId', ['placeholder' => 'Numero universitaire', 'label' => 'Numero universitaire']) ?>
+            <?= $this->Form->control('teacher-creation-code', ['placeholder' => 'Code de creation', 'label' => ['text' => 'Code de creation', 'id' => 'teacher-creation-code-label']]) ?>
+        </fieldset>
+        <?= $this->Form->button('Valider', ['class' => 'btn']) ?>
+    </fieldset>
+    <?= $this->Form->end() ?>
 </main>

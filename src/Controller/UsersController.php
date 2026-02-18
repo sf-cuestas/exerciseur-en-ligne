@@ -140,7 +140,7 @@ class UsersController extends AppController
         }
         // Display error if user submitted and authentication failed
         if ($this->request->is('post')) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->error('Invalid username ou mot de passe');
         }
     }
     public function logout()
@@ -149,6 +149,18 @@ class UsersController extends AppController
         return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
     }
     public function signup(){
-
+        //dd($this->getRequest()->getData());
+        $user = $this->Users->newEmptyEntity();
+        if ($this->request->is('post')) {
+            if ($this->request->getData()){
+                if ($this->Users->save($this->Users->newEntity($this->request->getData()))) {
+                    $this->Flash->success(__('la compte a été créée'));
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+                }else{
+                    $this->Flash->error("il y a eu une erreur");
+                }
+            }
+        }
+        $this->set('user', $user);
     }
 }
