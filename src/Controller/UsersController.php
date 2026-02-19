@@ -52,7 +52,7 @@ class UsersController extends AppController
     public function profile()
     {
         $user = $this->Authentication->getResult()->getData();
-        $grades = $this->Users->Results->find()->where(['id_user' => $user->id] )->all()->toArray() ?? [];
+        $grades = $this->Users->Results->find()->where(['id_user' => $user->id])->all()->toArray() ?? [];
         $idsClasses = $this->Users->UsersClassses->find()->where(['id_user' => $user->id])->all();
         $listClasses = [];
         foreach ($idsClasses as $idClass) {
@@ -99,7 +99,7 @@ class UsersController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error('The user could not be saved. Please, try again.');
         }
         $this->set(compact('user'));
     }
@@ -116,9 +116,9 @@ class UsersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $this->Flash->success('The user has been deleted.');
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error('The user could not be deleted. Please, try again.');
         }
 
         return $this->redirect(['action' => 'index']);
@@ -143,21 +143,48 @@ class UsersController extends AppController
             $this->Flash->error('Invalid username ou mot de passe');
         }
     }
+
     public function logout()
     {
         $this->Authentication->logout();
         return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
     }
-    public function signup(){
-        //dd($this->getRequest()->getData());
+
+    public function signup()
+    {
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
-            if ($this->request->getData()){
-                if ($this->Users->save($this->Users->newEntity($this->request->getData()))) {
-                    $this->Flash->success(__('la compte a été créée'));
-                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
-                }else{
-                    $this->Flash->error("il y a eu une erreur");
+            $data = $this->request->getData();
+            if ($data) {
+                if ($data['status'] == 'teacher') {
+                    $this->Creationcodes = $this->fetchTable('Creationcodes');
+                    if (!empty($data['teacher-creation-code'])) {
+                        $codeDb = $this->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
+                        if ($codeDb) {
+                            if ($this->Creationcodes->delete($codeDb)) {
+                                if ($this->Users->save($this->Users->newEntity($data))) {
+                                    $this->Flash->success('la compte a été créée');
+                                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+                                } else {
+                                    $this->Flash->error("il y a eu une erreur");
+                                }
+                            } else {
+                                $this->Flash->error("il y a eu une erreur");
+                            }
+
+                        } else {
+                            $this->Flash->error("le code n'existe pas");
+                        }
+                    } else {
+                        $this->Flash->error("il faut écrire le code d'inscription pour une compte de professeur");
+                    }
+                } else {
+                    if ($this->Users->save($this->Users->newEntity($data))) {
+                        $this->Flash->success('la compte a été créée');
+                        return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+                    } else {
+                        $this->Flash->error("il y a eu une erreur");
+                    }
                 }
             }
         }

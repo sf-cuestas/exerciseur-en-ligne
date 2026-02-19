@@ -92,7 +92,6 @@ class UsersTable extends Table
             ->scalar('schoolId')
             ->maxLength('schoolId', 15)
             ->allowEmptyString('schoolId');
-
         return $validator;
     }
 
