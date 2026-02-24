@@ -35,7 +35,7 @@ class ClasssesController extends AppController
             unset($listClasses);
             $listClasses = $listClassesAux;
         }
-        $chaptersIds = $this->Classses->UsersClassses->Users->UsersChapters->find()->where(['id_user'=>$teacher->id])->all()->toArray();
+        $chaptersIds = $this->Classses->UsersClassses->Users->UsersChapters->find()->where(['id_user' => $teacher->id])->all()->toArray();
         foreach ($chaptersIds as $idChapter) {
             $listChapters[] = $this->Classses->UsersClassses->Users->UsersChapters->Chapters->find()->where(['id' => $idChapter->id_chapter])->first();
         }
@@ -52,5 +52,29 @@ class ClasssesController extends AppController
         $this->set('chapterSearch', $chapterSearch);
         $this->set('listClasses', $listClasses);
         $this->set('listChapters', $listChapters);
+    }
+
+    public function add()
+    {
+        $class = $this->Classses->newEmptyEntity();
+        $data = $this->getRequest()->getData();
+        $teacher = $this->Authentication->getResult()->getData();
+        if ($this->request->is('post') && $data) {
+            if ($this->Classses->save($this->Classses->newEntity($data))) {
+                $lastClass = $this->Classses->find('all', ['order' => 'created_at DESC'])->first();
+                $userClass = $this->Classses->UsersClassses->newEmptyEntity();
+                $userClass->id_class = $lastClass->id;
+                $userClass->id_user = $teacher->id;
+                $userClass->responsible = 1;
+                if ($this->Classses->UsersClassses->save($userClass)) {
+                    $this->Flash->success('la classe a été créée');
+                    return $this->redirect(['controller' => 'Classses', 'action' => 'teachersSpace']);
+                } else {
+                    $this->Flash->error("il y a eu une erreur");
+                }
+            }
+
+        }
+        $this->set('class', $class);
     }
 }
