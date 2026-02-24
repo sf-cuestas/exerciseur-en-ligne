@@ -40,6 +40,7 @@ class CreationcodesTable extends Table
         $this->setTable('creationcodes');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->belongsTo('Users');
     }
 
     /**

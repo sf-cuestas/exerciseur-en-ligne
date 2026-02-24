@@ -76,4 +76,20 @@
         }
         ?>
     </div>
+    <?= $this->Form->end()?>
+    <div <?= $isAdmin ? "" : "style='display: none'" ?>>
+        <?= $this->Form->create()?>
+        <?= $this->Form->control('id_admin',['type'=>'hidden', 'value'=>$user->id ]) ?>
+        <?= $this->Form->control('create-code',['type'=>'hidden', 'value'=>true ]) ?>
+        <?= $this->Form->button('Créer code pour professeur', ['class' => 'btn', 'value' => 'create-teacher-code'])?>
+        <?= $this->Form->end()?>
+        <div <?= empty($codes) ? "hidden" : "" ?>>
+            <p>Codes</p>
+            <?php
+            foreach ($codes as $code) {
+                echo '<p>'. $code->code . '</p>';
+            }
+            ?>
+        </div>
+    </div>
 </main>

@@ -51,6 +51,8 @@ class UsersController extends AppController
      */
     public function profile()
     {
+        $isAdmin = false;
+        $codesCreationTeacher = [];
         $user = $this->Authentication->getResult()->getData();
         $grades = $this->Users->Results->find()->where(['id_user' => $user->id])->all()->toArray() ?? [];
         $idsClasses = $this->Users->UsersClassses->find()->where(['id_user' => $user->id])->all();
@@ -58,70 +60,19 @@ class UsersController extends AppController
         foreach ($idsClasses as $idClass) {
             $listClasses[] = $this->Users->UsersClassses->Classses->find()->where(['id' => $idClass->id_class])->first();
         }
+        if ($user->type == "admin") {
+            $isAdmin = true;
+            $codesCreationTeacher = $this->Users->Creationcodes->find()->where(['num_usages' => 1])->all()->toArray();
+        }
+        if ($this->getRequest()->getData('create-code')){
+            $this->createTeacherCode();
+        }
+        $this->set('user', $user);
+        $this->set('isAdmin', $isAdmin);
+        $this->set('codes', $codesCreationTeacher);
         $this->set('grades', $grades);
         $this->set('listClasses', $listClasses);
-    }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
-        }
-        $this->set(compact('user'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $user = $this->Users->get($id, contain: []);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error('The user could not be saved. Please, try again.');
-        }
-        $this->set(compact('user'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success('The user has been deleted.');
-        } else {
-            $this->Flash->error('The user could not be deleted. Please, try again.');
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -157,17 +108,12 @@ class UsersController extends AppController
             $data = $this->request->getData();
             if ($data) {
                 if ($data['status'] == 'teacher') {
-                    $this->Creationcodes = $this->fetchTable('Creationcodes');
                     if (!empty($data['teacher-creation-code'])) {
-                        $codeDb = $this->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
+                        $codeDb = $this->Users->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
                         if ($codeDb) {
-                            if ($this->Creationcodes->delete($codeDb)) {
-                                if ($this->Users->save($this->Users->newEntity($data))) {
-                                    $this->Flash->success('la compte a été créée');
-                                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
-                                } else {
-                                    $this->Flash->error("il y a eu une erreur");
-                                }
+                            if ($this->Users->save($this->Users->newEntity($data))) {
+                                $this->Flash->success('la compte a été créée');
+                                return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
                             } else {
                                 $this->Flash->error("il y a eu une erreur");
                             }
@@ -189,5 +135,23 @@ class UsersController extends AppController
             }
         }
         $this->set('user', $user);
+    }
+
+    function createTeacherCode(): void
+    {
+        $admin = $this->Authentication->getResult()->getData();
+        if ($admin->type == "admin") {
+            $code = $this->Users->Creationcodes->newEmptyEntity();
+            $code->code = bin2hex(random_bytes(5));
+            $code->num_usages = 1;
+            $code->id_admin = $admin->id;
+            $codeDb = $this->Users->Creationcodes->find()->where(['code' => $code->code])->first();
+            if ($codeDb){
+                while ($codeDb->code == $code->code) {
+                    $code->code = bin2hex(random_bytes(5));
+                }
+            }
+            $this->Users->Creationcodes->save($code);
+        }
     }
 }
