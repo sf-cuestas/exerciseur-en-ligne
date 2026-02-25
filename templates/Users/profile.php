@@ -38,18 +38,15 @@
                     if (!empty($listClasses)) {
                         foreach ($listClasses as $class) { ?>
                             <li class="btn">
-                                <?= $this->Html->link($class->name, ['controller' => 'Classes', 'action' => 'view', $class->id]) ?>
+                                <?= $this->Html->link($class->name, ['controller' => 'Classses', 'action' => 'viewClass', $class->id]) ?>
                             </li>
                         <?php }
                     } ?>
                 </ul>
-                <form action="" method="post">
-                    <label>
-                        Rejoindre classe par code d'invitation
-                        <input type="text" name="code-class-add">
-                    </label>
-                    <input type="submit" value="Rejoindre">
-                </form>
+                <?= $this->Form->create()?>
+                <?= $this->Form->control('code-join-class',['label' => "Rejoindre classe par code d'invitation"]) ?>
+                <?= $this->Form->button('Rejoindre') ?>
+                <?= $this->Form->end() ?>
             </div>
         </div>
 
