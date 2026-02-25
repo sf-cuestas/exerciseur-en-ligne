@@ -13,9 +13,7 @@
             <ul>
                 <?php
                 foreach ($students as $student) { ?>
-                    <li class="">
-                        <a href="profile.php?id-profil=<?= $student->id ?>"><?= $student->name ?></a>
-                    </li>
+                    <li><?= $student->name ?></a></li>
                 <?php } ?>
             </ul>
         </div>
@@ -60,9 +58,8 @@
     <div <?=($this->Identity->isLoggedIn() && $isTeacher && $isResponsible) ?  "" : "hidden" ?>>
         <?php
         if ($isTeacher && $isResponsible) {
-            ?>
-            <a class="btn" href="editor-class.php?id-class=<?= $class->id ?>">Modifier</a>
-        <?php } ?>
+            echo $this->Html->link('Modifier',['controller' => 'Classses', 'action' => 'edit', $class['id']], ['class' => 'btn']);
+        } ?>
     </div>
 </main>
 <script> //reseting localstorage in case we come from the 'go back' button (<--)
