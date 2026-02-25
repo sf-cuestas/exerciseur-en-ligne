@@ -78,6 +78,54 @@ class ClasssesController extends AppController
         $this->set('class', $class);
     }
 
+    public function viewClass($id = null){
+        $user = $this->Authentication->getResult()->getData();
+        $isTeacher = $user->type == "teacher";
+        $class = $this->Classses->find()->where(['id'=>$id])->first();
+        $students = [];
+        $studentsId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 0])->all()->toArray();
+        $teachersId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 1])->all()->toArray();
+        $chapters = $this->Classses->Chapters->find()->where(['class' => $class->id])->all()->toArray();
+        $classCodes = $this->Classses->CodesClass->find()->where(['id_class' => $class->id])->all()->toArray();
+        foreach ($teachersId as $teacherId) {
+            $teachers[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $teacherId->id_user])->first();
+        }
+        foreach ($studentsId as $studentId) {
+            $students[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentId->id_user])->first();
+        }
+        foreach($teachers as $teacher){
+            if($teacher->id == $user->id){
+                $isResponsible = true;
+            }
+        }
+        $creationCode = $this->getRequest()->getData();
+        if ($creationCode) {
+            $this->generateCodeClass($class['id'],$creationCode['num_usages']);
+        }
+        $this->set('class', $class);
+        $this->set('teachers', $teachers);
+        $this->set('isTeacher', $isTeacher);
+        $this->set('isResponsible', $isResponsible);
+        $this->set('students', $students);
+        $this->set('chapters', $chapters);
+        $this->set('classCodes', $classCodes);
+    }
+
+    private function generateCodeClass($idClass, $nUses)
+    {
+        $code = $this->Classses->CodesClass->newEmptyEntity();
+        $code['code'] = bin2hex(random_bytes(5));
+        $code['num_usages'] = $nUses;
+        $code['id_class'] = $idClass;
+        $codeDb = $this->Classses->CodesClass->find()->where(['code' => $code['code']])->first();
+        if ($codeDb){
+            while ($codeDb->code == $code->code) {
+                $code['code'] = bin2hex(random_bytes(5));
+            }
+        }
+        $this->Classses->CodesClass->save($code);
+    }
+
     public function edit($classId){
 
     }

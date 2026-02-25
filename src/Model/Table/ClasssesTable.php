@@ -41,6 +41,8 @@ class ClasssesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
         $this->hasMany('UsersClassses');
+        $this->hasMany("Chapters");
+        $this->hasMany('CodesClass');
     }
 
     /**
