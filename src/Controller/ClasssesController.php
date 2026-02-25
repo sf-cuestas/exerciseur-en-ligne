@@ -58,6 +58,7 @@ class ClasssesController extends AppController
     {
         $class = $this->Classses->newEmptyEntity();
         $data = $this->getRequest()->getData();
+        $teacher = $this->Authentication->getResult()->getData();
         if ($this->request->is('post') && $data) {
             if ($this->Classses->save($this->Classses->newEntity($data))) {
                 $lastClass = $this->Classses->find('all', ['order' => 'created_at DESC'])->first();
@@ -123,5 +124,9 @@ class ClasssesController extends AppController
             }
         }
         $this->Classses->CodesClass->save($code);
+    }
+
+    public function edit($classId){
+
     }
 }
