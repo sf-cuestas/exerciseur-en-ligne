@@ -160,7 +160,7 @@ class UsersController extends AppController
     }
     private function joinClass ($userId, $code)
     {
-        $codeClass = $this->Users->UsersClassses->Classses->CodesClass->find()->where(['code' => $code])->first();
+        $codeClass = $this->Users->UsersClassses->Classses->CodesClass->find()->where(['code' => $code, 'num_usages >' => 0])->first();
         if ($codeClass){
             $class = $this->Users->UsersClassses->Classses->find()->where(['id' => $codeClass->id_class])->first();
             if ($class){
