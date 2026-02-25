@@ -79,6 +79,7 @@ class ClasssesController extends AppController
     }
 
     public function viewClass($id = null){
+        $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
         $isTeacher = $user->type == "teacher";
         $class = $this->Classses->find()->where(['id'=>$id])->first();
@@ -86,7 +87,7 @@ class ClasssesController extends AppController
         $studentsId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 0])->all()->toArray();
         $teachersId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 1])->all()->toArray();
         $chapters = $this->Classses->Chapters->find()->where(['class' => $class->id])->all()->toArray();
-        $classCodes = $this->Classses->CodesClass->find()->where(['id_class' => $class->id])->all()->toArray();
+        $classCodes = $this->Classses->CodesClass->find()->where(['id_class' => $class->id, 'num_usages >' => 0])->all()->toArray();
         foreach ($teachersId as $teacherId) {
             $teachers[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $teacherId->id_user])->first();
         }
