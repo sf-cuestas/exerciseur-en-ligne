@@ -77,4 +77,8 @@ class ClasssesController extends AppController
         }
         $this->set('class', $class);
     }
+
+    public function edit($classId){
+
+    }
 }
