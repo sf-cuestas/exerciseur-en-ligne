@@ -37,86 +37,86 @@
                 </div>
             </li>
 
+            <li><h3>Classe</h3></li>
+
             <li>
-                <?php echo $this->Form->label('class-select', "Choisissez la classe dans laquelle ce chapitre sera inscrite"); ?>
-                
+                <?php 
+                    echo $this->Form->label('class-select', "Choisissez la classe dans laquelle ce chapitre sera inscrite");
+                    $classesNames = ["unspecified" => "Hors d'une classe"];
+                    foreach($listClasses as $class) {
+                        $classesNames[$class['name']] = $class['name'];
+                    }
+
+                    echo $this->Form->select('level-select', $classesNames, ['id' => "class-select"]);
+                ?>
+            </li>
+
+            <li>
+                <div id="grade-options">
+                    <?= $this->Form->checkbox("graded", ['hiddenField' => false, "id" => "graded", "value" => "3"]); ?>
+                    <?= $this->Form->label('graded', "Noter ce chapitre?"); ?>
+
+                    <div id="coefficient-box">
+                        <?= $this->Form->label('grade-weight', "Coefficient :"); ?>
+                        <?= $this->Form->number("grade-weight", ["id" => "grade-weight", "min" => "1", "max" => "100", "step" => "1", "value" => "1"]); ?>
+                    </div>
+                </div>
+            </li>
+
+            <li><h3>Essais</h3></li>
+
+            <li>
+                <?= $this->Form->checkbox("limittry", ['hiddenField' => false, "id" => "limittry", "value" => "3"]); ?>
+                <?= $this->Form->label('limittry', "Limiter le nombre d'essais pour le chapitre complet ?"); ?>
+
+                <div id="limit-try-options">
+                    <?= $this->Form->label('try-number', "Nombre d'essais autorisés :"); ?>
+                    <?= $this->Form->number("try-number", ["id" => "try-number", "min" => "1", "max" => "100", "step" => "1", "value" => "1"]); ?>
+                </div>
+            </li>
+
+            <li><h3>Correction</h3></li>
+
+            <li>
+                <?= $this->Form->checkbox("correctionend", ['hiddenField' => false, "id" => "correctionend"]); ?>
+                <?= $this->Form->label('correctionend', "Afficher la correction à la fin du chapitre ?"); ?>
+            </li>
+
+            <li><h3>Tags</h3></li>
+
+            <li>
+                <?= $this->Form->label('tags-input', "Ajouter des tags (séparés par des virgules)"); ?>
+                <?= $this->Form->text("tags-input", ["id" => "tags-input", "placeholder" => "ex: mathématiques, géométrie, fonctions"]); ?>
             </li>
         </ul>
     </fieldset>
+
+    <fieldset>
+        <legend>Création</legend>
+        <ul>
+            <li><?= $this->Form->label('title', "Titre :", ["class" => "subTitle3"]); ?></li>
+            <li><?= $this->Form->text('title', ['id' => "title", "placeholder" => "Entrez le titre du chapitre ici", "required" => true]); ?></li>
+            <li><?= $this->Form->label('desc', "Description :", ["class" => "subTitle3"]); ?></li>
+            <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true]); ?></li>
+        </ul>
+    </fieldset>
+
+    <?php echo $this->Form->submit(__('Valider la modifiacation des paramètres du chapitre')); ?>
     <?= $this->Form->end() ?>
-    <form action="processing-forms/processing-chapter-edition.php?id-chapter=<?= $chapter['id']; ?>" method="post">
-        <fieldset>
-            <legend>Paramètres</legend>
-            <ul>
-                <li><h3>Classe</h3></li>
-                <li>
-                    <label for="class-select">Choisissez la classe dans laquelle ce chapitre sera inscrite</label>
-                    <select name="class-select" id="class-select">
-                        <option value="unspecified">Hors d'une classe</option>
-                        <!-- dynamically generates options with php, getting all classes the professor is responsible for in the database-->
-                        <?php
-                        foreach ($classes as $class) {
-                            echo '<option value="' . $class["name"] . '">' . $class["name"] . '</option>';
-                        }
-                        ?>
-                    </select>
-                </li>
-                <li>
-                    <div id="grade-options"><!-- only show this span if a class is selected -->
-                        <input id="graded" type="checkbox" name="graded" value="3"><label for="graded">Noter ce
-                            chapitre?</label>
-                        <div id="coefficient-box"> <!-- only show this span if 'graded' checkbox checked -->
-                            <label for="grade-weight">Coefficient:</label>
-                            <input id="grade-weight" name="grade_weight" type="number" min="1" max="100" step="1"
-                                value="1">
-                        </div>
-                    </div>
-                </li>
-
-                <li><h3>Essais</h3></li>
-
-                <li><input id="limittry" type="checkbox" name="limittry"><label for="limittry">Limiter le nombre
-                        d'essais ? (pour le chapitre complet) </label>
-                    <div id="limit-try-options"> <!-- only show this span if 'limittry' checkbox checked -->
-                        <label for="try-number">Nombre d'essais autorisés :</label>
-                        <input id="try-number" name="try_number" type="number" min="1" max="100" step="1" value="1">
-                    </div>
-                </li>
-                <li><h3>Correction</h3></li>
-                <li><input id="correctionend" type="checkbox" name="correctionend"><label for="correctionend">Afficher
-                        la correction à la fin du chapitre?</label></li>
-
-                <li><h3>Tags</h3></li>
-                <li>
-                    <label for="tags-input">Ajouter des tags (séparés par des virgules)</label>
-                    <input id="tags-input" name="tags-input" type="text"
-                        placeholder="ex: mathématiques, géométrie, fonctions">
-                </li>
-            </ul>
-        </fieldset>
-        <fieldset>
-            <legend>Création</legend>
-            <ul>
-                <li><label class="subTitle3" for="title">Titre :</label></li>
-                <li><input id="title" name="title" type="text" placeholder="Entrez le titre du chapitre ici" required></li>
-                <li><label class="subTitle3" for="desc">Description :</label></li>
-                <li><textarea id="desc" name="desc" rows="10" required></textarea></li>
-            </ul>
-        </fieldset>
-        <button type="submit">Valider la modifiacation des paramètres du chapitre</button>
-    </form>
 
     <ul>   
         <li><h3>Choisir un Exercice à modifier</h3></li>
                 
         <?php 
-                
+            foreach($listExercises as $ex) {
+                echo "<li>" . $this->Html->link($ex['title'], ['controller' => 'Exercises', 'action' => 'edit'], ['escape' => false, 'class' => 'btn']) . "</li>";
+            }
             
         ?>
         <li>
             <?= $this->Html->link("Ajouter un exercice", ['controller' => 'Chapters', 'action' => 'add'], ['class' => 'btn']) ?>
         </li>
     </ul>
-    <a href="teacher-space.php" class="btn">Annuler</a>
-    
+
+    <?= $this->Html->link('Annuler',['controller' => 'Classses', 'action' => 'teachersSpace'],['escape'=>false,'class'=>'btn']) ?>  
 </main>

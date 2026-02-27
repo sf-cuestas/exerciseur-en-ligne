@@ -47,6 +47,7 @@ class ChaptersTable extends Table
             'foreignKey' => 'chapter_id',
         ]);
         $this->hasMany('UsersChapters');
+        $this->hasMany("Exercises");
     }
 
     /**
