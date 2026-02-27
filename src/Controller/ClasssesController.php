@@ -13,12 +13,12 @@ class ClasssesController extends AppController
     public function teachersSpace()
     {
         $teacher = $this->Authentication->getResult()->getData();
-        if ($teacher->type == "student") {
+        if ($teacher->type == 'student') {
             $this->Flash->error("Vous n'etes pas un professeur");
             $this->redirect(['controller' => 'Pages', 'action' => 'index']);
         }
-        $classSearch = $this->getRequest()->getData('class-search') ?? "";
-        $chapterSearch = $this->getRequest()->getData('chapter-search') ?? "";
+        $classSearch = $this->getRequest()->getData('class-search') ?? '';
+        $chapterSearch = $this->getRequest()->getData('chapter-search') ?? '';
         $listClasses = [];
         $listChapters = [];
         $listIdsClasses = $this->Classses->UsersClassses->find()->where(['id_user' => $teacher->id, 'responsible' => 1])->all()->toArray();
@@ -68,24 +68,25 @@ class ClasssesController extends AppController
                 $userClass->responsible = 1;
                 if ($this->Classses->UsersClassses->save($userClass)) {
                     $this->Flash->success('la classe a été créée');
+
                     return $this->redirect(['controller' => 'Classses', 'action' => 'teachersSpace']);
                 } else {
-                    $this->Flash->error("il y a eu une erreur");
+                    $this->Flash->error('il y a eu une erreur');
                 }
             }
-
         }
         $this->set('class', $class);
     }
 
-    public function viewClass($id = null){
+    public function viewClass($id = null)
+    {
         $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
-        $isTeacher = $user->type == "teacher";
-        $class = $this->Classses->find()->where(['id'=>$id])->first();
+        $isTeacher = $user->type == 'teacher';
+        $class = $this->Classses->find()->where(['id' => $id])->first();
         $students = [];
-        $studentsId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 0])->all()->toArray();
-        $teachersId = $this->Classses->UsersClassses->find()->where(['id_class'=>$class->id, 'responsible' => 1])->all()->toArray();
+        $studentsId = $this->Classses->UsersClassses->find()->where(['id_class' => $class->id, 'responsible' => 0])->all()->toArray();
+        $teachersId = $this->Classses->UsersClassses->find()->where(['id_class' => $class->id, 'responsible' => 1])->all()->toArray();
         $chapters = $this->Classses->Chapters->find()->where(['class' => $class->id])->all()->toArray();
         $classCodes = $this->Classses->CodesClass->find()->where(['id_class' => $class->id, 'num_usages >' => 0])->all()->toArray();
         foreach ($teachersId as $teacherId) {
@@ -94,14 +95,14 @@ class ClasssesController extends AppController
         foreach ($studentsId as $studentId) {
             $students[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentId->id_user])->first();
         }
-        foreach($teachers as $teacher){
-            if($teacher->id == $user->id){
+        foreach ($teachers as $teacher) {
+            if ($teacher->id == $user->id) {
                 $isResponsible = true;
             }
         }
         $creationCode = $this->getRequest()->getData();
         if ($creationCode) {
-            $this->generateCodeClass($class['id'],$creationCode['num_usages']);
+            $this->generateCodeClass($class['id'], $creationCode['num_usages']);
         }
         $this->set('class', $class);
         $this->set('teachers', $teachers);
@@ -119,7 +120,7 @@ class ClasssesController extends AppController
         $code['num_usages'] = $nUses;
         $code['id_class'] = $idClass;
         $codeDb = $this->Classses->CodesClass->find()->where(['code' => $code['code']])->first();
-        if ($codeDb){
+        if ($codeDb) {
             while ($codeDb->code == $code->code) {
                 $code['code'] = bin2hex(random_bytes(5));
             }
@@ -127,7 +128,12 @@ class ClasssesController extends AppController
         $this->Classses->CodesClass->save($code);
     }
 
-    public function edit($classId){
+    public function search()
+    {
 
+    }
+
+    public function edit($classId)
+    {
     }
 }

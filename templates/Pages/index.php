@@ -1,15 +1,15 @@
 <main id="home-page">
     <div class="searching-section">
-        <?= $this->Form->create(null, [])?>
+        <?= $this->Form->create()?>
         <div>
-            <?= $this->Form->control('exerciseSearch',['label' => 'Rechercher un chapitre par mot clé']) ?>
+            <?= $this->Form->control('exerciseSearch', ['label' => 'Rechercher un chapitre par mot clé']) ?>
             <?= $this->Form->button('Rechercher', ['class' => 'btn']) ?>
         </div>
         <?= $this->Form->end()?>
         <!--<form action="/processing-forms/processing-chapter-search.php" method="get"> -->
         <?= $this->Form->create(null, [])?>
         <div>
-            <?= $this->Form->control('classSearch', ['label'=> 'Rechercher une classe']) ?>
+            <?= $this->Form->control('classSearch', ['label' => 'Rechercher une classe']) ?>
             <?= $this->Form->button('Rechercher', ['class' => 'btn']) ?>
         </div>
         <?= $this->Form->end()?>
