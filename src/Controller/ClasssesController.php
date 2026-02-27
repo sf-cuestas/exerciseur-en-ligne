@@ -126,7 +126,35 @@ class ClasssesController extends AppController
         $this->Classses->CodesClass->save($code);
     }
 
-    public function edit($classId){
+    public function edit($classId=null){
+    $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
+    $studentsToAdd = [];
+    if ($studentToAdd) {
+            $studentsToAdd[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentToAdd])->first();
+        }
+
+    $class = $this->Classses->find()->where(['id'=>$classId])->first();
+    $listStudents = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 0])->all()->toArray();
+    $teachers = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 1])->all()->toArray();
+    $activesClassCodes = $this->Classses->CodesClass->find()->where(['id_class'=>$classId])->all()->toArray();
+    $listChapters = $this->Classses->Chapters->find()->where(['class'=>$classId])->all()->toArray();
+
+    $studentSearch = $_GET["student-search"] ?? "";
+    $teacherSearch = $_GET["teacher-search"] ?? "";
+    $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
+    $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
+    
+    $this->set('class', $class);
+    $this->set('listStudents', $listStudents);
+    $this->set('teachers', $teachers);
+    $this->set('activesClassCodes', $activesClassCodes);
+    $this->set('listChapters', $listChapters);  
+    $this->set('studentSearch', $studentSearch);
+    $this->set('teacherSearch', $teacherSearch);
+    $this->set('listAllStudents', $listAllStudents);
+    $this->set('listAllTeachers', $listAllTeachers);
+    $this->set('id-class', $classId);
+    $this->set('studentsToAdd', $studentsToAdd);
 
     }
 }
