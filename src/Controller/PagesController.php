@@ -44,6 +44,10 @@ class PagesController extends AppController
         if ($searchClass) {
             return $this->redirect(['controller' => 'Classses', 'action' => 'search',$searchClass]);
         }
+        $searchChapter = $this->getRequest()->getData('exerciseSearchBar');
+        if ($searchChapter) {
+            return $this->redirect(['controller' => 'Chapters', 'action' => 'search',$searchChapter]);
+        }
 
     }
     function about()

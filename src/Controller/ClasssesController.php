@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Event\EventInterface;
+
 /**
  * Classses Controller
  *
@@ -10,6 +12,13 @@ namespace App\Controller;
  */
 class ClasssesController extends AppController
 {
+
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['search', 'viewClass']);
+
+    }
     public function teachersSpace()
     {
         $teacher = $this->Authentication->getResult()->getData();
@@ -82,7 +91,11 @@ class ClasssesController extends AppController
     {
         $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
-        $isTeacher = $user->type == 'teacher';
+        if ($user) {
+            $isTeacher = $user->type == 'teacher';
+        }else{
+            $isTeacher = false;
+        }
         $class = $this->Classses->find()->where(['id' => $id])->first();
         $students = [];
         $teachers = [];
@@ -97,8 +110,10 @@ class ClasssesController extends AppController
             $students[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentId->id_user])->first();
         }
         foreach ($teachers as $teacher) {
-            if ($teacher->id == $user->id) {
-                $isResponsible = true;
+            if ($user){
+                if ($teacher->id == $user->id) {
+                    $isResponsible = true;
+                }
             }
         }
         $creationCode = $this->getRequest()->getData();
