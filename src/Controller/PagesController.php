@@ -40,8 +40,9 @@ class PagesController extends AppController
 
     function index()
     {
-        if ($this->getRequest()->getData('classSearch')) {
-            return $this->redirect(['controller' => 'Classses', 'action' => 'search']);
+        $searchClass = $this->getRequest()->getData('classSearchBar');
+        if ($searchClass) {
+            return $this->redirect(['controller' => 'Classses', 'action' => 'search',$searchClass]);
         }
 
     }

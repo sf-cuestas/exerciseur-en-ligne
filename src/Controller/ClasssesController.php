@@ -63,9 +63,9 @@ class ClasssesController extends AppController
             if ($this->Classses->save($this->Classses->newEntity($data))) {
                 $lastClass = $this->Classses->find('all', ['order' => 'created_at DESC'])->first();
                 $userClass = $this->Classses->UsersClassses->newEmptyEntity();
-                $userClass->id_class = $lastClass->id;
-                $userClass->id_user = $teacher->id;
-                $userClass->responsible = 1;
+                $userClass['id_class'] = $lastClass->id;
+                $userClass['id_user'] = $teacher->id;
+                $userClass['responsible'] = 1;
                 if ($this->Classses->UsersClassses->save($userClass)) {
                     $this->Flash->success('la classe a été créée');
 
@@ -78,13 +78,14 @@ class ClasssesController extends AppController
         $this->set('class', $class);
     }
 
-    public function viewClass($id = null)
+    public function viewClass($id = null): void
     {
         $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
         $isTeacher = $user->type == 'teacher';
         $class = $this->Classses->find()->where(['id' => $id])->first();
         $students = [];
+        $teachers = [];
         $studentsId = $this->Classses->UsersClassses->find()->where(['id_class' => $class->id, 'responsible' => 0])->all()->toArray();
         $teachersId = $this->Classses->UsersClassses->find()->where(['id_class' => $class->id, 'responsible' => 1])->all()->toArray();
         $chapters = $this->Classses->Chapters->find()->where(['class' => $class->id])->all()->toArray();
@@ -128,9 +129,15 @@ class ClasssesController extends AppController
         $this->Classses->CodesClass->save($code);
     }
 
-    public function search()
+    public function search($search = ""): void
     {
-
+        $results = $this->Classses->find()->where(['name LIKE' => '%' . $search . '%'])->toArray() ?? [];
+        $toSearch = $this->getRequest()->getData('search-class');
+        if ($toSearch) {
+            $this->redirect(['controller' => 'Classses', 'action' => 'search',$toSearch]);
+        }
+        $this->set('results', $results);
+        $this->set('search', $search);
     }
 
     public function edit($classId)
