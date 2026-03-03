@@ -110,7 +110,7 @@ class ClasssesController extends AppController
         $this->set('chapters', $chapters);
         $this->set('classCodes', $classCodes);
     }
-
+//todo:: le comportement de cette function se repete dan la fonction createTeacherCode() dans le controller usersController
     private function generateCodeClass($idClass, $nUses)
     {
         $code = $this->Classses->CodesClass->newEmptyEntity();
@@ -143,12 +143,12 @@ class ClasssesController extends AppController
     $teacherSearch = $_GET["teacher-search"] ?? "";
     $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
     $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
-    
+
     $this->set('class', $class);
     $this->set('listStudents', $listStudents);
     $this->set('teachers', $teachers);
     $this->set('activesClassCodes', $activesClassCodes);
-    $this->set('listChapters', $listChapters);  
+    $this->set('listChapters', $listChapters);
     $this->set('studentSearch', $studentSearch);
     $this->set('teacherSearch', $teacherSearch);
     $this->set('listAllStudents', $listAllStudents);
