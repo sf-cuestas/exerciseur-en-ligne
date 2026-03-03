@@ -25,7 +25,7 @@ class ChaptersControllerTest extends TestCase
         'app.Chapters',
         'app.Tagged',
         'app.UsersChapters',
-        'app.Classses',
+        'app.Classses'
     ];
 
     /**

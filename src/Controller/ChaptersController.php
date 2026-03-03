@@ -42,7 +42,19 @@ class ChaptersController extends AppController
      */
     public function view($id = null)
     {
-        $chapter = $this->Chapters->get($id, contain: ['Classses', 'Tagged', 'UsersChapters']);
+        $chapter = $this->Chapters->get($id, contain: []);
+        $teacher = $this->Authentication->getResult()->getData();
+
+        $listClasses = [];
+        $listIdsClasses = $this->Chapters->UsersChapters->Users->UsersClassses->find()->where(['id_user' => $teacher->id, 'responsible' => 1])->all()->toArray();
+        foreach ($listIdsClasses as $idClass) {
+            $listClasses[] = $this->Chapters->UsersChapters->Users->UsersClassses->Classses->find()->where(['id' => $idClass->id_class])->first();
+        }
+
+        $listExercises = $this->Chapters->Exercises->find()->where(['id_chapter' => $chapter->id]);
+
+        $this->set('listClasses', $listClasses);
+        $this->set('listExercises', $listExercises);
         $this->set(compact('chapter'));
     }
 
