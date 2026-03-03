@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Event\EventInterface;
+
 /**
  * Chapters Controller
  *
@@ -10,6 +12,13 @@ namespace App\Controller;
  */
 class ChaptersController extends AppController
 {
+
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['search', 'view']);
+    }
+
     /**
      * Index method
      *
@@ -17,7 +26,8 @@ class ChaptersController extends AppController
      */
     public function index()
     {
-        $query = $this->Chapters->find();
+        $query = $this->Chapters->find()
+            ->contain(['Classses']);
         $chapters = $this->paginate($query);
 
         $this->set(compact('chapters'));
@@ -65,7 +75,8 @@ class ChaptersController extends AppController
             }
             $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
         }
-        $this->set(compact('chapter'));
+        $classses = $this->Chapters->Classses->find('list', limit: 200)->all();
+        $this->set(compact('chapter', 'classses'));
     }
 
     /**
@@ -87,7 +98,8 @@ class ChaptersController extends AppController
             }
             $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
         }
-        $this->set(compact('chapter'));
+        $classses = $this->Chapters->Classses->find('list', limit: 200)->all();
+        $this->set(compact('chapter', 'classses'));
     }
 
     /**
@@ -108,5 +120,19 @@ class ChaptersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function search($search = ""): void
+    {
+        $results = $this->Chapters->find()
+            ->where(['visible ' => 1, 'OR' =>
+                ['title LIKE' => '%' . $search . '%', 'description LIKE' => '%' . $search . '%']])
+            ->toArray() ?? [];
+        $toSearch = $this->getRequest()->getData('search-chapter');
+        if ($toSearch) {
+            $this->redirect(['controller' => 'Chapters', 'action' => 'search',$toSearch]);
+        }
+        $this->set('search', $search);
+        $this->set('results', $results);
     }
 }

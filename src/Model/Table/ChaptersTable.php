@@ -48,6 +48,7 @@ class ChaptersTable extends Table
         ]);
         $this->hasMany('UsersChapters');
         $this->hasMany("Exercises");
+        $this->belongsTo('Classses');
     }
 
     /**

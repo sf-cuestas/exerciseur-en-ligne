@@ -43,7 +43,7 @@ class UsersTable extends Table
         $this->hasMany('UsersClassses');
         $this->hasMany('UsersChapters');
         $this->hasMany('Results');
-        $this->hasMany('Codes_class');
+
         $this->hasMany('Creationcodes');
     }
 
