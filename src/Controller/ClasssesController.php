@@ -127,6 +127,7 @@ class ClasssesController extends AppController
     }
 
     public function edit($classId=null){
+    
     $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
     $studentsToAdd = [];
     if ($studentToAdd) {
@@ -134,19 +135,30 @@ class ClasssesController extends AppController
         }
 
     $class = $this->Classses->find()->where(['id'=>$classId])->first();
-    $listStudents = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 0])->all()->toArray();
-    $teachers = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 1])->all()->toArray();
+    $getStudentsLinks = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 0])->all()->toArray();
+    $getTeachersLinks = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 1])->all()->toArray();
     $activesClassCodes = $this->Classses->CodesClass->find()->where(['id_class'=>$classId])->all()->toArray();
     $listChapters = $this->Classses->Chapters->find()->where(['class'=>$classId])->all()->toArray();
+
 
     $studentSearch = $_GET["student-search"] ?? "";
     $teacherSearch = $_GET["teacher-search"] ?? "";
     $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
     $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
     
+    $listStudents = [];
+    foreach ($getStudentsLinks as $link) {
+        $listStudents[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
+    }
+
+    $teachers=[];
+    foreach ($getTeachersLinks as $link) {
+        $teachers[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
+    }
+
     $this->set('class', $class);
     $this->set('listStudents', $listStudents);
-    $this->set('teachers', $teachers);
+    $this->set('teachers', value: $teachers);
     $this->set('activesClassCodes', $activesClassCodes);
     $this->set('listChapters', $listChapters);  
     $this->set('studentSearch', $studentSearch);
