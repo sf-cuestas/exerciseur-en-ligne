@@ -168,5 +168,31 @@ class ClasssesController extends AppController
     $this->set('id-class', $classId);
     $this->set('studentsToAdd', $studentsToAdd);
 
+    
+    if ($this->request->is(['post'])) {
+
+        if($this->getRequest()->getData('name')){
+
+            if($this->getRequest()->getData('description')){
+
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name', 'description']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['action' => 'edit', $classId]);
+                }
+
+            }else{
+            
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['action' => 'edit', $classId]);
+                }
+            }
+        }
+    }
+
     }
 }

@@ -10,8 +10,8 @@
             <?= $this->Form->create() ?>
             <fieldset>
                 <legend>Modification de la Classe </legend>
-                <?= $this->Form->control('name')?>
-                <?= $this->Form->control('description') ?>
+                <?= $this->Form->control('name', ['label' => 'Modifier le Nom']) ?>
+                <?= $this->Form->control('description', ['label' => 'Modifier la description']) ?>
             </fieldset>
             <?= $this->Form->control('class', ['type'=>'hidden','value'=>'"'.$class['id'].'"' ]) ?>
             <?= $this->Form->button("Valider la Modification") ?>
