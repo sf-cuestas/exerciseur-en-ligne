@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
     font-family: "Luciole Regular", serif;
     background-image: url(/img/brown-texture.jpg);
-    background-size: cover;
+    background-size: contain;
 }
 
 ul {
