@@ -16,8 +16,7 @@ class FirstMigration extends BaseMigration
     public function up(): void
     {
         $this->table('chapters', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
@@ -60,7 +59,7 @@ class FirstMigration extends BaseMigration
                 'null' => true,
                 'signed' => true,
             ])
-            ->addColumn('class', 'nativeuuid', [
+            ->addColumn('class', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
@@ -88,12 +87,12 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('chapters_tags', ['id' => false, 'primary_key' => ['tag_id', 'chapter_id']])
-            ->addColumn('tag_id', 'nativeuuid', [
+            ->addColumn('tag_id', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('chapter_id', 'nativeuuid', [
+            ->addColumn('chapter_id', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -101,8 +100,7 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('classses', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
@@ -140,7 +138,7 @@ class FirstMigration extends BaseMigration
                 'null' => true,
                 'signed' => true,
             ])
-            ->addColumn('id_class', 'nativeuuid', [
+            ->addColumn('id_class', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -163,7 +161,7 @@ class FirstMigration extends BaseMigration
                 'null' => true,
                 'signed' => true,
             ])
-            ->addColumn('id_admin', 'nativeuuid', [
+            ->addColumn('id_admin', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -175,8 +173,7 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('exercises', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
@@ -234,7 +231,7 @@ class FirstMigration extends BaseMigration
                 'null' => true,
                 'signed' => true,
             ])
-            ->addColumn('id_chapter', 'nativeuuid', [
+            ->addColumn('id_chapter', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -256,27 +253,26 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('results', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('id_subject', 'nativeuuid', [
+            ->addColumn('id_subject', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('id_user', 'nativeuuid', [
+            ->addColumn('id_user', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('id_exercise', 'nativeuuid', [
+            ->addColumn('id_exercise', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('id_class', 'nativeuuid', [
+            ->addColumn('id_class', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
@@ -311,8 +307,7 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('tags', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
@@ -330,8 +325,7 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('users', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'nativeuuid', [
-                'default' => 'sys_guid()',
+            ->addColumn('id', 'integer', [
                 'limit' => null,
                 'null' => false,
             ])
@@ -383,12 +377,12 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('users_chapters', ['id' => false, 'primary_key' => ['id_user', 'id_chapter']])
-            ->addColumn('id_user', 'nativeuuid', [
+            ->addColumn('id_user', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('id_chapter', 'nativeuuid', [
+            ->addColumn('id_chapter', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -396,12 +390,12 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('users_classses', ['id' => false, 'primary_key' => ['id_user', 'id_class']])
-            ->addColumn('id_user', 'nativeuuid', [
+            ->addColumn('id_user', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('id_class', 'nativeuuid', [
+            ->addColumn('id_class', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
@@ -423,12 +417,12 @@ class FirstMigration extends BaseMigration
             ->create();
 
         $this->table('users_exercises', ['id' => false, 'primary_key' => ['id_user', 'id_exercise']])
-            ->addColumn('id_user', 'nativeuuid', [
+            ->addColumn('id_user', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('id_exercise', 'nativeuuid', [
+            ->addColumn('id_exercise', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
