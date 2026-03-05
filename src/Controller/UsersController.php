@@ -67,6 +67,10 @@ class UsersController extends AppController
         if ($this->getRequest()->getData('create-code')){
             $this->createTeacherCode();
         }
+        $classCode = $this->getRequest()->getData('code-join-class');
+        if ($classCode){
+            $this->joinClass($user['id'], $classCode);
+        }
         $this->set('user', $user);
         $this->set('isAdmin', $isAdmin);
         $this->set('codes', $codesCreationTeacher);
@@ -137,14 +141,14 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
-    function createTeacherCode(): void
+    private function createTeacherCode(): void
     {
         $admin = $this->Authentication->getResult()->getData();
         if ($admin->type == "admin") {
             $code = $this->Users->Creationcodes->newEmptyEntity();
-            $code->code = bin2hex(random_bytes(5));
-            $code->num_usages = 1;
-            $code->id_admin = $admin->id;
+            $code['code'] = bin2hex(random_bytes(5));
+            $code['num_usages'] = 1;
+            $code['id_admin'] = $admin->id;
             $codeDb = $this->Users->Creationcodes->find()->where(['code' => $code->code])->first();
             if ($codeDb){
                 while ($codeDb->code == $code->code) {
@@ -152,6 +156,27 @@ class UsersController extends AppController
                 }
             }
             $this->Users->Creationcodes->save($code);
+        }
+    }
+    private function joinClass ($userId, $code)
+    {
+        $codeClass = $this->Users->UsersClassses->Classses->CodesClass->find()->where(['code' => $code, 'num_usages >' => 0])->first();
+        if ($codeClass){
+            $class = $this->Users->UsersClassses->Classses->find()->where(['id' => $codeClass->id_class])->first();
+            if ($class){
+                $userClass = $this->Users->UsersClassses->newEmptyEntity();
+                $userClass['id_user'] = $userId;
+                $userClass['id_class'] = $class->id;
+                if ($this->Users->UsersClassses->save($userClass)) {
+                    $codeClass['num_usages'] -= 1;
+                    $this->Users->UsersClassses->Classses->CodesClass->save($codeClass);
+                    $this->Flash->success('Vous etes inscrit avec succès');
+                }else{
+                    $this->Flash->error("il y a eu une erreur");
+                }
+            }
+        }else{
+            $this->Flash->error("le code n'existe pas");
         }
     }
 }
