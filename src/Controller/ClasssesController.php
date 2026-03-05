@@ -211,6 +211,7 @@ class ClasssesController extends AppController
             }
         }
     }
+    }
 
     public function search($search = ""): void
     {
