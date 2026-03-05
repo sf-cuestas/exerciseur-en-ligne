@@ -40,7 +40,9 @@ class CreationcodesTable extends Table
         $this->setTable('creationcodes');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-        $this->belongsTo('Users');
+        $this->belongsTo('Users',[
+            'foreignKey' => 'id_admin',
+        ]);
     }
 
     /**
@@ -59,6 +61,10 @@ class CreationcodesTable extends Table
         $validator
             ->integer('num_usages')
             ->allowEmptyString('num_usages');
+
+        $validator
+            ->scalar('id_admin')
+            ->notEmptyString('id_admin');
 
         return $validator;
     }
