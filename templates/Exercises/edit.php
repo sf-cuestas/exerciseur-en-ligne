@@ -63,65 +63,56 @@
                 <li><h3>Options d'essais</h3></li>
 
                 <li>
-                    
-                </li>
-            </ul>
-        </fieldset>
-    <?= $this->Form->end() ?>
+                    <?= $this->Form->checkbox("tries", ['hiddenField' => false, "id" => "tries"]); ?>
+                    <?= $this->Form->label('tries', "Limiter le nombre d'essais ?"); ?>
 
-    <form action="processing-forms/processing-exercise-edition.php?id-chapter=<?php echo $_GET['id-chapter']; ?>&exercise-num=<?php echo $_GET['exercise-num']; ?>" method="post" id ="dynamic-form">
-
-        <fieldset>
-            <legend>Paramètres de la section</legend>   
-
-            <ul>
-                <li> <input id="tries" type="checkbox" name="tries"><label for="tries">Limiter le nombre d'essais ? </label>
-                    <span> <!-- only show this span if 'tries' checkbox checked -->
-                        <label for="tries-number">Nombre d'essais autorisés:</label>
-                        <input id="tries-number" name="tries_number" type="number" min="1" max="100" step="1" value="1">
+                    <span>
+                        <?= $this->Form->label('tries-number', "Nombre d'essais autorisés :"); ?>
+                        <?= $this->Form->number("tries-number", ["id" => "tries-number", "min" => "1", "max" => "100", "step" => "1", "value" => "1"]); ?>
                     </span>
-            
                 </li>
 
                 <li><h3>Options de réponses</h3></li>
 
-                <li> 
-                    <input id="ansdef" type="checkbox" name="ansdef"><label for="ansdef">Réponses définitives? (pas de modification possible après avoir quité la page ou validé la réponse)</label>
-                        <!-- only show this input if 'ansdef' checkbox checked -->
-                    <input id="showans" type="checkbox" name="showans"><label for="showans">Montrer la réponse après la validation</label>
+                <li>
+                    <?= $this->Form->checkbox("ansdef", ['hiddenField' => false, "id" => "ansdef"]); ?>
+                    <?= $this->Form->label('ansdef', "Réponses définitives? (pas de modification possible après avoir quité la page ou validé la réponse)"); ?>
+
+                    <!-- only show this input if 'ansdef' checkbox checked -->
+                    <?= $this->Form->checkbox("showans", ['hiddenField' => false, "id" => "showans"]); ?>
+                    <?= $this->Form->label('showans', "Montrer la réponse après la validation"); ?>
                 </li>
-
-                
-            
             </ul>
-
         </fieldset>
 
         <fieldset>
             <legend>Création de la section</legend>
+
             <ul>
                 <li>
-                    <label for="total-grade" id="total-grade-display">Note totale : ?</label>
-                    <input id="total-grade" type="text" name="total-grade" hidden>
+                    <?= $this->Form->label('total-grade', "Note totale : ?", ['id' => "total-grade-display"]); ?>
+                    <?= $this->Form->text("total-grade", ["id" => "total-grade", "hidden" => true]); ?>
                 </li>
 
                 <li><h3>Modules par défaut</h3></li>
+
                 <li>
-                    <label for="section-title">Titre de la section</label>
-                    <input id="section-title" type="text" name="section-title">
+                    <?= $this->Form->label('section-title', "Titre de la section"); ?>
+                    <?= $this->Form->text("section-title", ["id" => "section-title"]); ?>
                 </li>
 
                 <li><h3>Modules dynamiques</h3></li>
-                
+
                 <li>
                     <div id="inputs"></div>
                 </li>
-            </ul>   
-            
+            </ul>
         </fieldset>
-        <button type="submit" id="accept-changes">Enregistrer les modifications</button>
-        <button type="submit" id="cancel-changes">Annuler les modifications</button>
-        </form>
+
+        <?= $this->Form->submit(__('Enregistrer les modifications'), ['id' => "accept-changes"]); ?>
+        <?= $this->Form->submit(__('Annuler les modifications'), ['id' => "cancel-changes"]); ?>
+    <?= $this->Form->end() ?>
+
     <form>
         <fieldset>
             <legend>Aperçu de l'exercice (point de vue d'un élève)</legend>
