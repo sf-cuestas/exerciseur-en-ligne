@@ -50,4 +50,15 @@ class AppController extends Controller
          */
         //$this->loadComponent('FormProtection');
     }
+    function generateCode($table)
+    {
+        $code = bin2hex(random_bytes(5));
+        $codeDb = $table->find()->where(['code' => $code])->first();
+        if ($codeDb) {
+            while ($codeDb->code == $code) {
+                $code = bin2hex(random_bytes(5));
+            }
+        }
+        return $code;
+    }
 }

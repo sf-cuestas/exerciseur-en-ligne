@@ -132,20 +132,14 @@ class ClasssesController extends AppController
     private function generateCodeClass($idClass, $nUses)
     {
         $code = $this->Classses->CodesClass->newEmptyEntity();
-        $code['code'] = bin2hex(random_bytes(5));
+        $code['code'] = $this->generateCode($this->Classses->CodesClass);
         $code['num_usages'] = $nUses;
         $code['id_class'] = $idClass;
-        $codeDb = $this->Classses->CodesClass->find()->where(['code' => $code['code']])->first();
-        if ($codeDb) {
-            while ($codeDb->code == $code->code) {
-                $code['code'] = bin2hex(random_bytes(5));
-            }
-        }
         $this->Classses->CodesClass->save($code);
     }
 
     public function edit($classId=null){
-    
+
     $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
     $studentsToAdd = [];
     if ($studentToAdd) {
@@ -163,7 +157,7 @@ class ClasssesController extends AppController
     $teacherSearch = $_GET["teacher-search"] ?? "";
     $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
     $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
-    
+
     $listStudents = [];
     foreach ($getStudentsLinks as $link) {
         $listStudents[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
@@ -178,7 +172,7 @@ class ClasssesController extends AppController
     $this->set('listStudents', $listStudents);
     $this->set('teachers', value: $teachers);
     $this->set('activesClassCodes', $activesClassCodes);
-    $this->set('listChapters', $listChapters);  
+    $this->set('listChapters', $listChapters);
     $this->set('studentSearch', $studentSearch);
     $this->set('teacherSearch', $teacherSearch);
     $this->set('listAllStudents', $listAllStudents);
@@ -186,7 +180,7 @@ class ClasssesController extends AppController
     $this->set('id-class', $classId);
     $this->set('studentsToAdd', $studentsToAdd);
 
-    
+
     if ($this->request->is(['post'])) {
 
         if($this->getRequest()->getData('name')){
@@ -201,7 +195,7 @@ class ClasssesController extends AppController
                 }
 
             }else{
-            
+
                 $class = $this->Classses->patchEntity($class, $this->request->getData(), [
                     'fields' => ['name']
                 ]);
@@ -224,5 +218,5 @@ class ClasssesController extends AppController
         $this->set('search', $search);
     }
 
-    
+
 }
