@@ -11,6 +11,7 @@ use Cake\Event\EventInterface;
  *
  * @property UsersTable $Users
  */
+// TODO expliquer les functions et effacer les fonctions qu'on n'utilise pas
 class UsersController extends AppController
 {
     public function beforeFilter(EventInterface $event): void

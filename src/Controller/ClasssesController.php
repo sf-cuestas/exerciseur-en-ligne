@@ -10,6 +10,7 @@ use Cake\Event\EventInterface;
  *
  * @property \App\Model\Table\ClasssesTable $Classses
  */
+//TODO expliquer les functions
 class ClasssesController extends AppController
 {
 
@@ -138,6 +139,7 @@ class ClasssesController extends AppController
         $this->Classses->CodesClass->save($code);
     }
 
+    //TODO mettre en order the end of the function
     public function edit($classId=null){
 
     $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
@@ -182,7 +184,7 @@ class ClasssesController extends AppController
 
 
     if ($this->request->is(['post'])) {
-
+//TODO optimiser le code, la vue peut avoir les valeurs dans le form avec ça on sait qu'on doit simplement appeller la function save
         if($this->getRequest()->getData('name')){
 
             if($this->getRequest()->getData('description')){

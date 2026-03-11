@@ -10,6 +10,7 @@ use Cake\Event\EventInterface;
  *
  * @property \App\Model\Table\ChaptersTable $Chapters
  */
+// TODO expliquer les functions et effacer les fonctions qu'on n'utilise pas
 class ChaptersController extends AppController
 {
 
