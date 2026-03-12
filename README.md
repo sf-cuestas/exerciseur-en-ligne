@@ -4,10 +4,28 @@ consiste d'une page web pour la realisation et la creation d'exercices pour les 
 Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakephp
 voici le lien au projet https://github.com/JeromeTardivon/Exerciseur-en-Ligne
 
+## Convention de nommage des variables
+Pour les contrôleurs, entités, tables et variables, nous allons suivre la convention de [cakePHP](https://book.cakephp.org/5.x/intro/conventions.html)
+```
+UsersController.php ->
+class UsersController extends AppController
+{
+    // URL: /users/viewMe
+    public function viewMe()
+    {
+        // camelBacked method names
+    }
+}
+```
+et pour le nommage des autres fichiers (javascript, css, fonts, images), nous allons utiliser camelBacked avec la premiere lettre en miniscule.
+```
+fichier javascript -> controlCreationUser.js
+        php        -> teachersSpace.php
+```
 
 
-Nous avons amelioré le projet avec la mise en place d'une architecture MVC plus claire.
-Nous avons refactoricé les fonctions qui sont difficiles à comprendre, qui se repetent
+Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
+Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
 ## Installation develop
 1. Download and install PHP 8.2
 2. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
