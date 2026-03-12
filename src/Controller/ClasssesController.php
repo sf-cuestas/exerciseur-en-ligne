@@ -10,6 +10,7 @@ use Cake\Event\EventInterface;
  *
  * @property \App\Model\Table\ClasssesTable $Classses
  */
+//TODO expliquer les functions
 class ClasssesController extends AppController
 {
 
@@ -128,20 +129,84 @@ class ClasssesController extends AppController
         $this->set('chapters', $chapters);
         $this->set('classCodes', $classCodes);
     }
-
+//todo:: le comportement de cette function se repete dan la fonction createTeacherCode() dans le controller usersController
     private function generateCodeClass($idClass, $nUses)
     {
         $code = $this->Classses->CodesClass->newEmptyEntity();
-        $code['code'] = bin2hex(random_bytes(5));
+        $code['code'] = $this->generateCode($this->Classses->CodesClass);
         $code['num_usages'] = $nUses;
         $code['id_class'] = $idClass;
-        $codeDb = $this->Classses->CodesClass->find()->where(['code' => $code['code']])->first();
-        if ($codeDb) {
-            while ($codeDb->code == $code->code) {
-                $code['code'] = bin2hex(random_bytes(5));
+        $this->Classses->CodesClass->save($code);
+    }
+
+    //TODO mettre en order the end of the function
+    public function edit($classId=null){
+
+    $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
+    $studentsToAdd = [];
+    if ($studentToAdd) {
+            $studentsToAdd[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentToAdd])->first();
+        }
+
+    $class = $this->Classses->find()->where(['id'=>$classId])->first();
+    $getStudentsLinks = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 0])->all()->toArray();
+    $getTeachersLinks = $this->Classses->UsersClassses->find()->where(['id_class'=>$classId, 'responsible' => 1])->all()->toArray();
+    $activesClassCodes = $this->Classses->CodesClass->find()->where(['id_class'=>$classId])->all()->toArray();
+    $listChapters = $this->Classses->Chapters->find()->where(['class'=>$classId])->all()->toArray();
+
+
+    $studentSearch = $_GET["student-search"] ?? "";
+    $teacherSearch = $_GET["teacher-search"] ?? "";
+    $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
+    $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
+
+    $listStudents = [];
+    foreach ($getStudentsLinks as $link) {
+        $listStudents[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
+    }
+
+    $teachers=[];
+    foreach ($getTeachersLinks as $link) {
+        $teachers[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
+    }
+
+    $this->set('class', $class);
+    $this->set('listStudents', $listStudents);
+    $this->set('teachers', value: $teachers);
+    $this->set('activesClassCodes', $activesClassCodes);
+    $this->set('listChapters', $listChapters);
+    $this->set('studentSearch', $studentSearch);
+    $this->set('teacherSearch', $teacherSearch);
+    $this->set('listAllStudents', $listAllStudents);
+    $this->set('listAllTeachers', $listAllTeachers);
+    $this->set('id-class', $classId);
+    $this->set('studentsToAdd', $studentsToAdd);
+
+
+    if ($this->request->is(['post'])) {
+//TODO optimiser le code, la vue peut avoir les valeurs dans le form avec ça on sait qu'on doit simplement appeller la function save
+        if($this->getRequest()->getData('name')){
+
+            if($this->getRequest()->getData('description')){
+
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name', 'description']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['action' => 'edit', $classId]);
+                }
+
+            }else{
+
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['action' => 'edit', $classId]);
+                }
             }
         }
-        $this->Classses->CodesClass->save($code);
+    }
     }
 
     public function search($search = ""): void
@@ -155,7 +220,5 @@ class ClasssesController extends AppController
         $this->set('search', $search);
     }
 
-    public function edit($classId)
-    {
-    }
+
 }

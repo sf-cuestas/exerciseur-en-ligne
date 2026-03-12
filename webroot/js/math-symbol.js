@@ -91,8 +91,9 @@ class ElementsBtn {
         this.dataArray = dataArray;
         this.prefix = prefix;
         this.suffix = suffix;
-        
-        this.btn.addEventListener("click", ()=>this.addElements());
+        if(this.btn!=null){
+            this.btn.addEventListener("click", ()=>this.addElements());
+        }
     }
     
     // adds the characters buttons in the displayDiv and reloads Mathjax in the div
@@ -175,7 +176,9 @@ function addElementsBtn(id, btnDiv, symbolsDiv, symbolsArray, innerHtml) {
     newBtn.innerHTML = innerHtml;
     
     let div = document.getElementById(btnDiv);
+    if(div!=null){
     div.appendChild(newBtn);
+    }
     addElementsBtnArray.push(new ElementsBtn(id, symbolsDiv, symbolsArray));
 }
 

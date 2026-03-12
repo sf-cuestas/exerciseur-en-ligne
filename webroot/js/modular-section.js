@@ -1,13 +1,15 @@
-
+//todo : commenter les fonctions non compréhensibles
+//modulariser les fonctions en plus de petites fonctions
 
 document.addEventListener('DOMContentLoaded', function(){
+    
     const container = document.getElementById('inputs');
+if (container!=null){ //Temporary solution to prevent console errors
     const previewContainer = document.getElementById('previews');
 
     document.getElementById('section-title').addEventListener('input', loadPreview);
     document.getElementById('section-title').addEventListener('click', loadPreview);
 
-    
     const addTextBtn = document.getElementById('add-text');
     const addTitle1Btn = document.getElementById('add-title-1');
     const addTitle2Btn = document.getElementById('add-title-2');
@@ -35,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('tries-number').addEventListener('click', updateHintBtnState);
     document.getElementById('tries').addEventListener('input', updateHintBtnState);
     document.getElementById('tries').addEventListener('click', updateHintBtnState);
-
 
     if(document.getElementById('save-section')&&document.getElementById('save-section-end')){
 
@@ -581,7 +582,6 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         });
 
-        
         try {
             localStorage.setItem('dynamicModules', JSON.stringify(data));
             if(fullSave){   
@@ -600,7 +600,6 @@ document.addEventListener('DOMContentLoaded', function(){
                         form.appendChild(hidden);
                     }
                     hidden.value = payload;
-                    
                     
                 } else {
                     console.warn('saveState(true) called but form element not found; cannot attach content input');
@@ -649,7 +648,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     console.warn('Unsupported module type during load:', item.type);
                 }
                 
-                
                 // set the stored semantic type on the wrapper so saveState captures it
                 const last = container.lastElementChild;
                 if (last) last.dataset.type = item.type || 'text';
@@ -672,7 +670,6 @@ document.addEventListener('DOMContentLoaded', function(){
         reloadMathJax(sectionTitle);
         wrapper.appendChild(sectionTitle);
         
-
         try {
             const raw = localStorage.getItem('dynamicModules');
             if (!raw) return;
@@ -708,8 +705,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         const label = document.createElement('label');
                         label.textContent = choice.text || '';
                         label.setAttribute('for', cb.id);
-                        
-
+                    
                         choiceDiv.appendChild(cb);
                         choiceDiv.appendChild(label);
                         mcqElem.appendChild(choiceDiv);
@@ -741,7 +737,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     const falseLabel = document.createElement('label');
                     falseLabel.setAttribute('for', 'falseradio');
                     falseLabel.textContent = 'Faux';
-
 
                     trueFalseElem.appendChild(falseradio);
                     trueFalseElem.appendChild(falseLabel);
@@ -778,18 +773,14 @@ document.addEventListener('DOMContentLoaded', function(){
                     wrapper.appendChild(answerInput);
 
                 } else if(item.type === 'hint'){
-                    // hints are not shown in preview
+                    // hints are not shown in preview, need the case to prevent hints from falling into the 'else' case below
                 } else {
                     console.warn('Unsupported module type during load:', item.type);
                 }
-                
-                
-                
             }
 
         );
             previewContainer.appendChild(wrapper);
-            
             
         }catch (e) {
             console.warn('Failed to load saved modules:', e);
@@ -809,8 +800,8 @@ document.addEventListener('DOMContentLoaded', function(){
     addMultipleChoiceBtn.addEventListener('click', ()=> addMultipleChoiceField());
     addHintBtn.addEventListener('click', ()=> addHintField());
 
-    
     loadState();
     calculateTotalGrade();
     loadPreview();
+}
 });

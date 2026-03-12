@@ -11,6 +11,7 @@ use Cake\Event\EventInterface;
  *
  * @property UsersTable $Users
  */
+// TODO expliquer les functions et effacer les fonctions qu'on n'utilise pas
 class UsersController extends AppController
 {
     public function beforeFilter(EventInterface $event): void
@@ -111,7 +112,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             if ($data) {
-                if ($data['status'] == 'teacher') {
+                if ($data['type'] == 'teacher') {
                     if (!empty($data['teacher-creation-code'])) {
                         $codeDb = $this->Users->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
                         if ($codeDb) {
@@ -141,20 +142,16 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
+    //todo:: le comportement de cette function se repete dans la class classeControlle
     private function createTeacherCode(): void
+
     {
         $admin = $this->Authentication->getResult()->getData();
         if ($admin->type == "admin") {
             $code = $this->Users->Creationcodes->newEmptyEntity();
-            $code['code'] = bin2hex(random_bytes(5));
+            $code['code'] = $this->generateCode($this->Users->Creationcodes);
             $code['num_usages'] = 1;
             $code['id_admin'] = $admin->id;
-            $codeDb = $this->Users->Creationcodes->find()->where(['code' => $code->code])->first();
-            if ($codeDb){
-                while ($codeDb->code == $code->code) {
-                    $code->code = bin2hex(random_bytes(5));
-                }
-            }
             $this->Users->Creationcodes->save($code);
         }
     }
