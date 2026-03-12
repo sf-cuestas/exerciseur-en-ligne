@@ -45,7 +45,7 @@
             
             <h2>Ajouter Responsables</h2>
             <div class="class-adding">
-                <?= $this->Form->create(null, ['method' => 'get', 'action' => '/editor-class.php']) ?>
+                <?= $this->Form->create() ?>
                 <?= $this->Form->control('teacher-search', ['type' => 'search', 'label' => false, 'value' => $teacherSearch]) ?>
                 <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' =>$class['id']]) ?>
                 <?= $this->Form->button("Rechercher responsable", ['class' => 'btn']) ?>
@@ -180,4 +180,9 @@
             <?php } ?>
         </ul>
     </div>
+    </div>
+
+    <?= $this->Html->link("Revenir à la vue", ['controller'=>'Classses','action' => 'viewClass', $class['id']],['class' => 'btn'])?>
+
+    
 </main>

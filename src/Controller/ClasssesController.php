@@ -197,7 +197,7 @@ class ClasssesController extends AppController
                     'fields' => ['name', 'description']
                 ]);
                 if ($this->Classses->save($class)) {
-                    return $this->redirect(['action' => 'edit', $classId]);
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
                 }
 
             }else{
@@ -206,9 +206,13 @@ class ClasssesController extends AppController
                     'fields' => ['name']
                 ]);
                 if ($this->Classses->save($class)) {
-                    return $this->redirect(['action' => 'edit', $classId]);
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
                 }
             }
+        }
+
+        if($this->getRequest()->getData('backtoview')){
+            return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
         }
     }
     }
