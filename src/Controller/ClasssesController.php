@@ -129,7 +129,7 @@ class ClasssesController extends AppController
         $this->set('chapters', $chapters);
         $this->set('classCodes', $classCodes);
     }
-
+//todo:: le comportement de cette function se repete dan la fonction createTeacherCode() dans le controller usersController
     private function generateCodeClass($idClass, $nUses)
     {
         $code = $this->Classses->CodesClass->newEmptyEntity();

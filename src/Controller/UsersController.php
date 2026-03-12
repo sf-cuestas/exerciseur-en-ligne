@@ -142,7 +142,9 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
+    //todo:: le comportement de cette function se repete dans la class classeControlle
     private function createTeacherCode(): void
+
     {
         $admin = $this->Authentication->getResult()->getData();
         if ($admin->type == "admin") {
