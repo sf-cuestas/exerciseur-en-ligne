@@ -11,7 +11,6 @@ use Cake\Validation\Validator;
 /**
  * Chapters Model
  *
- * @property \App\Model\Table\TaggedTable&\Cake\ORM\Association\HasMany $Tagged
  *
  * @method \App\Model\Entity\Chapter newEmptyEntity()
  * @method \App\Model\Entity\Chapter newEntity(array $data, array $options = [])
@@ -42,12 +41,21 @@ class ChaptersTable extends Table
         $this->setTable('chapters');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
-
-        $this->hasMany('Tagged', [
+        $this->hasMany('ChaptersTags', [
             'foreignKey' => 'chapter_id',
         ]);
-        $this->hasMany('UsersChapters');
+        $this->hasMany('UsersChapters', [
+            'foreignKey' => 'id_chapter',
+        ]);
+        $this->hasMany('Exercises');
         $this->belongsTo('Classses');
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always'
+                ]
+            ]]);
     }
 
     /**

@@ -11,6 +11,7 @@ use Cake\Event\EventInterface;
  *
  * @property UsersTable $Users
  */
+// TODO expliquer les functions et effacer les fonctions qu'on n'utilise pas
 class UsersController extends AppController
 {
     public function beforeFilter(EventInterface $event): void
@@ -67,6 +68,10 @@ class UsersController extends AppController
         if ($this->getRequest()->getData('create-code')){
             $this->createTeacherCode();
         }
+        $classCode = $this->getRequest()->getData('code-join-class');
+        if ($classCode){
+            $this->joinClass($user['id'], $classCode);
+        }
         $this->set('user', $user);
         $this->set('isAdmin', $isAdmin);
         $this->set('codes', $codesCreationTeacher);
@@ -107,7 +112,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             if ($data) {
-                if ($data['status'] == 'teacher') {
+                if ($data['type'] == 'teacher') {
                     if (!empty($data['teacher-creation-code'])) {
                         $codeDb = $this->Users->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
                         if ($codeDb) {
@@ -136,22 +141,39 @@ class UsersController extends AppController
         }
         $this->set('user', $user);
     }
-//todo:: le comportement de cette function se repete dans la class classeController
-    function createTeacherCode(): void
+
+    //todo:: le comportement de cette function se repete dans la class classeControlle
+    private function createTeacherCode(): void
+
     {
         $admin = $this->Authentication->getResult()->getData();
         if ($admin->type == "admin") {
             $code = $this->Users->Creationcodes->newEmptyEntity();
-            $code->code = bin2hex(random_bytes(5));
-            $code->num_usages = 1;
-            $code->id_admin = $admin->id;
-            $codeDb = $this->Users->Creationcodes->find()->where(['code' => $code->code])->first();
-            if ($codeDb){
-                while ($codeDb->code == $code->code) {
-                    $code->code = bin2hex(random_bytes(5));
+            $code['code'] = $this->generateCode($this->Users->Creationcodes);
+            $code['num_usages'] = 1;
+            $code['id_admin'] = $admin->id;
+            $this->Users->Creationcodes->save($code);
+        }
+    }
+    private function joinClass ($userId, $code)
+    {
+        $codeClass = $this->Users->UsersClassses->Classses->CodesClass->find()->where(['code' => $code, 'num_usages >' => 0])->first();
+        if ($codeClass){
+            $class = $this->Users->UsersClassses->Classses->find()->where(['id' => $codeClass->id_class])->first();
+            if ($class){
+                $userClass = $this->Users->UsersClassses->newEmptyEntity();
+                $userClass['id_user'] = $userId;
+                $userClass['id_class'] = $class->id;
+                if ($this->Users->UsersClassses->save($userClass)) {
+                    $codeClass['num_usages'] -= 1;
+                    $this->Users->UsersClassses->Classses->CodesClass->save($codeClass);
+                    $this->Flash->success('Vous etes inscrit avec succès');
+                }else{
+                    $this->Flash->error("il y a eu une erreur");
                 }
             }
-            $this->Users->Creationcodes->save($code);
+        }else{
+            $this->Flash->error("le code n'existe pas");
         }
     }
 }

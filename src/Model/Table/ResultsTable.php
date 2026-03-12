@@ -44,6 +44,13 @@ class ResultsTable extends Table
         $this->belongsTo('Classses');
         $this->belongsTo('Chapters');
         $this->belongsTo('Exercises');
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always'
+                ]
+            ]]);
 
     }
 

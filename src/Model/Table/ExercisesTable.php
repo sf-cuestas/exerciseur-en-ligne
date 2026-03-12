@@ -48,6 +48,15 @@ class ExercisesTable extends Table
             'targetForeignKey' => 'user_id',
             'joinTable' => 'users_exercises',
         ]);
+        $this->belongsTo('Chapters',
+            [ 'foreignKey' => 'id_chapter' ]);
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always'
+                ]
+            ]]);
     }
 
     /**
