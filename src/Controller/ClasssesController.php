@@ -140,6 +140,7 @@ class ClasssesController extends AppController
     }
 
     //TODO mettre en order the end of the function
+    //TODO change the logic behind checking empty inputs (use current values as default values)
     public function edit($classId=null){
 
     $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
@@ -155,10 +156,26 @@ class ClasssesController extends AppController
     $listChapters = $this->Classses->Chapters->find()->where(['class'=>$classId])->all()->toArray();
 
 
-    $studentSearch = $_GET["student-search"] ?? "";
-    $teacherSearch = $_GET["teacher-search"] ?? "";
-    $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
-    $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
+  
+    $listAllStudents = [];
+    $listAllTeachers = [];
+    $teacherSearch = '';
+    $studentSearch = '';
+    
+    if(isset($_GET["student-search"])){
+        $studentSearch = $_GET["student-search"];
+        $listAllStudents =  $this->Classses->UsersClassses->Users->find()->where(['name LIKE' => '%' . $studentSearch . '%'])->toArray() ?? [];
+        
+   
+    }
+    if(isset($_GET["teacher-search"])){
+        $teacherSearch = $_GET["teacher-search"];
+        $listAllTeachers =  $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher', 'name LIKE' => '%' . $teacherSearch . '%'])->toArray() ?? [];
+        
+    }
+    
+    
+    
 
     $listStudents = [];
     foreach ($getStudentsLinks as $link) {

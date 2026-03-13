@@ -4,7 +4,9 @@
 
         <div id="class-responsable">
             <h2>Responsable(s):</h2>
-            <?php foreach ($teachers as $teacher) {echo "<h3>".$teacher->name . ' ' . $teacher->surname."</h3>";} ?>
+            <?php foreach ($teachers as $teacher) {echo "<h3>".$teacher->name . ' ' . $teacher->surname."</h3>";} 
+
+            use Cake\Controller\Controller;?>
         </div>
         <div id="class-description">
             <?= $this->Form->create() ?>
@@ -45,9 +47,9 @@
             
             <h2>Ajouter Responsables</h2>
             <div class="class-adding">
-                <?= $this->Form->create() ?>
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                 <?= $this->Form->control('teacher-search', ['type' => 'search', 'label' => false, 'value' => $teacherSearch]) ?>
-                <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' =>$class['id']]) ?>
+                <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' =>$class['id']]) ?> -->
                 <?= $this->Form->button("Rechercher responsable", ['class' => 'btn']) ?>
                 <?= $this->Form->end() ?>       
                 
@@ -65,9 +67,9 @@
                         </li>
                     <?php } ?>
                 </ul>
-            <h2 <?= empty($teachers) ? "hidden" : "" ?>>Liste des Responsables inscrits</h2>
-            <ul>
-                <?php foreach ($teachers as $teacher) { ?>
+                <h2 <?= empty($teachers) ? "hidden" : "" ?>>Liste des Responsables inscrits</h2>
+                <ul>
+                    <?php foreach ($teachers as $teacher) { ?>
                     <li>
                         <div>
                             <?= $this->Html->link($teacher['name'] . " " . $teacher['surname'], ['controller' => 'Users', 'action' => 'profile', $teacher['id']]) ?>
@@ -90,7 +92,7 @@
 
             <h2>Ajouter étudiants</h2>
             <div class="class-adding">
-                <?= $this->Form->create(null, ['method' => 'get', 'action' => '/editor-class.php']) ?>
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                 <?= $this->Form->control('student-search', ['type' => 'search', 'label' => false, 'value' => $studentSearch]) ?>
                 <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?>
                 <?= $this->Form->button("Rechercher étudiant", ['class' => 'btn']) ?>
@@ -159,7 +161,7 @@
     <h2>Generation de codes d'invitation à la classe</h2>
     <div id="class-codes">
 
-        <?= $this->Form->create(null, ['action' => '/processing-forms/processing-form-class-edition.php']) ?>
+        <?= $this->Form->create(null, ['controller' => 'Classses', 'action' => 'generateCodeClass',$class['id']]) ?>
         <?= $this->Form->control('generate-code-class', ['type' => 'hidden', 'value' => 'true']) ?>
         <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?>
         <?= $this->Form->control('number-usages-code', ['type' => 'number', 'label' => "Nombre d'usages :", 'value' => 1, 'min' => 1, 'max' => 67000]) ?>
