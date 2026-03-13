@@ -4,7 +4,7 @@
     <fieldset>
         <fieldset>
             <legend>Statut</legend>
-            <?= $this->Form->radio('status', ['student' => 'Étudiant(e)', 'teacher' => 'Enseignant(e)', ], ['value' => 'student']) ?>
+            <?= $this->Form->radio('type', ['student' => 'Étudiant(e)', 'teacher' => 'Enseignant(e)', ], ['value' => 'student']) ?>
         </fieldset>
         <fieldset>
             <legend>Identité</legend>

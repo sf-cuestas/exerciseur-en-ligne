@@ -30,6 +30,7 @@ use Cake\View\Exception\MissingTemplateException;
  *
  * @link https://book.cakephp.org/5/en/controllers/pages-controller.html
  */
+// TODO expliquer la raison de laisser cettes pages sans authentication et effacer les fonctions qu'on n'utilise pas
 class PagesController extends AppController
 {
     public function beforeFilter(EventInterface $event)

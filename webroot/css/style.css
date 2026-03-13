@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Luciole Regular';
-    src: url('/font/Luciole-Regular.ttf') format("truetype");
+    src: url('/font/lucioleRegular.ttf') format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -20,7 +20,7 @@ body {
     margin: 0;
     min-height: 100vh;
     font-family: "Luciole Regular", serif;
-    background-image: url(/img/brown-texture.jpg);
+    background-image: url(/img/brownTexture.jpg);
     background-size: cover;
 }
 
