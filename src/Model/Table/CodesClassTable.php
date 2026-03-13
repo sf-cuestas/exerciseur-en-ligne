@@ -38,6 +38,10 @@ class CodesClassTable extends Table
         parent::initialize($config);
 
         $this->setTable('codes_class');
+        $this->setPrimaryKey('id');
+        $this->belongsTo('Classses', [
+            'foreignKey' => 'id_class',
+        ]);
     }
 
     /**

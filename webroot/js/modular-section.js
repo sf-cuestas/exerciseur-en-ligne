@@ -1,7 +1,9 @@
 
 
 document.addEventListener('DOMContentLoaded', function(){
+    
     const container = document.getElementById('inputs');
+if (container!=null){ //Temporary solution to prevent console errors
     const previewContainer = document.getElementById('previews');
 
     document.getElementById('section-title').addEventListener('input', loadPreview);
@@ -813,4 +815,6 @@ document.addEventListener('DOMContentLoaded', function(){
     loadState();
     calculateTotalGrade();
     loadPreview();
+
+}
 });

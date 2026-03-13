@@ -42,6 +42,10 @@ class UsersClasssesTable extends Table
         $this->setPrimaryKey(['id_user', 'id_class']);
         $this->belongsTo('Users');
         $this->belongsTo('Classses');
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => ['joined_at' => 'new']
+            ]]);
     }
 
     /**

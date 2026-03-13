@@ -1,5 +1,11 @@
-document.getElementById('teacher-creation-code-label').style.visibility = "hidden";
-document.getElementById('teacher-creation-code').style.visibility = "hidden";
+codeLabel=document.getElementById('teacher-creation-code-label');
+if(codeLabel!=null){
+    codeLabel.style.visibility = "hidden";
+}
+creationCode=document.getElementById('teacher-creation-code');
+if(creationCode!=null){
+    creationCode.style.visibility = "hidden";
+}
 let radios = document.querySelectorAll("input[name=\"status\"]");
 // Use Array.forEach to add an event listener to each radio element.
 radios.forEach(function (radio) {
