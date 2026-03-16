@@ -199,12 +199,12 @@
     <h2>Generation de codes d'invitation à la classe</h2>
     <div id="class-codes">
 
-        <?= $this->Form->create(null, ['controller' => 'Classses', 'action' => 'generateCodeClass',$class['id']]) ?>
-        <?= $this->Form->control('generate-code-class', ['type' => 'hidden', 'value' => 'true']) ?>
-        <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?>
-        <?= $this->Form->control('number-usages-code', ['type' => 'number', 'label' => "Nombre d'usages :", 'value' => 1, 'min' => 1, 'max' => 67000]) ?>
-        <?= $this->Form->button("Créer code") ?>
-        <?= $this->Form->end() ?>
+        <?= $this->Form->create()?>
+        <?= $this->Form->hidden('create-code-class',)?>
+        <?= $this->Form->control('num_usages', ['label' => "Nombre d'usages:", 'value' => 1, 'min' => 1, 'max' => 67000, 'step' => 1]) ?>
+        <?= $this->Form->control('isCode', ['type' => 'hidden', 'value' => 'true']) ?>
+        <?= $this->Form->Button('Créer code')?>
+        <?= $this->Form->end()?>
             
     <div>
         <h4>Codes Actifs</h4>

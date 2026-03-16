@@ -208,6 +208,12 @@ class ClasssesController extends AppController
         return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
     }   
 
+    if(isset($this->getRequest()->getData()['isCode'])&& $this->getRequest()->getData()['isCode'] === 'true'){
+        $data = $this->getRequest()->getData();
+        $this->generateCodeClass($classId, $data['num_usages']);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }
+
 
   
     $listAllStudents = [];
