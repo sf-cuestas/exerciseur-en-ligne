@@ -12,7 +12,7 @@
         </div>
     </aside>
 
-    <?= $this->Form->create($exercise, ["id" => "dynamic-form"]); ?>
+    <?= $this->Form->create($exercise, ["id" => "dynamic-form", "method" => "post"]); // because cake php is too stupid to follow its own doc and put this shit on post by default ?>
     <fieldset>
         <div id="exercise-container">
         <!-- where the CSS will add the stuff to correct -->

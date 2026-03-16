@@ -174,11 +174,12 @@ class ExercisesController extends AppController
 
         if ($this->request->is('post')) {
             // the content straight from the database
-            $originalDecoded = json_decode($exercise["answer"], true);
+            $exercise = $this->Exercises->get($exerciseId);
+            $originalDecoded = json_decode($exercise["content"], true);
 
             // the content gotten from the form (the manually corrected stuff)
             $gradedData = $this->request->getData();
-            $gradedDecoded = json_decode($gradedData["answer"], true);
+            $gradedDecoded = json_decode($gradedData["content"], true);
 
             // the answers completed by the student
             $answersData = $this->Exercises->UsersExercises->get([$userId, $exerciseId]);
@@ -186,6 +187,8 @@ class ExercisesController extends AppController
 
             $finalMaxGrades = array();
             $finalGrades = array();
+
+            
 
 
             // filling up $finalMaxGrades
@@ -276,15 +279,14 @@ class ExercisesController extends AppController
             if ($this->Exercises->UsersExercises->save($answersData)) {
                 $this->Flash->success(__('The chapter has been saved.'));
 
+                $this->redirect(["controller" => "Classses", "action" => "teachersSpace"]);
             } else {
-                $this->redirect(['controller' => 'Pages', 'action' => 'index']);
-                    
-            }
                 $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+            }
         }
             
         $this->set(compact("exercise"));
         $this->set(compact("user"));
-        $this->set("john", json_decode($this->Exercises->UsersExercises->get([$userId, $exerciseId])["answer"], true));
+        $this->set("john", $this->request->is("POST"));
     }
 }
