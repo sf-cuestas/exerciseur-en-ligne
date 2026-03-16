@@ -100,7 +100,7 @@ class ClasssesController extends AppController
         $this->set('class', $class);
     }
 
-    public function viewClass($id = null): void
+    public function viewClass($id = null)
     {
         $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
@@ -129,9 +129,11 @@ class ClasssesController extends AppController
                 }
             }
         }
-        $creationCode = $this->getRequest()->getData();
-        if ($creationCode) {
+        
+        if (isset($this->getRequest()->getData()['num_usages'])) {
+            $creationCode = $this->getRequest()->getData();
             $this->generateCodeClass($class['id'], $creationCode['num_usages']);
+            return $this->redirect(['controller'=>'Classses','action' => 'view_class', $class['id']]);
         }
         $this->set('class', $class);
         $this->set('teachers', $teachers);
