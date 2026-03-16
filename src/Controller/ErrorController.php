@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\UnauthorizedException;
 
 /**
  * Error Handling Controller
@@ -66,5 +67,8 @@ class ErrorController extends AppController
      */
     public function afterFilter(EventInterface $event): void
     {
+    }
+    function error400($message): void{
+        $this->set('message', $message);
     }
 }

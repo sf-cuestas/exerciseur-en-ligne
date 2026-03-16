@@ -72,7 +72,7 @@
         </p>
     </div>
 </footer>
-<?= $this->Html->script(['chapter-creation-behavior', 'controlCreationUser', 'math-symbol', 'modular-section', 'sidebar-tools-behavior']) ?>
+<?= $this->Html->script(['chapterCreationBehavior', 'controlCreationUser', 'mathSymbol', 'modularSection', 'sidebarToolsBehavior']) ?>
 <?= $this->fetch('js') ?>
 </body>
 </html>

@@ -2,7 +2,7 @@
     <aside>
         <div id="profile">
             <!-- image placeholder A CHANGER -->
-            <?= $this->Html->image('profile-pic.jpg', ['alt' => 'photo de profil']) ?>
+            <?= $this->Html->image('profilePic.jpg', ['alt' => 'photo de profil']) ?>
             <div>
                 <h2>
                     <?= $this->Identity->get('name') . " " . $this->Identity->get('surname') ?>
