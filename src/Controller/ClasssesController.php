@@ -226,13 +226,13 @@ class ClasssesController extends AppController
         $studentSearch = $this->getRequest()->getQuery()['student-search'];
         $listAllStudents =  $this->Classses->UsersClassses->Users->find()->where(['name LIKE' => '%' . $studentSearch . '%'])->toArray() ?? [];
     }else{
-        $studentSearch = ' ';
+        $studentSearch = '';
     }
     if(isset($this->getRequest()->getQuery()['teacher-search'])){
         $teacherSearch = $this->getRequest()->getQuery()['teacher-search'];
         $listAllTeachers =  $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher', 'name LIKE' => '%' . $teacherSearch . '%'])->toArray() ?? [];
     }else{
-        $teacherSearch = ' ';
+        $teacherSearch = '';
     }
     
     
