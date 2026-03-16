@@ -57,6 +57,9 @@ class ExercisesTable extends Table
                     'updated_at' => 'always'
                 ]
             ]]);
+        $this->hasMany("UsersExercises", [
+            'foreignKey' => 'id_exercise'
+        ]);
     }
 
     /**
