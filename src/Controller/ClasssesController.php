@@ -100,7 +100,7 @@ class ClasssesController extends AppController
         $this->set('class', $class);
     }
 
-    public function viewClass($id = null): void
+    public function viewClass($id = null)
     {
         $isResponsible = false;
         $user = $this->Authentication->getResult()->getData();
@@ -129,9 +129,11 @@ class ClasssesController extends AppController
                 }
             }
         }
-        $creationCode = $this->getRequest()->getData();
-        if ($creationCode) {
+        
+        if (isset($this->getRequest()->getData()['num_usages'])) {
+            $creationCode = $this->getRequest()->getData();
             $this->generateCodeClass($class['id'], $creationCode['num_usages']);
+            return $this->redirect(['controller'=>'Classses','action' => 'view_class', $class['id']]);
         }
         $this->set('class', $class);
         $this->set('teachers', $teachers);
@@ -153,6 +155,7 @@ class ClasssesController extends AppController
     }
 
     //TODO mettre en order the end of the function
+    //TODO change the logic behind checking empty inputs (use current values as default values)
     public function edit($classId = null)
     {
         try {
@@ -160,15 +163,14 @@ class ClasssesController extends AppController
             if ($teacher->type == 'student') {
                 throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
             }
+            if(!$this->Classses->UsersClassses->find()->where(['id_user' => $teacher->id, 'id_class' => $classId, 'responsible' => 1])->first()){
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
         } catch (UnauthorizedException $error) {
             $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
         }
 
-        $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
-        $studentsToAdd = [];
-        if ($studentToAdd) {
-            $studentsToAdd[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentToAdd])->first();
-        }
+        
 
         $class = $this->Classses->find()->where(['id' => $classId])->first();
         $getStudentsLinks = $this->Classses->UsersClassses->find()->where(['id_class' => $classId, 'responsible' => 0])->all()->toArray();
@@ -177,10 +179,64 @@ class ClasssesController extends AppController
         $listChapters = $this->Classses->Chapters->find()->where(['class' => $classId])->all()->toArray();
 
 
-        $studentSearch = $_GET["student-search"] ?? "";
-        $teacherSearch = $_GET["teacher-search"] ?? "";
-        $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
-        $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
+    if(isset($this->getRequest()->getQuery()['add-teacher'])){
+        $teacherToAdd = $this->getRequest()->getQuery()['add-teacher'];
+        $teacherLink = $this->Classses->UsersClassses->newEmptyEntity();
+        $teacherLink['id_user'] = $teacherToAdd;
+        $teacherLink['id_class'] = $classId;
+        $teacherLink['responsible'] = 1;
+        $this->Classses->UsersClassses->save($teacherLink);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }
+    if (isset($this->getRequest()->getQuery()['add-student'])) {
+        $studentToAdd = $this->getRequest()->getQuery()['add-student'];
+        $studentLink = $this->Classses->UsersClassses->newEmptyEntity();
+        $studentLink['id_user'] = $studentToAdd;
+        $studentLink['id_class'] = $classId;
+        $studentLink['responsible'] = 0;
+        $this->Classses->UsersClassses->save($studentLink);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }
+    if(isset($this->getRequest()->getQuery()['delete-teacher'])){
+        $teacherToDelete = $this->getRequest()->getQuery()['delete-teacher'];
+        $teacherLink = $this->Classses->UsersClassses->find()->where(['id_user' => $teacherToDelete, 'id_class' => $classId])->first();
+        $this->Classses->UsersClassses->delete($teacherLink);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }
+    if (isset($this->getRequest()->getQuery()['delete-student-db'])) {
+        $studentToDelete = $this->getRequest()->getQuery()['delete-student-db'];
+        $studentLink = $this->Classses->UsersClassses->find()->where(['id_user' => $studentToDelete, 'id_class' => $classId])->first(); 
+        $this->Classses->UsersClassses->delete($studentLink);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }   
+
+    if(isset($this->getRequest()->getData()['isCode'])&& $this->getRequest()->getData()['isCode'] === 'true'){
+        $data = $this->getRequest()->getData();
+        $this->generateCodeClass($classId, $data['num_usages']);
+        return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
+    }
+
+
+  
+    $listAllStudents = [];
+    $listAllTeachers = [];
+    
+    
+    if(isset($this->getRequest()->getQuery()['student-search'])){
+        $studentSearch = $this->getRequest()->getQuery()['student-search'];
+        $listAllStudents =  $this->Classses->UsersClassses->Users->find()->where(['name LIKE' => '%' . $studentSearch . '%'])->toArray() ?? [];
+    }else{
+        $studentSearch = '';
+    }
+    if(isset($this->getRequest()->getQuery()['teacher-search'])){
+        $teacherSearch = $this->getRequest()->getQuery()['teacher-search'];
+        $listAllTeachers =  $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher', 'name LIKE' => '%' . $teacherSearch . '%'])->toArray() ?? [];
+    }else{
+        $teacherSearch = '';
+    }
+    
+    
+    
 
         $listStudents = [];
         foreach ($getStudentsLinks as $link) {
@@ -202,7 +258,7 @@ class ClasssesController extends AppController
         $this->set('listAllStudents', $listAllStudents);
         $this->set('listAllTeachers', $listAllTeachers);
         $this->set('id-class', $classId);
-        $this->set('studentsToAdd', $studentsToAdd);
+        //$this->set('studentsToAdd', $studentsToAdd);
 
 
         if ($this->request->is(['post'])) {
@@ -211,24 +267,28 @@ class ClasssesController extends AppController
 
                 if ($this->getRequest()->getData('description')) {
 
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name', 'description']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name', 'description']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
+                }
 
                 } else {
 
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
                 }
             }
         }
+
+        if($this->getRequest()->getData('backtoview')){
+            return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
+        }
+    }
     }
 
     public function search($search = ""): void
