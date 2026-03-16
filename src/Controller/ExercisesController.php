@@ -150,4 +150,143 @@ class ExercisesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    // $userId refers to the id of the user being corrected
+    public function correct($exerciseId = null, $userId = null) {
+        
+        $exercise = null;
+        $user = null;
+        
+        try {
+            $exercise = $this->Exercises->get($exerciseId);
+            $user = $this->Exercises->Users->get($userId);
+        } catch (\Throwable $th) {
+            return $this->redirect(["controller" => "Classses", "action" => "teachersSpace"]);
+        }
+
+        $content = $exercise['content'];
+        $decoded = null;
+
+        if (!empty($content)) {
+            $decoded = json_decode($content, true);
+        }
+        $john = null;
+
+        if ($this->request->is('post')) {
+            // the content straight from the database
+            $exercise = $this->Exercises->get($exerciseId);
+            $originalDecoded = json_decode($exercise["content"], true);
+
+            // the content gotten from the form (the manually corrected stuff)
+            $gradedData = $this->request->getData();
+            $gradedDecoded = json_decode($gradedData["content"], true);
+
+            // the answers completed by the student
+            $answersData = $this->Exercises->UsersExercises->get([$userId, $exerciseId]);
+            $answersDecoded = json_decode($answersData["answer"], true);
+
+            $finalMaxGrades = array();
+            $finalGrades = array();
+
+            
+
+
+            // filling up $finalMaxGrades
+            for ($i = 0; $i < count($originalDecoded); $i++) {
+                if ($originalDecoded[$i]["type"] == "mcq") {
+                    $totalGrade = 0;
+
+                    foreach ($originalDecoded[$i]['choices'] as $choice) {
+                        $totalGrade += floatval(isset($choice['grade']) && $choice['grade'] > 0 ? $choice['grade'] : 0.0);
+                    }
+
+                    $grade = $totalGrade;
+                } else {
+                    $grade = floatval($originalDecoded[$i]['grade'] ?? 0);
+                }
+
+                array_push($finalMaxGrades, $grade);
+            }
+
+            $answersCpt = 0;
+
+            // filling up $finalGrades
+            for ($i = 0; $i < count($gradedDecoded); $i++) {
+                switch ($gradedDecoded[$i]['type']) {
+                    case 'openquestion':
+                        $grade = floatval($gradedDecoded[$i]['grade'] ?? 0);
+                        $grade = $grade > $finalMaxGrades[$i] ? $finalMaxGrades[$i] : $grade;
+                        break;
+
+                    case 'mcq':
+                        $grade = 0;
+                        for ($j = 0; $j < count($answersDecoded[$i]['choices']); $j++) {
+                            $choice = $answersDecoded[$i]['choices'][$j];
+                            $ogChoice = $originalDecoded[$i]['choices'][$j];
+
+                            if ($choice['text'] == $ogChoice['text'] && $choice['answer']) {
+                                $grade += floatval($ogChoice['grade'] ?? 0.0);
+                            }
+                        }
+
+                        $answersCpt++;
+                        break;
+
+                    case 'numericalquestion':
+                        // echo $answersDecoded[$answersCpt]['answernumber'];
+                        if (isset($answersDecoded[$answersCpt]['answernumber'])) {
+                            if (floatval($answersDecoded[$answersCpt]['answernumber']) === floatval($originalDecoded[$i]['answerProf'])) {
+                                $grade = $finalMaxGrades[$i];
+                            } else {
+                                $grade = 0;
+                            }
+                        } else {
+                            $grade = 0;
+                        }
+                        
+                        $answersCpt++;
+                        break;
+
+                    case 'truefalse':
+                        // echo $answersDecoded[$answersCpt]['answer'] . " ; " . $originalDecoded[$i]['answerProf'] . "<br>";
+
+                        if (isset($answersDecoded[$answersCpt]['answer'])) {
+                            if ($answersDecoded[$answersCpt]['answer'] === $originalDecoded[$i]['answerProf']) {
+                                $grade = $finalMaxGrades[$i];
+                            } else {
+                                $grade = 0;
+                            }
+                        } else {
+                            $grade = 0;
+                        }
+                        $answersCpt++;
+                        break;
+
+                    default:
+                        $grade = 0;
+                        break;
+                }
+
+                array_push($finalGrades, $grade);
+            }
+
+            $totalGrade = array_sum($finalGrades);
+            $totalMaxGrade = array_sum($finalMaxGrades);
+
+            $answersData['grade'] = $totalGrade;
+
+
+            if ($this->Exercises->UsersExercises->save($answersData)) {
+                $this->Flash->success(__('The chapter has been saved.'));
+
+                $this->redirect(["controller" => "Classses", "action" => "teachersSpace"]);
+            } else {
+                $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+            }
+        }
+            
+        $this->set(compact("exercise"));
+        $this->set(compact("user"));
+        $this->set("john", $this->request->is("POST"));
+    }
 }
