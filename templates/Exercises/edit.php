@@ -1,5 +1,6 @@
 <main id="chapter-creation">
     <div class = columnSideBar>
+        
         <button  id="button-tools">outils</button>
         <div id="sidebar">
             <aside class="chapter-creation-aside">
@@ -33,7 +34,7 @@
         </div>
     </div>
 
-    <?= $this->Form->create($exercise) ?>
+    <?= $this->Form->create($exercise, ['id' => "dynamic-form"]) ?>
         <fieldset>
             <legend>Paramètres de la section</legend>   
             <ul>
@@ -110,15 +111,14 @@
         </fieldset>
 
         <?= $this->Form->submit(__('Enregistrer les modifications'), ['id' => "accept-changes"]); ?>
-        <?= $this->Form->submit(__('Annuler les modifications'), ['id' => "cancel-changes"]); ?>
     <?= $this->Form->end() ?>
 
-    <form>
+    <?= $this->Form->create(); ?>
         <fieldset>
             <legend>Aperçu de l'exercice (point de vue d'un élève)</legend>
             <div id="previews"></div>
         </fieldset>
-    </form>
+    <?= $this->Form->end(); ?>
 </main>
 
 <script>
