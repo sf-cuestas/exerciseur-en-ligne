@@ -153,6 +153,7 @@ class ClasssesController extends AppController
     }
 
     //TODO mettre en order the end of the function
+    //TODO change the logic behind checking empty inputs (use current values as default values)
     public function edit($classId = null)
     {
         try {
@@ -163,7 +164,6 @@ class ClasssesController extends AppController
         } catch (UnauthorizedException $error) {
             $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
         }
-
         $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
         $studentsToAdd = [];
         if ($studentToAdd) {
@@ -177,10 +177,26 @@ class ClasssesController extends AppController
         $listChapters = $this->Classses->Chapters->find()->where(['class' => $classId])->all()->toArray();
 
 
-        $studentSearch = $_GET["student-search"] ?? "";
-        $teacherSearch = $_GET["teacher-search"] ?? "";
-        $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
-        $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
+  
+    $listAllStudents = [];
+    $listAllTeachers = [];
+    $teacherSearch = '';
+    $studentSearch = '';
+    
+    if(isset($_GET["student-search"])){
+        $studentSearch = $_GET["student-search"];
+        $listAllStudents =  $this->Classses->UsersClassses->Users->find()->where(['name LIKE' => '%' . $studentSearch . '%'])->toArray() ?? [];
+        
+   
+    }
+    if(isset($_GET["teacher-search"])){
+        $teacherSearch = $_GET["teacher-search"];
+        $listAllTeachers =  $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher', 'name LIKE' => '%' . $teacherSearch . '%'])->toArray() ?? [];
+        
+    }
+    
+    
+    
 
         $listStudents = [];
         foreach ($getStudentsLinks as $link) {
@@ -211,24 +227,28 @@ class ClasssesController extends AppController
 
                 if ($this->getRequest()->getData('description')) {
 
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name', 'description']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name', 'description']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
+                }
 
                 } else {
 
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
+                $class = $this->Classses->patchEntity($class, $this->request->getData(), [
+                    'fields' => ['name']
+                ]);
+                if ($this->Classses->save($class)) {
+                    return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
                 }
             }
         }
+
+        if($this->getRequest()->getData('backtoview')){
+            return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
+        }
+    }
     }
 
     public function search($search = ""): void
