@@ -202,7 +202,7 @@ class ClasssesController extends AppController
         return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
     }
     if (isset($this->getRequest()->getQuery()['delete-student-db'])) {
-        $studentToDelete = $this->getRequest()->getQuery()['delete-student'];
+        $studentToDelete = $this->getRequest()->getQuery()['delete-student-db'];
         $studentLink = $this->Classses->UsersClassses->find()->where(['id_user' => $studentToDelete, 'id_class' => $classId])->first(); 
         $this->Classses->UsersClassses->delete($studentLink);
         return $this->redirect(['controller'=>'Classses','action' => 'edit', $classId]);
@@ -212,19 +212,19 @@ class ClasssesController extends AppController
   
     $listAllStudents = [];
     $listAllTeachers = [];
-    $teacherSearch = '';
-    $studentSearch = '';
+    
     
     if(isset($this->getRequest()->getQuery()['student-search'])){
         $studentSearch = $this->getRequest()->getQuery()['student-search'];
         $listAllStudents =  $this->Classses->UsersClassses->Users->find()->where(['name LIKE' => '%' . $studentSearch . '%'])->toArray() ?? [];
-        
-   
+    }else{
+        $studentSearch = ' ';
     }
     if(isset($this->getRequest()->getQuery()['teacher-search'])){
         $teacherSearch = $this->getRequest()->getQuery()['teacher-search'];
         $listAllTeachers =  $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher', 'name LIKE' => '%' . $teacherSearch . '%'])->toArray() ?? [];
-        
+    }else{
+        $teacherSearch = ' ';
     }
     
     

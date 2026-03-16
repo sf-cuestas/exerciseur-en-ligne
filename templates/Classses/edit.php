@@ -50,6 +50,9 @@
                 <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                 <?= $this->Form->control('teacher-search', ['type' => 'search', 'label' => false, 'value' => $teacherSearch]) ?>
                 <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' =>$class['id']]) ?> -->
+                <?php if (isset($studentSearch)) { ?>
+                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                <?php } ?>
                 <?= $this->Form->button("Rechercher responsable", ['class' => 'btn']) ?>
                 <?= $this->Form->end() ?>       
                 
@@ -61,6 +64,12 @@
                                 <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                                 <?= $this->Form->control('add-teacher', ['type' => 'hidden', 'value' => $teacher['id']]) ?>
                                 <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                <?php if (isset($teacherSearch)) { ?>
+                                    <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                <?php } ?>
+                                <?php if (isset($studentSearch)) { ?>
+                                    <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                <?php } ?>
                                 <?= $this->Form->button("Ajouter", ['class' => 'btn']) ?>
                                 <?= $this->Form->end() ?>
                             </div>
@@ -76,6 +85,12 @@
                             <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                             <?= $this->Form->control('delete-teacher', ['type' => 'hidden', 'value' => $teacher['id']]) ?>
                             <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                            <?php if (isset($teacherSearch)) { ?>
+                                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                            <?php } ?>
+                            <?php if (isset($studentSearch)) { ?>
+                                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                            <?php } ?>
                             <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
                             <?= $this->Form->end() ?>
                             </form>
@@ -94,7 +109,10 @@
             <div class="class-adding">
                 <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                 <?= $this->Form->control('student-search', ['type' => 'search', 'label' => false, 'value' => $studentSearch]) ?>
-                <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?>
+                <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                <?php if (isset($teacherSearch)) { ?>
+                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                <?php } ?>
                 <?= $this->Form->button("Rechercher étudiant", ['class' => 'btn']) ?>
                 <?= $this->Form->end() ?>
                 
@@ -106,6 +124,12 @@
                             <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                             <?= $this->Form->control('add-student', ['type' => 'hidden', 'value' => $student['id']]) ?>
                             <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                            <?php if (isset($studentSearch)) { ?>
+                                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                            <?php } ?>
+                            <?php if (isset($teacherSearch)) { ?>
+                                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                            <?php } ?>
                             <?= $this->Form->button("Ajouter", ['class' => 'btn']) ?>
                             <?= $this->Form->end() ?>
                         </div>
@@ -126,6 +150,12 @@
                                         <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                                         <?= $this->Form->control('delete-student', ['type' => 'hidden', 'value' => $student['id']]) ?>
                                         <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                        <?php if (isset($studentSearch)) { ?>
+                                            <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                        <?php } ?>
+                                        <?php if (isset($teacherSearch)) { ?>
+                                            <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                        <?php } ?>
                                         <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
                                         <?= $this->Form->end() ?>
                                         </form>
@@ -133,12 +163,11 @@
                                 </li>
                         <?php } } ?>
                     </ul>
-                    <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
-                    <input type="hidden" name="add-student-db" value="true">
+                    <!-- <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
                     <?= $this->Form->control('add-student-db',['type' => 'hidden', 'value'=>"true"]) ?>
-                    <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                    <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?>
                     <?= $this->Form->button("Ajouter les étudiants", ['class' => 'btn']) ?>
-                    <?= $this->Form->end() ?>        
+                    <?= $this->Form->end() ?>         -->
                     </div>
                     
                     <h2 <?= empty($listStudents) ? "hidden" : "" ?>>Liste des étudiants inscrits</h2>
@@ -146,10 +175,16 @@
                         <?php foreach ($listStudents as $student) { ?>
                             <li class="">
                                 <div>
-                                    <?= $this->Html->link($student['name'] . " " . $student['surname'], ['controller' => 'Users', 'action' => 'profile', $student['id_user']]) ?>
+                                    <?= $this->Html->link($student['name'] . " " . $student['surname'], ['controller' => 'Users', 'action' => 'profile', $student['id']]) ?>
                                     <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
-                                    <?= $this->Form->control('delete-student-db', ['type' => 'hidden', 'value' => $student['id_user']]) ?>
+                                    <?= $this->Form->control('delete-student-db', ['type' => 'hidden', 'value' => $student['id']]) ?>
                                     <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                    <?php if (isset($studentSearch)) { ?>
+                                        <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                    <?php } ?>
+                                    <?php if (isset($teacherSearch)) { ?>
+                                        <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                    <?php } ?>
                                     <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
                                     <?= $this->Form->end() ?>
                                 </div>
