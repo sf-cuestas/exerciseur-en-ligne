@@ -188,8 +188,6 @@ class ExercisesController extends AppController
             $finalMaxGrades = array();
             $finalGrades = array();
 
-            
-
 
             // filling up $finalMaxGrades
             for ($i = 0; $i < count($originalDecoded); $i++) {
@@ -277,16 +275,15 @@ class ExercisesController extends AppController
 
 
             if ($this->Exercises->UsersExercises->save($answersData)) {
-                $this->Flash->success(__('The chapter has been saved.'));
+                $this->Flash->success(__('The exercise has been successfully corrected and saved.'));
 
                 $this->redirect(["controller" => "Classses", "action" => "teachersSpace"]);
             } else {
-                $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+                $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
             }
         }
             
         $this->set(compact("exercise"));
         $this->set(compact("user"));
-        $this->set("john", $this->request->is("POST"));
     }
 }
