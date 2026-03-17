@@ -1,3 +1,8 @@
+// NOTE : some of this code might have been inspired by modularSection.js,
+// thus the functions declared inside the function declared inside the settings of an event listener
+
+// TODO : put those function outside the event listener
+
 document.addEventListener('DOMContentLoaded', function(){
     exerciseContainer = document.getElementById('exercise-container');
     const form = document.getElementById('dynamic-form');

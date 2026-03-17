@@ -185,8 +185,9 @@ class ExercisesController extends AppController
             $answersData = $this->Exercises->UsersExercises->get([$userId, $exerciseId]);
             $answersDecoded = json_decode($answersData["answer"], true);
 
-            $finalMaxGrades = array();
-            $finalGrades = array();
+
+            $finalMaxGrades = array();  // stores the maximum grade possible per question
+            $finalGrades = array();     // stores every grade, although only the sum is used it may be usefull to keep the grade details
 
 
             // filling up $finalMaxGrades
@@ -273,7 +274,7 @@ class ExercisesController extends AppController
 
             $answersData['grade'] = $totalGrade;
 
-
+            // changes the answer in the UserExercises table to save the grade
             if ($this->Exercises->UsersExercises->save($answersData)) {
                 $this->Flash->success(__('The exercise has been successfully corrected and saved.'));
 
@@ -282,7 +283,8 @@ class ExercisesController extends AppController
                 $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
             }
         }
-            
+
+
         $this->set(compact("exercise"));
         $this->set(compact("user"));
     }
