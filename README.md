@@ -28,6 +28,10 @@ kebab-case (les images et fichiers javascript), autres avec snake_case (pour les
 - Nous avons essayé de standardiser le nommage avec camelCase, mais pour les fichiers avec la vue de pages le framework nous force à
 utiliser snake_case pour les fichiers avec multiples mots.
 
+Pour la programmation defensive, nous avons ajouté pour quelques fonctions un try catch pour prévenir que le site web s'arrete dans une section critique,
+aussi, nous avons ajouté la verification de nulls pour éviter que les scripts de javascript ont de problèmes d'exécution parce que nous devons charger tous les scripts meme si la page actuelle n'utiles pas
+ce fichier de javascript à cause de la structure de CakePHP.
+
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
 Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
