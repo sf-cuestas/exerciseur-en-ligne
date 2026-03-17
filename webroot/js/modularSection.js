@@ -1,15 +1,19 @@
 //todo : commenter les fonctions non compréhensibles
 //modulariser les fonctions en plus de petites fonctions
 
+//event listener called when page is loaded (loads all the necessary javascript to make the modular exercise creation work)
 document.addEventListener('DOMContentLoaded', function(){
     
+    //container is the html element in which all the imputs are created.
     const container = document.getElementById('inputs');
 if (container!=null){ //Temporary solution to prevent console errors
+    //same as container but for the preview section
     const previewContainer = document.getElementById('previews');
-
+    //adding eventlistener to update the preview when the section title is changed
     document.getElementById('section-title').addEventListener('input', loadPreview);
     document.getElementById('section-title').addEventListener('click', loadPreview);
 
+    //creating variables for the different buttons to add eventlisteners on
     const addTextBtn = document.getElementById('add-text');
     const addTitle1Btn = document.getElementById('add-title-1');
     const addTitle2Btn = document.getElementById('add-title-2');
@@ -22,22 +26,22 @@ if (container!=null){ //Temporary solution to prevent console errors
     const addMultipleChoiceBtn = document.getElementById('add-multiple-choice');
     const addHintBtn = document.getElementById('add-hint');
 
-
+    //changes the state of the hint button depending on the parameters (if the number of allowed tries is 1 then there is no use for hints, same if the answers are given right after validating the question)
     function updateHintBtnState(){
         if(document.getElementById('tries')&&document.getElementById('tries').checked==true&&(document.getElementById('tries-number')&&document.getElementById('tries-number').value<2)){
 
             addHintBtn.setAttribute('disabled','true');
         }else{
             addHintBtn.removeAttribute('disabled');
-            
         }
     }
-
+    //setting listeners to update hint button
     document.getElementById('tries-number').addEventListener('input', updateHintBtnState);
     document.getElementById('tries-number').addEventListener('click', updateHintBtnState);
     document.getElementById('tries').addEventListener('input', updateHintBtnState);
     document.getElementById('tries').addEventListener('click', updateHintBtnState);
 
+    //these two possiblities depend on wether we're on the 
     if(document.getElementById('save-section')&&document.getElementById('save-section-end')){
 
         const saveBtn = document.getElementById('save-section');
