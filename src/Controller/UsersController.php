@@ -114,9 +114,11 @@ class UsersController extends AppController
             if ($data) {
                 if ($data['type'] == 'teacher') {
                     if (!empty($data['teacher-creation-code'])) {
-                        $codeDb = $this->Users->Creationcodes->find()->where(['code' => $data['teacher-creation-code']])->first();
+                        $codeDb = $this->Users->Creationcodes->find()->where(['code' => $data['teacher-creation-code'], 'num_usages >' => 0 ])->first();
                         if ($codeDb) {
                             if ($this->Users->save($this->Users->newEntity($data))) {
+                                $codeDb['num_usages'] = $codeDb['num_usages'] - 1;
+                                $this->Users->Creationcodes->save($codeDb);
                                 $this->Flash->success('la compte a été créée');
                                 return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
                             } else {

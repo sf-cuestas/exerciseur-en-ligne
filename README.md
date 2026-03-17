@@ -1,27 +1,32 @@
 # Exerciseur en ligne
-Salut celui-là c'est un projet dans le cadre de la SAÉ pour le deuxième, le projet
+Salut celui-là c'est un projet dans le cadre de la SAÉ pour le deuxième année de BUT Informatique, le projet
 consiste d'une page web pour la realisation et la creation d'exercices pour les étudiants
-Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakephp
+Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakePHP
 voici le lien au projet https://github.com/JeromeTardivon/Exerciseur-en-Ligne
 
 ## Convention de nommage des variables
-Pour les contrôleurs, entités, tables et variables, nous allons suivre la convention de [cakePHP](https://book.cakephp.org/5.x/intro/conventions.html)
+Pour les contrôleurs, entités, tables et variables, nous allons suivre la convention de [cakePHP](https://book.cakephp.org/5.x/intro/conventions.html).
 ```
 UsersController.php ->
 class UsersController extends AppController
 {
-    // URL: /users/viewMe
+    // URL: /users/view_Me
     public function viewMe()
     {
         // camelBacked method names
     }
 }
 ```
-et pour le nommage des autres fichiers (javascript, css, fonts, images), nous allons utiliser camelBacked avec la premiere lettre en miniscule.
+Et pour le nommage des autres fichiers (javascript, css, fonts, images), nous allons utiliser camelBacked avec la premiere lettre en miniscule, nous nous sommes mis d'accord sur
+ce type de nommage pour suivre l'idée de cake php mais dans la documentation du framework, il n'y a pas une convention sur le nommage de ficher hors les fichiers que cakePHP utilise.
 ```
 fichier javascript -> controlCreationUser.js
-        php        -> teachersSpace.php
 ```
+Quelques erreurs que nous avons trouvé sur le nommage des fichiers et variables:
+- Quand nous avons commencé le projet, nous nommions quelques fichiers avec
+kebab-case (les images et fichiers javascript), autres avec snake_case (pour les fichiers qui ont eu une structure html).
+- Nous avons essayé de standardiser le nommage avec camelCase, mais pour les fichiers avec la vue de pages le framework nous force à
+utiliser snake_case pour les fichiers avec multiples mots.
 
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
