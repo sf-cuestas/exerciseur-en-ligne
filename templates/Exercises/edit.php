@@ -34,14 +34,14 @@
         </div>
     </div>
 
-    <?= $this->Form->create($exercise, ['id' => "dynamic-form"]) ?>
+    <?= $this->Form->create($exercise, ['id' => "dynamic-form", "method" => "post"]) ?>
         <fieldset>
             <legend>Paramètres de la section</legend>   
             <ul>
                 <li><h3>Options de notation</h3></li>
                 <li>
                     <span>
-                        <?php echo $this->Form->label('weight', "Coefficient (nécéssaire même si non notée, pour les statistiques):"); ?>
+                        <?= $this->Form->label('weight', "Coefficient (nécéssaire même si non notée, pour les statistiques):"); ?>
                         <?= $this->Form->number("weight", ["id" => "weight", "min" => "0", "max" => "100", "step" => "1", "value" => "0"]); ?>
                     </span>
                 </li>
@@ -113,12 +113,12 @@
         <?= $this->Form->submit(__('Enregistrer les modifications'), ['id' => "accept-changes"]); ?>
     <?= $this->Form->end() ?>
 
-    <?= $this->Form->create(); ?>
+    <form>
         <fieldset>
             <legend>Aperçu de l'exercice (point de vue d'un élève)</legend>
             <div id="previews"></div>
         </fieldset>
-    <?= $this->Form->end(); ?>
+    </form>
 </main>
 
 <script>
