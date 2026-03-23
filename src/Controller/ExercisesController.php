@@ -79,7 +79,6 @@ class ExercisesController extends AppController
             $reqData = $this->request->getData();
             // $this->Flash->error(__(dd($reqData)));
 
-            // TODO : also save total grade in DB
             if (isset($reqData['section-title'])&&isset($reqData['weight'])&&isset($reqData["content"])){
                 $content = $reqData["content"];
                 $weight = $reqData['weight'];
@@ -107,6 +106,7 @@ class ExercisesController extends AppController
                     'timesec' => $time,
                     'tries' => $tries_number,
                     'ansdef' => $ansdef,
+                    'grade' => $grade,
                     'showans' => $showans,
                 ];
 
@@ -116,8 +116,7 @@ class ExercisesController extends AppController
                 if ($this->Exercises->save($exercise)) {
                     $this->Flash->success(__('The exercise has been saved.'));
 
-                    // TODO : change this to the Chapters -> view -> the chapter from wich the exercise is
-                    $this->redirect(['controller' => 'Classses', "action" => "teachers-space"]);
+                    $this->redirect(['controller' => 'Chapters', "action" => "view", $exercise["id_chapter"]]);
                 } else {
                     $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
                 }
