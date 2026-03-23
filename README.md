@@ -33,6 +33,10 @@ aussi, nous avons ajouté la verification de nulls pour éviter que les scripts 
 
 De plus, pour la gestion d'erreur, nous avons géré l'accès aux pages avec l'authentification, si l'utilisateur n'est pas connecté, le
 Framework l'oblige à se connecter et si l'utilisateur est déjà connecté, nous regardons si le type d'utilisateur (prof/admin/étudiant) a accès à la page et si ce n'est pas le cas nous le redirigons à une page 401 pour notifier l'erreur d'autorisation.
+```
+Exemple
+se connecter en tant qu'étudiant et clicker sur le button space professeur.
+```
 
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
