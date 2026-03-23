@@ -1,6 +1,5 @@
 <main id="chapter-creation">
     <div class = columnSideBar>
-        
         <button  id="button-tools">outils</button>
         <div id="sidebar">
             <aside class="chapter-creation-aside">

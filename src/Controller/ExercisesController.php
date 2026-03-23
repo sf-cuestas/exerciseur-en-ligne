@@ -79,7 +79,9 @@ class ExercisesController extends AppController
             $reqData = $this->request->getData();
             // $this->Flash->error(__(dd($reqData)));
 
-            if (isset($reqData['section-title'])&&isset($reqData['weight'])){
+            // TODO : also save total grade in DB
+            if (isset($reqData['section-title'])&&isset($reqData['weight'])&&isset($reqData["content"])){
+                $content = $reqData["content"];
                 $weight = $reqData['weight'];
                 $ansdef = isset($reqData['ansdef']) && $reqData['ansdef']=="on" ? 1 : 0;
 
