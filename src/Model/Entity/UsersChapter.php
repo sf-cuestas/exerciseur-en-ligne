@@ -24,7 +24,7 @@ class UsersChapter extends Entity
      */
     protected array $_accessible = [
         '*' => true,
-        'id_user' => false,
-        'id_chapter' => false,
+        'id_user' => true,
+        'id_chapter' => true,
     ];
 }

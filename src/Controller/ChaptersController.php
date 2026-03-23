@@ -66,18 +66,48 @@ class ChaptersController extends AppController
      */
     public function add()
     {
-        $chapter = $this->Chapters->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $chapter = $this->Chapters->patchEntity($chapter, $this->request->getData());
+        //$chapter = $this->Chapters->newEmptyEntity();
+         if ($this->request->is('post')) {
+            $chapter = $this->fetchTable('Chapters')->newEntity(
+                [
+                    'title' => $this->request->getData('title'),
+                    'description' => $this->request->getData('description'),
+                    'visible' => $this->request->getData('visible'),
+                    'level' => $this->request->getData('level'),
+                    'secondstimelimit' => ($this->request->getData('timelimit') ? ($this->request->getData('timelimit_hours') * 3600 + $this->request->getData('timelimit_minutes') * 60 + $this->request->getData('timelimit_seconds')) : null),
+                    'class' => ($this->request->getData('class') != 'unspecified' ? $this->Chapters->Classses->find()->where(['name' => $this->request->getData('class')])->first()->id : null),
+                    'weight' => ($this->request->getData('graded') ? $this->request->getData('weight') : null),
+                    'tries' => ($this->request->getData('limittry') ? $this->request->getData('tries') : null),
+                    'corrend' => $this->request->getData('corrend'),
+                    // TODO gérer les tags
+                ]
+            );
             if ($this->Chapters->save($chapter)) {
-                $this->Flash->success(__('The chapter has been saved.'));
+                $chapterUser = $this->fetchTable('UsersChapters')->newEntity(
+                    [
+                        'id_user' => $this->Authentication->getResult()->getData()->id,
+                        'id_chapter' => $chapter->id,
+                        
+                    ]
+                );
+                if ($this->Chapters->UsersChapters->save($chapterUser)) {
+                    //$this->Flash->success(__('The chapter has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['controller' => 'Chapters', 'action' => 'add', $chapter->id]);
+                } else {
+                    // If chapterUser sav   e fails, delete the chapter to maintain consistency
+                    $this->Chapters->delete($chapter);
+                }
             }
             $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+         }
+        $usersClassses = $this->Chapters->UsersChapters->Users->UsersClassses->find()->where(['id_user' => $this->Authentication->getResult()->getData()->id, 'responsible' => 1])->all();
+        $classses = [];
+        foreach ($usersClassses as $usersClassse) {
+            $classses[] = $this->Chapters->UsersChapters->Users->UsersClassses->Classses->find()->where(['id' => $usersClassse->id_class])->first();
         }
-        $classses = $this->Chapters->Classses->find('list', limit: 200)->all();
-        $this->set(compact('chapter', 'classses'));
+
+        $this->set('classes', $classses);
     }
 
     /**

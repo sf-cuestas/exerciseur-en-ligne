@@ -41,18 +41,36 @@ class ExercisesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($id = null)
     {
-        $exercise = $this->Exercises->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $exercise = $this->Exercises->patchEntity($exercise, $this->request->getData());
+        if($id == null) {
+            return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+        }
+
+         $exercise = $this->Exercises->newEmptyEntity();
+         if ($this->request->is('post')) {
+             $exercise = $this->Exercises->patchEntity(
+                 $exercise,
+                 [
+                     'id_chapter' => $id,
+                     'id_user' => $this->Authentication->getResult()->getData()->id,
+                     'content' => '{}',
+                     'title' => 'Nouvel exercice',
+                     'coef' => 1,
+                     'timesec' => null,
+                     'tries' => null,
+                     'ansdef' => 0,
+                     'showans' => 0
+                 ]
+             );
+         
             if ($this->Exercises->save($exercise)) {
                 $this->Flash->success(__('The exercise has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+    
+                return $this->redirect(['controller' => 'Chapters', 'action' => 'view', $id]);
             }
-            $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
-        }
+         }    
+        
         $users = $this->Exercises->Users->find('list', limit: 200)->all();
         $this->set(compact('exercise', 'users'));
     }
