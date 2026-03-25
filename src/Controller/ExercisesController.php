@@ -95,15 +95,17 @@ class ExercisesController extends AppController
 
         if ($this->request->is('post')) {
             $reqData = $this->request->getData();
+            // $this->Flash->error(__(dd($reqData)));
 
-            if (isset($reqData['section-title'])&&isset($reqData['weight'])  && isset($reqData['user']) && $reqData['user']['type'] === 'teacher'){
+            if (isset($reqData['section-title'])&&isset($reqData['weight'])&&isset($reqData["content"])){
+                $content = $reqData["content"];
                 $weight = $reqData['weight'];
                 $ansdef = isset($reqData['ansdef']) && $reqData['ansdef']=="on" ? 1 : 0;
 
                 $showans = isset($reqData['showans']) && $reqData['showans'] == "on" && $ansdef == 1 ? 1 : 0;
 
                 $title = $reqData['section-title'];
-                $time = $reqData['timelimit_seconds'] + $reqData['timelimit_minutes'] * 60 + $reqData['timelimit_hours'] * 3600;
+                $time = $reqData['timelimit-seconds'] + $reqData['timelimit-minutes'] * 60 + $reqData['timelimit-hours'] * 3600;
                 $grade = 0;
                 if (isset($reqData["total-grade"])) {
                     $grade =(float) $reqData["total-grade"];
@@ -122,28 +124,23 @@ class ExercisesController extends AppController
                     'timesec' => $time,
                     'tries' => $tries_number,
                     'ansdef' => $ansdef,
+                    'grade' => $grade,
                     'showans' => $showans,
-
                 ];
 
                 $exercise = $this->Exercises->patchEntity($exercise, $data);
+                // $this->Flash->error(__(dd($exercise)));
 
-                if ($exercise) {
+                if ($this->Exercises->save($exercise)) {
+                    $this->Flash->success(__('The exercise has been saved.'));
 
-                    if ($this->Exercises->save($exercise)) {
-                        $this->Flash->success(__('The exercise has been saved.'));
-    
-                        return $this->redirect(['controller' => 'Chapters', "action" => "search"]);
-                    }
-    
-                    $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
+                    $this->redirect(['controller' => 'Chapters', "action" => "view", $exercise["id_chapter"]]);
                 } else {
-                    $exercise = null;
+                    $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
                 }
             }
         }
-            
-        $this->set("john", $reqData);
+        
         $this->set('exercise', $exercise);
         $this->set("content", $content);
         $this->set("decoded", $decoded);
