@@ -294,7 +294,7 @@ class ExercisesController extends AppController
             if ($this->Exercises->UsersExercises->save($answersData)) {
                 $this->Flash->success(__('The chapter has been saved.'));
 
-                $this->redirect(["controller" => "Classses", "action" => "teachersSpace"]);
+                $this->redirect(["controller" => "Exercises", "action" => "copies-to-correct", $exerciseId]);
             } else {
                 $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
             }
@@ -303,5 +303,16 @@ class ExercisesController extends AppController
         $this->set(compact("exercise"));
         $this->set(compact("user"));
         $this->set("john", $this->request->is("POST"));
+    }
+
+    // TODO : get users names so thats what being displayed in the view
+    public function copiesToCorrect($exerciseId) {
+        $user = $this->Authentication->getResult()->getData();
+        $exercise = $this->Exercises->get($exerciseId);
+
+        $exercises = $this->Exercises->UsersExercises->find()
+        ->where(['id_exercise =' => $exercise['id'], 'grade IS ' => NULL])->toArray();
+
+        $this->set(compact("exercises"));
     }
 }
