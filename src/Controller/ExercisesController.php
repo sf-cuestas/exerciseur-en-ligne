@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Exception\UnauthorizedException;
+
 /**
  * Exercises Controller
  *
@@ -43,12 +45,32 @@ class ExercisesController extends AppController
      */
     public function add($idChapter = null)
     {
+
+        try {
+            $teacher = $this->Authentication->getResult()->getData();
+            if ($teacher->type == 'student') {
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
+            if(!$this->Exercises->Chapters->UsersChapters->find()->where(['id_user' => $teacher->id, 'id_chapter' => $idChapter])->first()){
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
+        } catch (UnauthorizedException $error) {
+            $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
+        }
         
         if($idChapter == null) {
             return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
         }
-
+         //more comprehensive handling of the parameters
          $exercise = $this->Exercises->newEmptyEntity();
+         $timelimit_hours = $this->request->getData('timelimit_hours')==null? 0 : $this->request->getData('timelimit_hours');
+         $timelimit_minutes = $this->request->getData('timelimit_minutes')==null? 0 : $this->request->getData('timelimit_minutes');
+         $timelimit_seconds = $this->request->getData('timelimit_seconds')==null? 0 : $this->request->getData('timelimit_seconds');
+         $timeLimit = $timelimit_seconds + $timelimit_minutes*60 + $timelimit_hours*3600;
+         $nbtries= null;
+         if($this->request->getData('tries') == "1"){
+            $nbtries = $this->request->getData('tries_number');
+         }
          if ($this->request->is('post')) {
              $exercise = $this->Exercises->patchEntity(
                  $exercise,
@@ -56,16 +78,18 @@ class ExercisesController extends AppController
                     'id_chapter' => $idChapter,
                     'id_user' => $this->Authentication->getResult()->getData()->id,
                     'content' => $this->request->getData("content") ?? "{}",
-                    'title' => $this->request->getData('section-title')? $this->request->getData('section-title')== "" ? "Exercice sans titre" : $this->request->getData('section-title') : "Titre Supprimé",
-                    'coef' => $this->request->getData('weight')?? 0,
+                    'title' => $this->request->getData('section-title') == '' ? "Exercice sans titre" : $this->request->getData('section-title'),
+                    'coef' => $this->request->getData('weight')? $this->request->getData('weight') : 0,
                     //if time limit is 0, set it to null (==unlimited)
-                    'timesec' => $this->request->getData('timelimit-seconds') && $this->request->getData('timelimit-minutes') && $this->request->getData('timelimit-hours') ?  $this->request->getData('timelimit-seconds') + $this->request->getData('timelimit-minutes') * 60 + $this->request->getData('timelimit-hours') * 3600 ==0? null : $this->request->getData('timelimit-seconds') + $this->request->getData('timelimit-minutes') * 60 + $this->request->getData('timelimit-hours') * 3600 : null,
-                    'tries' => $this->request->getData('tries')&& $this->request->getData('tries_number') ? $this->request->getData('tries')== "on" ? $this->request->getData('tries_number') : null : null,
-                    'ansdef' =>  $this->request->getData('ansdef')? $this->request->getData('ansdef') == "on" ? 1 : 0 : 0,
-                    'showans' => $this->request->getData('showans')&& $this->request->getData('ansdef') ? $this->request->getData('showans') == "on" && $this->request->getData('ansdef') == "on" ? 1 : 0 : 0,
+                    'timesec' =>$timeLimit == 0 ? null : $timeLimit,
+                    'tries' => $nbtries,
+                    'ansdef' =>  $this->request->getData('ansdef') == "1" ? 1 : 0 ,
+                    //if ansdef is off showing answers is irrelevent as the student could answer again after seeing the correct answers
+                    'showans' => $this->request->getData('showans') == "1" && $this->request->getData('ansdef') == "1" ? 1 : 0,
                     'grade' => $this->request->getData('total-grade')?? 0,
                  ]
              );
+             
          
             if ($this->Exercises->save($exercise)) {
                 //$this->Flash->success(__('The exercise has been saved.'));

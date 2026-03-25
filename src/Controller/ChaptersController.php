@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\UnauthorizedException;
 
 /**
  * Chapters Controller
@@ -66,19 +67,30 @@ class ChaptersController extends AppController
      */
     public function add()
     {
+
+    try {
+            $teacher = $this->Authentication->getResult()->getData();
+            if ($teacher->type == 'student') {
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
+        } catch (UnauthorizedException $error) {
+            $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
+        }
+
         //$chapter = $this->Chapters->newEmptyEntity();
          if ($this->request->is('post')) {
             $chapter = $this->fetchTable('Chapters')->newEntity(
                 [
-                    'title' => $this->request->getData('title'),
-                    'description' => $this->request->getData('description'),
-                    'visible' => $this->request->getData('visible'),
-                    'level' => $this->request->getData('level'),
-                    'secondstimelimit' => ($this->request->getData('timelimit') ? ($this->request->getData('timelimit_hours') * 3600 + $this->request->getData('timelimit_minutes') * 60 + $this->request->getData('timelimit_seconds')) : null),
-                    'class' => ($this->request->getData('class') != 'unspecified' ? $this->Chapters->Classses->find()->where(['name' => $this->request->getData('class')])->first()->id : null),
-                    'weight' => ($this->request->getData('graded') ? $this->request->getData('weight') : null),
+                    'title' => $this->request->getData('title') == '' ? 'Chapitre sans titre' : $this->request->getData('title'),
+                    'description' => $this->request->getData('description')?? '',
+                    'visible' => $this->request->getData('visible')?? false,
+                    'level' => $this->request->getData('level')?? 0,
+                    // if timelimit is 0 then set it to null ( == no time limit)
+                    'secondstimelimit' => ($this->request->getData('timelimit') && $this->request->getData('timelimit_hours') * 3600 + $this->request->getData('timelimit_minutes') * 60 + $this->request->getData('timelimit_seconds')==0? null : $this->request->getData('timelimit_hours') * 3600 + $this->request->getData('timelimit_minutes') * 60 + $this->request->getData('timelimit_seconds')),
+                    'class' => ($this->request->getData('class')&&$this->request->getData('class') != 'unspecified' ? $this->Chapters->Classses->find()->where(['name' => $this->request->getData('class')])->first()->id : null),
+                    'weight' => ($this->request->getData('graded') && $this->request->getData('weight')==0? null : $this->request->getData('weight')),
                     'tries' => ($this->request->getData('limittry') ? $this->request->getData('tries') : null),
-                    'corrend' => $this->request->getData('corrend'),
+                    'corrend' => $this->request->getData('corrend')?? 0,
                     // TODO gérer les tags
                 ]
             );
