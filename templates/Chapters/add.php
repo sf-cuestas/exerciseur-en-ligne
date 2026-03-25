@@ -36,7 +36,7 @@
                 <li>
                     <div id="timelimit-box"> <!-- hide everything in this span if checkbox not checked -->
                         <?= $this->Form->label('timelimit_hours', 'Heures', ['class' => 'visually-hidden']) ?>
-                        <?= $this->Form->number('timelimit_hours', ['id' => 'timelimit-hours', 'min' => 0, 'max' => 2048, 'step' => 1, 'value' => 0]) ?>
+                        <?= $this->Form->number('timelimit_hours', ['id' => 'timelimit-hours', 'min' => 0, 'max' => 16, 'step' => 1, 'value' => 0]) ?>
                         <?= $this->Form->label('timelimit_minutes', 'Minutes') ?>
                         <?= $this->Form->number('timelimit_minutes', ['id' => 'timelimit-minutes', 'min' => 0, 'max' => 59, 'step' => 1, 'value' => 0]) ?>
                         <?= $this->Form->label('timelimit_seconds', 'Secondes') ?>

@@ -41,9 +41,10 @@ class ExercisesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add($id = null)
+    public function add($idChapter = null)
     {
-        if($id == null) {
+        
+        if($idChapter == null) {
             return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
         }
 
@@ -52,27 +53,31 @@ class ExercisesController extends AppController
              $exercise = $this->Exercises->patchEntity(
                  $exercise,
                  [
-                     'id_chapter' => $id,
-                     'id_user' => $this->Authentication->getResult()->getData()->id,
-                     'content' => '{}',
-                     'title' => 'Nouvel exercice',
-                     'coef' => 1,
-                     'timesec' => null,
-                     'tries' => null,
-                     'ansdef' => 0,
-                     'showans' => 0
+                    'id_chapter' => $idChapter,
+                    'id_user' => $this->Authentication->getResult()->getData()->id,
+                    'content' => $this->request->getData("content") ?? "{}",
+                    'title' => $this->request->getData('section-title')? $this->request->getData('section-title')== "" ? "Exercice sans titre" : $this->request->getData('section-title') : "Titre Supprimé",
+                    'coef' => $this->request->getData('weight')?? 0,
+                    //if time limit is 0, set it to null (==unlimited)
+                    'timesec' => $this->request->getData('timelimit-seconds') && $this->request->getData('timelimit-minutes') && $this->request->getData('timelimit-hours') ?  $this->request->getData('timelimit-seconds') + $this->request->getData('timelimit-minutes') * 60 + $this->request->getData('timelimit-hours') * 3600 ==0? null : $this->request->getData('timelimit-seconds') + $this->request->getData('timelimit-minutes') * 60 + $this->request->getData('timelimit-hours') * 3600 : null,
+                    'tries' => $this->request->getData('tries')&& $this->request->getData('tries_number') ? $this->request->getData('tries')== "on" ? $this->request->getData('tries_number') : null : null,
+                    'ansdef' =>  $this->request->getData('ansdef')? $this->request->getData('ansdef') == "on" ? 1 : 0 : 0,
+                    'showans' => $this->request->getData('showans')&& $this->request->getData('ansdef') ? $this->request->getData('showans') == "on" && $this->request->getData('ansdef') == "on" ? 1 : 0 : 0,
+                    'grade' => $this->request->getData('total-grade')?? 0,
                  ]
              );
          
             if ($this->Exercises->save($exercise)) {
-                $this->Flash->success(__('The exercise has been saved.'));
+                //$this->Flash->success(__('The exercise has been saved.'));
     
-                return $this->redirect(['controller' => 'Chapters', 'action' => 'view', $id]);
+                return $this->redirect(['controller' => 'Exercises', 'action' => 'add', $idChapter]);
             }
          }    
-        
+        $this->set('idChapter', $idChapter);
         $users = $this->Exercises->Users->find('list', limit: 200)->all();
         $this->set(compact('exercise', 'users'));
+
+        
     }
 
     /**

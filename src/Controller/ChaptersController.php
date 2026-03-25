@@ -93,7 +93,7 @@ class ChaptersController extends AppController
                 if ($this->Chapters->UsersChapters->save($chapterUser)) {
                     //$this->Flash->success(__('The chapter has been saved.'));
 
-                    return $this->redirect(['controller' => 'Chapters', 'action' => 'add', $chapter->id]);
+                    return $this->redirect(['controller' => 'Exercises', 'action' => 'add', $chapter->id]);
                 } else {
                     // If chapterUser sav   e fails, delete the chapter to maintain consistency
                     $this->Chapters->delete($chapter);

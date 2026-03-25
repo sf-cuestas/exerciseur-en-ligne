@@ -665,7 +665,7 @@ if (container!=null){ //Temporary solution to prevent console errors
         previewContainer.innerHTML = '';
         const wrapper = document.createElement('div');
         const sectionTitle = document.createElement('h1');
-        sectionTitle.textContent = document.getElementById('section-title').value || 'Titre de la section';
+        sectionTitle.textContent = document.getElementById('section-title').value || 'Titre de l\'exercice';
         sectionTitle.className = 'section-title';
         reloadMathJax(sectionTitle);
         wrapper.appendChild(sectionTitle);
