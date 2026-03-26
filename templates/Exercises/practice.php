@@ -1,4 +1,4 @@
-<main id="chapter-creation">     
+<main id="chapter-creation">
     <aside id=chapter-creation-aside-1>
         <h2>Outils</h2>
         <div>
@@ -16,12 +16,21 @@
     <?= $this->Form->create(null, ['id' => 'dynamic-form', 'method' => 'post']); ?>
         <fieldset>
             <legend><?= $exerciseTitle ?></legend>
+            <?php echo $this->Form->text('content', ['id' => 'content', 'hidden' => true]); ?>
             <div id="exercise-container"></div>
         </fieldset>
 
         <?= $this->Form->submit(__('Valider les réponses'), ['id' => "accept-changes"]); ?>
     <?= $this->Form->end(); ?>
 </main>
+
+<?php      
+    if (isset($_SESSION['clear_local_storage']) && $_SESSION['clear_local_storage']) {
+        
+        echo '<script>try{localStorage.removeItem("dynamicModules"); /*localStorage.clear();*/}catch(e){}</script>';
+        unset($_SESSION['clear_local_storage']);
+    }
+?>
 
 <?= $this->Html->script(["exercisePractice"]) ?>
 

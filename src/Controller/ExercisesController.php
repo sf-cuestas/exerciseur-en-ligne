@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Error\Debugger;
 
 /**
  * Exercises Controller
@@ -421,6 +422,10 @@ class ExercisesController extends AppController
                 }
             }
             unset($module);
+        }
+
+        if ($this->request->is('post')) {
+            Debugger::dump($this->request->getData());
         }
 
         $this->set("exerciseTitle", $exercise['title']);

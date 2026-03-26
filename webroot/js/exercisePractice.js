@@ -136,4 +136,12 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     loadExercise();
 
+    const contentInput = document.getElementById('content');
+    contentInput.value = localStorage.getItem('dynamicModules') || '';
+
+});
+
+document.addEventListener('click', () => {
+    const contentInput = document.getElementById('content');
+    contentInput.value = localStorage.getItem('dynamicModules') || '';
 });
