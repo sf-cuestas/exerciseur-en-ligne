@@ -38,7 +38,7 @@
 
                 foreach ($listChapters as $chapter) { ?>
                     <li>
-                        <?= $this->Html->link($chapter->title, ['controller' => 'Chapters', 'action' => 'view', $chapter->id], ['class' => 'btn']) ?>
+                        <?= $this->Html->link($chapter->title, ['controller' => 'Chapters', 'action' => 'edit', $chapter->id], ['class' => 'btn']) ?>
                     </li>
                 <?php }
                 ?>

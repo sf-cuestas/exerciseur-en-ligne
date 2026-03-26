@@ -95,9 +95,9 @@
         <legend>Création</legend>
         <ul>
             <li><?= $this->Form->label('title', "Titre :", ["class" => "subTitle3"]); ?></li>
-            <li><?= $this->Form->text('title', ['id' => "title", "placeholder" => "Entrez le titre du chapitre ici", "required" => true]); ?></li>
+            <li><?= $this->Form->text('title', ['id' => "title", "placeholder" => "Entrez le titre du chapitre ici", "required" => true, "value" => $chapter['title']]); ?></li>
             <li><?= $this->Form->label('desc', "Description :", ["class" => "subTitle3"]); ?></li>
-            <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true]); ?></li>
+            <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true, "value" => $chapter['description']]); ?></li>
         </ul>
     </fieldset>
 
