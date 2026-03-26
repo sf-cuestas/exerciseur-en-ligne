@@ -361,4 +361,69 @@ class ExercisesController extends AppController
 
         $this->set(compact("exercises"));
     }
+
+
+    public function practice($exerciseId = null) {
+        $exercise = null;
+
+        try {
+            $exercise = $this->Exercises->get($exerciseId);
+        } catch (\Throwable $th) {
+            $this->redirect(["controller" => "Classses", "action" => "teachers-space"]);
+        }
+
+        $content = $exercise['content'];
+        $decoded = null;
+
+        if (!empty($content)) {
+            $decoded = json_decode($content, true);
+        }
+
+        //setting up the json to be used in practice mode (removing grades and answers from localstorage as well as adding empty answers)
+        if (is_array($decoded)) {
+            foreach ($decoded as &$module) {
+                if (isset($module['type']) && $module['type'] === 'mcq' && isset($module['choices']) && is_array($module['choices'])) {
+                    // For MCQ modules, delete the 'grade' field from each option
+                    foreach ($module['choices'] as &$choice) {
+                        if (isset($choice['grade'])) {
+                            unset($choice['grade']);
+                        }
+                        if(!isset($choice['answer'])) {
+                            $choice['answer'] = null;
+                        }
+                    }
+                    
+                } else if (isset($module['type']) && $module['type'] === 'truefalse') {
+                    if(isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if(isset($module['answerProf'])) {
+                        unset($module['answerProf']);
+                    }
+                }else if (isset($module['type']) && $module['type'] === 'numericalquestion') {
+                    if (isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if (!isset($module['answerjustification'])) {
+                        $module['answer'] = '';
+                    }
+                    if (!isset($module['answernumber'])) {
+                        $module['answernumber'] = 0;
+                    }
+
+                }else{
+                    if (isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if (!isset($module['answer'])) {
+                        $module['answer'] = '';
+                    }
+                }
+            }
+            unset($module);
+        }
+
+        $this->set("exerciseTitle", $exercise['title']);
+        $this->set(compact('decoded'));
+    }
 }
