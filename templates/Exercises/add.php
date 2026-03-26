@@ -124,3 +124,8 @@
         </fieldset>
     </form>
 </main>
+<?php 
+    if(isset($resetLocalStorage) && $resetLocalStorage) {
+        echo'<script>try{localStorage.removeItem("dynamicModules"); }catch(e){}</script>'; 
+    }
+?>

@@ -93,10 +93,18 @@ class ExercisesController extends AppController
          
             if ($this->Exercises->save($exercise)) {
                 //$this->Flash->success(__('The exercise has been saved.'));
-    
+                
+                $this->request->getSession()->write('resetLocalStorage', true);
                 return $this->redirect(['controller' => 'Exercises', 'action' => 'add', $idChapter]);
             }
          }    
+
+        if($this->request->getSession()->read('resetLocalStorage')){
+            $this->set('resetLocalStorage', true);
+            $this->request->getSession()->delete('resetLocalStorage');
+        } else {
+            $this->set('resetLocalStorage', false);
+        }
         $this->set('idChapter', $idChapter);
         $users = $this->Exercises->Users->find('list', limit: 200)->all();
         $this->set(compact('exercise', 'users'));
