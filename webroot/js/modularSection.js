@@ -38,52 +38,6 @@ if (container!=null){ //Temporary solution to prevent console errors
     document.getElementById('tries').addEventListener('input', updateHintBtnState);
     document.getElementById('tries').addEventListener('click', updateHintBtnState);
 
-    if(document.getElementById('save-section')&&document.getElementById('save-section-end')){
-
-        const saveBtn = document.getElementById('save-section');
-        const saveEndBtn = document.getElementById('save-section-end');
-
-        saveBtn.addEventListener('click', (e)=> {
-            // ensure no redirect flag is submitted for the normal save (continue on section)
-            if (form) {
-                const r = form.querySelector('input[name="redirect"]');
-                if (r) r.parentNode.removeChild(r);
-            }
-            saveState(true);
-        });
-
-        saveEndBtn.addEventListener('click', (e)=> {
-            // set a hidden redirect flag so server will redirect to index after saving
-            if (form) {
-                let r = form.querySelector('input[name="redirect"]');
-                if (!r) {
-                    r = document.createElement('input');
-                    r.type = 'hidden';
-                    r.name = 'redirect';
-                    form.appendChild(r);
-                }
-                r.value = 'index';
-            }
-            saveState(true);
-        });
-    }else if(document.getElementById('accept-changes')&&document.getElementById('cancel-changes')){
-        const acceptBtn = document.getElementById('accept-changes');
-        const cancelBtn = document.getElementById('cancel-changes');
-
-        cancelBtn.addEventListener('click', (e)=> {
-            e.preventDefault();
-            if (confirm("Êtes-vous sûr de vouloir annuler les modifications ?")) {
-                window.location.href = '/teacher-space.php';
-            }
-            localStorage.removeItem('dynamicModules');
-        });
-
-        acceptBtn.addEventListener('click', (e)=> {
-            saveState(true);
-            localStorage.removeItem('dynamicModules');
-        });
-    }
-
     const form = document.getElementById('dynamic-form');
     const output = document.getElementById('output');
 
@@ -235,6 +189,25 @@ if (container!=null){ //Temporary solution to prevent console errors
         spinner.value = defaultv;
         
         return spinner;
+    }
+
+    function addAnswerField(wrapper, type, id, name, text, defaultv = false) {
+        const answerLabel = createLabel(text, name);
+        answer = null;
+
+        if (type == "spinner") {
+            answer = createSpinner(id, name, -2147483647, 2147483646, 0.000001, defaultv);
+        } else if (type == "text") {
+            answer = createInput('text', id, 'Réponse', defaultv, name);
+        }
+
+        if (!suspendSave) saveState();
+        answer.addEventListener('change', () => {
+            if (!answer) saveState();
+        });
+
+        wrapper.appendChild(answerLabel);
+        wrapper.appendChild(answer);
     }
 
     function createCheckbox(id, name, defaultv = false){
@@ -446,7 +419,7 @@ if (container!=null){ //Temporary solution to prevent console errors
 
     
 
-    function addOpenQuestionField(defaultv = "", defaultGrade = 0) {
+    function addOpenQuestionField(defaultv = "", defaultGrade = 0, defaultAnswer = "") {
         const wrapper = createWrapper('openquestion');
         const id = `modules_${index}_value`;
         //name usable server side (modules[0][value], modules[1][value], ...)
@@ -455,6 +428,7 @@ if (container!=null){ //Temporary solution to prevent console errors
         const remove = createRemove(wrapper);
         wrapper.appendChild(label);
         wrapper.appendChild(input);
+        addAnswerField(wrapper, "text", `modules_${index}_answer`, `modules[${index}][answer]`, 'Réponse : ', defaultAnswer);
         wrapper.appendChild(remove);
         addGradeField(wrapper, `openquestion_${index}_grade`, `modules[${index}][grade]`, 'Barème de la question : ', defaultGrade, 0);
         container.appendChild(wrapper);
@@ -467,15 +441,17 @@ if (container!=null){ //Temporary solution to prevent console errors
         wrapper.appendChild(createUpDownArrows(container, wrapper));
     }
 
-    function addNumericalQuestionField(defaultv = "", defaultGrade = 0) {
+    function addNumericalQuestionField(defaultv = "", defaultGrade = 0, defaultAnswer = 0) {
         const wrapper = createWrapper('numericalquestion');
         const id = `modules_${index}_value`;
         //name usable server side (modules[0][value], modules[1][value], ...)
         const input = createTextarea(id, "Entrez la question numérique ici", defaultv,`modules[${index}][value]`);
         const label = createLabel("Question numérique : ", id);
         const remove = createRemove(wrapper);
+
         wrapper.appendChild(label);
         wrapper.appendChild(input);
+        addAnswerField(wrapper, "spinner", `modules_${index}_numerical_answer`, `modules[${index}][numerical_answer]`, 'Réponse : ', defaultAnswer);
         wrapper.appendChild(remove);
         addGradeField(wrapper, `numericalquestion_${index}_grade`, `modules[${index}][grade]`, 'Barème de la question : ', defaultGrade, 0);
         container.appendChild(wrapper);
@@ -567,11 +543,21 @@ if (container!=null){ //Temporary solution to prevent console errors
                     choices.push({ text: txt ? txt.value : '', grade: grade.value});
                 });
                 data.push({ type: 'mcq', question: question, choices: choices });
+            } else if (type === 'numericalquestion') {
+                const valueInput = wrapper.querySelector('input, textarea');
+                const grade = wrapper.querySelector(`input[type="number"][name$="[grade]"]`);
+                const answer = wrapper.querySelector(`input[type="number"][name$="[numerical_answer]"]`);
+                data.push({ type: type, value: valueInput ? valueInput.value : '', grade: grade.value, answerProf: answer ? answer.value : 0 });
+            } else if (type === 'openquestion') {
+                const valueInput = wrapper.querySelector('input, textarea');
+                const grade = wrapper.querySelector(`input[type="number"][name$="[grade]"]`);
+                const answer = wrapper.querySelector(`input[type="text"][name$="[answer]"]`);
+                data.push({ type: type, value: valueInput ? valueInput.value : '', grade: grade.value, answerProf: answer ? answer.value : "" });
             } else if (type.startsWith('title') || type === 'text') {
                 const valueInput = wrapper.querySelector('input, textarea');
                 const grade = wrapper.querySelector(`input[type="number"]`);
                 data.push({ type: type, value: valueInput ? valueInput.value : '' });
-            } else if (type === 'truefalse' || type === 'openquestion' || type === 'numericalquestion') {
+            } else if (type === 'truefalse') {
                 const valueInput = wrapper.querySelector('input, textarea');
                 const grade = wrapper.querySelector(`input[type="number"]`);
                 data.push({ type: type, value: valueInput ? valueInput.value : '', grade: grade.value });
@@ -639,10 +625,10 @@ if (container!=null){ //Temporary solution to prevent console errors
                     addTrueFalseField(item.value || '', item.grade || 0);
 
                 } else if (item.type === 'openquestion') {
-                    addOpenQuestionField(item.value || '', item.grade || 0);
+                    addOpenQuestionField(item.value || '', item.grade || 0, item.answerProf || '');
 
                 } else if (item.type === 'numericalquestion') {
-                    addNumericalQuestionField(item.value || '', item.grade || 0);
+                    addNumericalQuestionField(item.value || '', item.grade || 0, item.answerProf || 0);
 
                 } else {
                     console.warn('Unsupported module type during load:', item.type);
