@@ -45,6 +45,9 @@ class ExercisesController extends AppController
      */
     public function add($idChapter = null)
     {
+        if($idChapter == null) {
+            return $this->redirect(['controller' => 'Classses', 'action' => 'teachers-space']);
+        }
 
         try {
             $teacher = $this->Authentication->getResult()->getData();
@@ -58,9 +61,6 @@ class ExercisesController extends AppController
             $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
         }
         
-        if($idChapter == null) {
-            return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
-        }
          //more comprehensive handling of the parameters
          $exercise = $this->Exercises->newEmptyEntity();
          $timelimit_hours = $this->request->getData('timelimit_hours')==null? 0 : $this->request->getData('timelimit_hours');

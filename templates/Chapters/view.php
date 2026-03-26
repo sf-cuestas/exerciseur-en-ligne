@@ -114,7 +114,7 @@
             
         ?>
         <li>
-            <?= $this->Html->link("Ajouter un exercice", ['controller' => 'Chapters', 'action' => 'add'], ['class' => 'btn']) ?>
+            <?= $this->Html->link("Ajouter un exercice", ['controller' => 'Exercises', 'action' => 'add', $chapter['id']], ['class' => 'btn']) ?>
         </li>
     </ul>
 

@@ -396,16 +396,44 @@ if (container!=null){ //Temporary solution to prevent console errors
         wrapper.appendChild(createUpDownArrows(container, wrapper));
     }
 
-    function addTrueFalseField(defaultv = "", defaultGrade = 0) {
+    function addTrueFalseField(defaultv = "", defaultGrade = 0, defaultAnswer = false) {
         const wrapper = createWrapper('truefalse');
         const id = `modules_${index}_value`;
         //name usable server side (modules[0][value], modules[1][value], ...)
         const input = createTextarea(id, "Entrez la question Vrai ou Faux ici", defaultv,`modules[${index}][value]`);
         const label = createLabel("Question Vrai ou Faux : ", id);
         const remove = createRemove(wrapper);
+
+        // answer field, buttons and labels
+        const answerWrapper = document.createElement('div');
+        const labelTrue = createLabel("Vrai", `truefalse_${index}_true`);
+        const labelFalse = createLabel("Faux", `truefalse_${index}_false`);
+        const trueRadio = document.createElement('input');
+        trueRadio.type = 'radio';
+        trueRadio.name = `truefalse_${index}`;
+        trueRadio.id = `truefalse_${index}_true`;
+        const falseRadio = document.createElement('input');
+        falseRadio.type = 'radio';
+        falseRadio.name = `truefalse_${index}`;
+        falseRadio.id = `truefalse_${index}_false`;
+
+        if (defaultAnswer) {
+            trueRadio.checked = true;
+            falseRadio.checked = false;
+        } else {
+            falseRadio.checked = true;
+            trueRadio.checked = false;
+        }
+
+        answerWrapper.appendChild(labelTrue);
+        answerWrapper.appendChild(trueRadio);
+        answerWrapper.appendChild(labelFalse);
+        answerWrapper.appendChild(falseRadio);
+
         wrapper.appendChild(label);
         wrapper.appendChild(input);
         wrapper.appendChild(remove);
+        wrapper.appendChild(answerWrapper);
         addGradeField(wrapper, `truefalse_${index}_grade`, `modules[${index}][grade]`, 'Barème de la question : ', defaultGrade, 0);
         container.appendChild(wrapper);
         index++;
@@ -560,7 +588,8 @@ if (container!=null){ //Temporary solution to prevent console errors
             } else if (type === 'truefalse') {
                 const valueInput = wrapper.querySelector('input, textarea');
                 const grade = wrapper.querySelector(`input[type="number"]`);
-                data.push({ type: type, value: valueInput ? valueInput.value : '', grade: grade.value });
+                const answer = wrapper.querySelector(`input[type="radio"]`);
+                data.push({ type: type, value: valueInput ? valueInput.value : '', grade: grade.value, answerProf: answer.checked ?? false});
             } else {
                 // fallback: try to grab a value
                 const valueInput = wrapper.querySelector('input, textarea');
@@ -622,7 +651,7 @@ if (container!=null){ //Temporary solution to prevent console errors
                     addMultipleChoiceField(item);
 
                 } else if (item.type === 'truefalse') {
-                    addTrueFalseField(item.value || '', item.grade || 0);
+                    addTrueFalseField(item.value || '', item.grade || 0, item.answerProf);
 
                 } else if (item.type === 'openquestion') {
                     addOpenQuestionField(item.value || '', item.grade || 0, item.answerProf || '');
