@@ -111,11 +111,15 @@
                 <li>
                     <div id="inputs"></div>
                 </li>
+                <li>   
+                    <?= $this->Form->label('localStorageKeep', 'Garder les modules actuels pour l\'exercice suivant?') ?>
+                    <?= $this->Form->checkbox('localStorageKeep', ['id' => 'localStorageKeep']) ?>
+                </li>
             </ul>   
             
         </fieldset>
-        <?= $this->Form->button('Enregistrer la section et continuer', ['id' => 'save-section']) ?>
-        <?= $this->Form->button('Enregistrer la section et terminer le chapitre', ['id' => 'save-section-end']) ?>
+        <?= $this->Form->button('Enregistrer la section et continuer', ['id' => 'save-section','value' => 'continue']) ?>
+        <?= $this->Form->button('Enregistrer la section et terminer le chapitre', ['id'=>'save-section-end','name' => 'save-section-end', 'value' => 'finish']) ?>
         </form>
     <form>
         <fieldset>

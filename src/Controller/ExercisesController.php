@@ -92,9 +92,18 @@ class ExercisesController extends AppController
              
          
             if ($this->Exercises->save($exercise)) {
-                //$this->Flash->success(__('The exercise has been saved.'));
+                $this->Flash->success(__('The exercise has been saved.'));
+
+                //used to reset localstorage between exercises (preventing the previously entered modules to stay there on the creation of the next exercise)
+                if($this->request->getData('localStorageKeep') == "1"){
+                    //do nothing, keep the local storage as is for the next exercise
+                } else {
+                     $this->request->getSession()->write('resetLocalStorage', true);
+                }
                 
-                $this->request->getSession()->write('resetLocalStorage', true);
+                if($this->request->getData('save-section-end')) {
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+                }
                 return $this->redirect(['controller' => 'Exercises', 'action' => 'add', $idChapter]);
             }
          }    
