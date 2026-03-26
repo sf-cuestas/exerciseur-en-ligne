@@ -44,6 +44,6 @@
                 ?>
             </ul>
         </div>
-        <h2><?= $this->Html->link('Créer chapitres', ['controller' => 'Classses', 'action' => 'add'], ['class' => 'btn']) ?></h2>
+        <h2><?= $this->Html->link('Créer chapitres', ['controller' => 'Chapters', 'action' => 'add'], ['class' => 'btn']) ?></h2>
     </div>
 </main>

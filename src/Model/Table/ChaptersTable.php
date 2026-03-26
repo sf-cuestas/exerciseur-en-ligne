@@ -48,7 +48,9 @@ class ChaptersTable extends Table
             'foreignKey' => 'id_chapter',
         ]);
         $this->hasMany('Exercises');
-        $this->belongsTo('Classses');
+        $this->belongsTo('Classses', [
+            'foreignKey' => 'class',
+        ]);
         $this->addBehavior('Timestamp',
             ['events' => [
                 'Model.beforeSave' => [

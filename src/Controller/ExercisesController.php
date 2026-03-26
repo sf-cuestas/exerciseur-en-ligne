@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Exception\UnauthorizedException;
+
 /**
  * Exercises Controller
  *
@@ -41,20 +43,82 @@ class ExercisesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($idChapter = null)
     {
-        $exercise = $this->Exercises->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $exercise = $this->Exercises->patchEntity($exercise, $this->request->getData());
+        if($idChapter == null) {
+            return $this->redirect(['controller' => 'Classses', 'action' => 'teachers-space']);
+        }
+
+        try {
+            $teacher = $this->Authentication->getResult()->getData();
+            if ($teacher->type == 'student') {
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
+            if(!$this->Exercises->Chapters->UsersChapters->find()->where(['id_user' => $teacher->id, 'id_chapter' => $idChapter])->first()){
+                throw new UnauthorizedException("Error 401 vous n'êtes pas autorisé à accéder à cette page");
+            }
+        } catch (UnauthorizedException $error) {
+            $this->redirect(['controller' => 'Error', 'action' => 'error400', $error->getMessage()]);
+        }
+        
+         //more comprehensive handling of the parameters
+         $exercise = $this->Exercises->newEmptyEntity();
+         $timelimit_hours = $this->request->getData('timelimit_hours')==null? 0 : $this->request->getData('timelimit_hours');
+         $timelimit_minutes = $this->request->getData('timelimit_minutes')==null? 0 : $this->request->getData('timelimit_minutes');
+         $timelimit_seconds = $this->request->getData('timelimit_seconds')==null? 0 : $this->request->getData('timelimit_seconds');
+         $timeLimit = $timelimit_seconds + $timelimit_minutes*60 + $timelimit_hours*3600;
+         $nbtries= null;
+         if($this->request->getData('tries') == "1"){
+            $nbtries = $this->request->getData('tries_number');
+         }
+         if ($this->request->is('post')) {
+             $exercise = $this->Exercises->patchEntity(
+                 $exercise,
+                 [
+                    'id_chapter' => $idChapter,
+                    'id_user' => $this->Authentication->getResult()->getData()->id,
+                    'content' => $this->request->getData("content") ?? "{}",
+                    'title' => $this->request->getData('section-title') == '' ? "Exercice sans titre" : $this->request->getData('section-title'),
+                    'coef' => $this->request->getData('weight')? $this->request->getData('weight') : 0,
+                    //if time limit is 0, set it to null (==unlimited)
+                    'timesec' =>$timeLimit == 0 ? null : $timeLimit,
+                    'tries' => $nbtries,
+                    'ansdef' =>  $this->request->getData('ansdef') == "1" ? 1 : 0 ,
+                    //if ansdef is off showing answers is irrelevent as the student could answer again after seeing the correct answers
+                    'showans' => $this->request->getData('showans') == "1" && $this->request->getData('ansdef') == "1" ? 1 : 0,
+                    'grade' => $this->request->getData('total-grade')?? 0,
+                 ]
+             );
+             
+         
             if ($this->Exercises->save($exercise)) {
                 $this->Flash->success(__('The exercise has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //used to reset localstorage between exercises (preventing the previously entered modules to stay there on the creation of the next exercise)
+                if($this->request->getData('localStorageKeep') == "1"){
+                    //do nothing, keep the local storage as is for the next exercise
+                } else {
+                     $this->request->getSession()->write('resetLocalStorage', true);
+                }
+                
+                if($this->request->getData('save-section-end')) {
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+                }
+                return $this->redirect(['controller' => 'Exercises', 'action' => 'add', $idChapter]);
             }
-            $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
+         }    
+
+        if($this->request->getSession()->read('resetLocalStorage')){
+            $this->set('resetLocalStorage', true);
+            $this->request->getSession()->delete('resetLocalStorage');
+        } else {
+            $this->set('resetLocalStorage', false);
         }
+        $this->set('idChapter', $idChapter);
         $users = $this->Exercises->Users->find('list', limit: 200)->all();
         $this->set(compact('exercise', 'users'));
+
+        
     }
 
     /**

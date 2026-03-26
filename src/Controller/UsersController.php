@@ -67,6 +67,7 @@ class UsersController extends AppController
         }
         if ($this->getRequest()->getData('create-code')){
             $this->createTeacherCode();
+            return $this->redirect(['action' => 'profile']);
         }
         $classCode = $this->getRequest()->getData('code-join-class');
         if ($classCode){
