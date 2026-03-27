@@ -52,6 +52,8 @@ Le point complexe que nous avons demandé à l'IA à faire, c'est régler un bug
 ```prompt
 now can you fix the saving of chapters on the function chapters Edit? after getting the answers from the form on the page 'Chapters/edit.php' all the right infos are sent but, for an unknown reason, the chapter cant be saved, feel free to edit the edit function on ChaptersController.php and the form on Chapters/edit.php if needed
 ```
+### Débogage
+Comme le projet est Web, ce n'est pas possible utiliser le déboguer de l'IDE, notre stratégie est de montrer les données avec `var_dump` ou la fonction de cakePHP `dd` car en temps normal les origines des problèmes sont des variables vides ou null et pour les fichiers JS, nous utilisons la console du navigateur parce que c'est la seule manière d'observer le problème.
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
 Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
