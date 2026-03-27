@@ -38,6 +38,17 @@ Exemple
 se connecter en tant qu'étudiant et clicker sur le button space professeur.
 ```
 
+### L'IA dans le projet
+Pour le projet, nous avons utilisé l'IA GitHub Copilot.
+Nous avons utilisé l'IA pour faire sortir des fonctions de l'eventListener (de plus de 800 lignes) dans le fichier de JS modularSection.js, cela a marché avec le premier prompt et toutes les fonctions marche bien.
+```prompt
+Please just take all the functions out of the eventlistener and only make it call them when needed while keeping the same functionablility and without modifying ainything from the functions themselves
+```
+
+Le point complexe que nous avons demandé à l'IA à faire, c'est régler un bug dans la sous-garde de l'édition d'un chapitre, l'IA a corrigé le problème avec un seul essay.
+```prompt
+now can you fix the saving of chapters on the function chapters Edit? after getting the answers from the form on the page 'Chapters/edit.php' all the right infos are sent but, for an unknown reason, the chapter cant be saved, feel free to edit the edit function on ChaptersController.php and the form on Chapters/edit.php if needed
+```
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
 Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
