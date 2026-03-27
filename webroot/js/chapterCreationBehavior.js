@@ -14,7 +14,7 @@ if(timeLimitSection!=null){
 let gradeOptions = document.getElementById("grade-options");
 if(gradeOptions!=null){
     gradeOptions.style.display = "none";
-    document.getElementById("class-select").addEventListener('change', function (){
+    document.getElementById("class").addEventListener('change', function (){
         if (this.value !== "unspecified"){
             gradeOptions.style.display = "block";
         }else{

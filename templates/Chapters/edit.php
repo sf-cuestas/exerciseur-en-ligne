@@ -1,7 +1,7 @@
 <main id="modif-selection">
-    <?= $this->Form->create($chapter) ?>
+    <?= $this->Form->create(null, ["method" => 'post']) ?>
     <fieldset>
-        <legend   nd>Paramètres</legend>
+        <legend>Paramètres</legend>
         <ul>
             <li><h3>Visibilité</h3></li>
             <li>
@@ -95,9 +95,9 @@
         <legend>Création</legend>
         <ul>
             <li><?= $this->Form->label('title', "Titre :", ["class" => "subTitle3"]); ?></li>
-            <li><?= $this->Form->text('title', ['id' => "title", "placeholder" => "Entrez le titre du chapitre ici", "required" => true]); ?></li>
+            <li><?= $this->Form->text('title', ['id' => "title", "placeholder" => "Entrez le titre du chapitre ici", "required" => true, "value" => $chapter['title']]); ?></li>
             <li><?= $this->Form->label('desc', "Description :", ["class" => "subTitle3"]); ?></li>
-            <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true]); ?></li>
+            <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true, "value" => $chapter['description']]); ?></li>
         </ul>
     </fieldset>
 
@@ -114,7 +114,7 @@
             
         ?>
         <li>
-            <?= $this->Html->link("Ajouter un exercice", ['controller' => 'Exercises', 'action' => 'add', $chapter['id']], ['class' => 'btn']) ?>
+            <?= $this->Html->link("Ajouter un exercice", ['controller' => 'Chapters', 'action' => 'add'], ['class' => 'btn']) ?>
         </li>
     </ul>
 
