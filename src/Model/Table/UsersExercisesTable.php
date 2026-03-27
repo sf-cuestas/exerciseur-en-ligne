@@ -51,6 +51,12 @@ class UsersExercisesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->integer('id_user');
+
+        $validator
+            ->integer('id_exercise');
+
+        $validator
             ->scalar('answer')
             ->requirePresence('answer', 'create')
             ->notEmptyString('answer');

@@ -16,7 +16,7 @@
     <?= $this->Form->create(null, ['id' => 'dynamic-form', 'method' => 'post']); ?>
         <fieldset>
             <legend><?= $exerciseTitle ?></legend>
-            <?php echo $this->Form->text('content', ['id' => 'content', 'hidden' => true]); ?>
+            <?php echo $this->Form->text('content', ['id' => 'content', 'hidden' => false]); ?>
             <div id="exercise-container"></div>
         </fieldset>
 
@@ -46,4 +46,5 @@
         } else {
         try { localStorage.removeItem('dynamicModules'); } catch(e) {}
     }
+    
 </script>

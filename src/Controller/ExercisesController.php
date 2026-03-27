@@ -383,6 +383,10 @@ class ExercisesController extends AppController
         //setting up the json to be used in practice mode (removing grades and answers from localstorage as well as adding empty answers)
         if (is_array($decoded)) {
             foreach ($decoded as &$module) {
+                if(isset($module['answerProf'])) {
+                    unset($module['answerProf']);
+                }
+
                 if (isset($module['type']) && $module['type'] === 'mcq' && isset($module['choices']) && is_array($module['choices'])) {
                     // For MCQ modules, delete the 'grade' field from each option
                     foreach ($module['choices'] as &$choice) {
@@ -425,7 +429,22 @@ class ExercisesController extends AppController
         }
 
         if ($this->request->is('post')) {
-            Debugger::dump($this->request->getData());
+            $answeredExercise = $this->Exercises->UsersExercises->newEntity([
+                'id_user' => $this->Authentication->getResult()->getData()['id'],
+                'id_exercise' => intval($exerciseId),
+                'answer' => $this->request->getData()['content'],
+                'grade' => null
+            ]);
+
+            // Debugger::dump(intval($exerciseId));
+
+            if ($this->Exercises->UsersExercises->save($answeredExercise)) {
+                $this->Flash->success("Exercise successfully saved.");
+
+                $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+            } else {
+                $this->Flash->error("Something's wrong");
+            }
         }
 
         $this->set("exerciseTitle", $exercise['title']);
