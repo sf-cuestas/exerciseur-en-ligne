@@ -22,11 +22,8 @@ class ClasssesController extends AppController
 
     }
 
-<<<<<<< HEAD
-    public function teachersSpace(): void
-=======
+
     public function teachersSpace()
->>>>>>> develop
     {
         try {
             $teacher = $this->Authentication->getResult()->getData();
