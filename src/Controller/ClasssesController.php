@@ -22,7 +22,6 @@ class ClasssesController extends AppController
 
     }
 
-
     public function teachersSpace()
     {
         try {
@@ -145,12 +144,8 @@ class ClasssesController extends AppController
         $this->set('classCodes', $classCodes);
     }
 
-<<<<<<< HEAD
-    private function generateCodeClass($idClass, $nUses): void
-=======
 //todo:: le comportement de cette function se repete dan la fonction createTeacherCode() dans le controller usersController
     private function generateCodeClass($idClass, $nUses)
->>>>>>> develop
     {
         $code = $this->Classses->CodesClass->newEmptyEntity();
         $code['code'] = $this->generateCode($this->Classses->CodesClass);
@@ -160,17 +155,6 @@ class ClasssesController extends AppController
     }
 
     //TODO mettre en order the end of the function
-<<<<<<< HEAD
-    public function edit($classId = null)
-    {
-
-        $studentToAdd = $this->getRequest()->getData('studentsToAdd') ?? null;
-        $studentsToAdd = [];
-        if ($studentToAdd) {
-            $studentsToAdd[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $studentToAdd])->first();
-        }
-
-=======
     //TODO change the logic behind checking empty inputs (use current values as default values)
     public function edit($classId = null)
     {
@@ -188,7 +172,6 @@ class ClasssesController extends AppController
 
         
 
->>>>>>> develop
         $class = $this->Classses->find()->where(['id' => $classId])->first();
         $getStudentsLinks = $this->Classses->UsersClassses->find()->where(['id_class' => $classId, 'responsible' => 0])->all()->toArray();
         $getTeachersLinks = $this->Classses->UsersClassses->find()->where(['id_class' => $classId, 'responsible' => 1])->all()->toArray();
@@ -196,23 +179,6 @@ class ClasssesController extends AppController
         $listChapters = $this->Classses->Chapters->find()->where(['class' => $classId])->all()->toArray();
 
 
-<<<<<<< HEAD
-        $studentSearch = $_GET["student-search"] ?? "";
-        $teacherSearch = $_GET["teacher-search"] ?? "";
-        $listAllStudents = isset($_GET["student-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'student'])->all()->toArray() : array();
-        $listAllTeachers = isset($_GET["teacher-search"]) ? $this->Classses->UsersClassses->Users->find()->where(['type' => 'teacher'])->all()->toArray() : array();
-
-        $listStudents = [];
-        foreach ($getStudentsLinks as $link) {
-            $listStudents[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
-        }
-
-        $teachers = [];
-        foreach ($getTeachersLinks as $link) {
-            $teachers[] = $this->Classses->UsersClassses->Users->find()->where(['id' => $link->id_user])->first();
-        }
-
-=======
     if(isset($this->getRequest()->getQuery()['add-teacher'])){
         $teacherToAdd = $this->getRequest()->getQuery()['add-teacher'];
         $teacherLink = $this->Classses->UsersClassses->newEmptyEntity();
@@ -295,30 +261,12 @@ class ClasssesController extends AppController
         //$this->set('studentsToAdd', $studentsToAdd);
 
 
->>>>>>> develop
         if ($this->request->is(['post'])) {
 //TODO optimiser le code, la vue peut avoir les valeurs dans le form avec ça on sait qu'on doit simplement appeller la function save
             if ($this->getRequest()->getData('name')) {
 
                 if ($this->getRequest()->getData('description')) {
 
-<<<<<<< HEAD
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name', 'description']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
-
-                } else {
-
-                    $class = $this->Classses->patchEntity($class, $this->request->getData(), [
-                        'fields' => ['name']
-                    ]);
-                    if ($this->Classses->save($class)) {
-                        return $this->redirect(['action' => 'edit', $classId]);
-                    }
-=======
                 $class = $this->Classses->patchEntity($class, $this->request->getData(), [
                     'fields' => ['name', 'description']
                 ]);
@@ -333,29 +281,14 @@ class ClasssesController extends AppController
                 ]);
                 if ($this->Classses->save($class)) {
                     return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
->>>>>>> develop
                 }
             }
         }
 
-<<<<<<< HEAD
-        $this->set('class', $class);
-        $this->set('listStudents', $listStudents);
-        $this->set('teachers', value: $teachers);
-        $this->set('activesClassCodes', $activesClassCodes);
-        $this->set('listChapters', $listChapters);
-        $this->set('studentSearch', $studentSearch);
-        $this->set('teacherSearch', $teacherSearch);
-        $this->set('listAllStudents', $listAllStudents);
-        $this->set('listAllTeachers', $listAllTeachers);
-        $this->set('id-class', $classId);
-        $this->set('studentsToAdd', $studentsToAdd);
-=======
         if($this->getRequest()->getData('backtoview')){
             return $this->redirect(['controller'=>'Classses','action' => 'viewClass', $classId]);
         }
     }
->>>>>>> develop
     }
 
     public function search($search = ""): void
