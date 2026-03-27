@@ -4,7 +4,7 @@ consiste d'une page web pour la realisation et la creation d'exercices pour les 
 Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakePHP
 voici le lien au projet https://github.com/JeromeTardivon/Exerciseur-en-Ligne
 
-## Convention de nommage des variables
+### Convention de nommage des variables
 Pour les contrôleurs, entités, tables et variables, nous allons suivre la convention de [cakePHP](https://book.cakephp.org/5.x/intro/conventions.html).
 ```
 UsersController.php ->
@@ -27,6 +27,9 @@ Quelques erreurs que nous avons trouvé sur le nommage des fichiers et variables
 kebab-case (les images et fichiers javascript), autres avec snake_case (pour les fichiers qui ont eu une structure html).
 - Nous avons essayé de standardiser le nommage avec camelCase, mais pour les fichiers avec la vue de pages le framework nous force à
 utiliser snake_case pour les fichiers avec multiples mots.
+
+### Commentaires
+Pour cette partie, nous avons écrit quelques commentaires pendant que nous faisions le projet s'il y a eu besoin d'expliquer pour expliquer une fonction ou la façon de faire quelque chose dans une fonction, par exemple dans le fichier src/Controller/ExercisesController.php.
 ### Programmation défensive et control d'erreurs
 Pour la programmation défensive, nous avons ajouté pour quelques fonctions un try catch pour prévenir que le site web s'arrete dans une section critique,
 aussi, nous avons ajouté la verification de nulls pour éviter que les scripts Javascript aient des problèmes d'exécution, car nous sommes contraints par cake php de charger tous les scripts meme si la page actuelle ne les utilise pas.
