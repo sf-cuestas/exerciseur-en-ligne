@@ -16,7 +16,7 @@
     <?= $this->Form->create(null, ['id' => 'dynamic-form', 'method' => 'post']); ?>
         <fieldset>
             <legend><?= $exerciseTitle ?></legend>
-            <?php echo $this->Form->text('content', ['id' => 'content', 'hidden' => false]); ?>
+            <?php echo $this->Form->text('content', ['id' => 'content', 'hidden' => true]); ?>
             <div id="exercise-container"></div>
         </fieldset>
 
