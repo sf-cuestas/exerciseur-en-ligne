@@ -25,7 +25,7 @@
             foreach ($chapters as $chapter) { ?>
                 <li class="">
                     <div>
-                        <a href="exercise.php?id-chapter=<?= $chapter->id ?>&exercise-num=1"><?= $chapter->title ?></a>
+                        <?= $this->Html->link($chapter->title, ['controller' => 'Chapters', 'action' => 'view', $chapter->id]) ?>
                         <p><?=$chapter->description?></p>
                     </div>
                 </li>
