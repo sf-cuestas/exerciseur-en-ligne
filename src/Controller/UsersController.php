@@ -14,6 +14,9 @@ use Cake\Event\EventInterface;
 // TODO expliquer les functions et effacer les fonctions qu'on n'utilise pas
 class UsersController extends AppController
 {
+    /*
+     * to allow the user to create and login we have to allow the access to the pages of login and signup
+     */
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
@@ -145,7 +148,6 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
-    //todo:: le comportement de cette function se repete dans la class classeControlle
     private function createTeacherCode(): void
 
     {

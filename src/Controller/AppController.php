@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Random\RandomException;
 
 /**
  * Application Controller
@@ -50,15 +51,26 @@ class AppController extends Controller
          */
         //$this->loadComponent('FormProtection');
     }
-    function generateCode($table)
+    /*
+     * this function receive a table and generate a code unique for that table in the database and verify
+     * if the code existe already in the column 'code', and return the code
+     * $table -> this is an instance of the database table exemple of element to send as parameter $this->tableName
+     */
+    function generateCode($table): string
     {
-        $code = bin2hex(random_bytes(5));
-        $codeDb = $table->find()->where(['code' => $code])->first();
-        if ($codeDb) {
-            while ($codeDb->code == $code) {
-                $code = bin2hex(random_bytes(5));
+        // adding the try catch because the function random_bytes can give a problem of random exception
+        try {
+            $code = bin2hex(random_bytes(5));
+            $codeDb = $table->find()->where(['code' => $code])->first();
+            if ($codeDb) {
+                while ($codeDb->code == $code) {
+                    $code = bin2hex(random_bytes(5));
+                }
             }
+        } catch (RandomException $e) {
+            echo "<script>console.log('there is a problem in the creation of the code' + $e->getMessage() );</script>";
         }
+
         return $code;
     }
 }

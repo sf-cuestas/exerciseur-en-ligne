@@ -43,7 +43,7 @@ class ChaptersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(string $id = null)
     {
         $chapter = $this->Chapters->get($id, contain: []);
         $teacher = $this->Authentication->getResult()->getData();
@@ -130,7 +130,7 @@ class ChaptersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(string $id = null)
     {
         $chapter = $this->Chapters->get($id, contain: []);
         $teacher = $this->Authentication->getResult()->getData();
@@ -143,49 +143,52 @@ class ChaptersController extends AppController
 
         $listExercises = $this->Chapters->Exercises->find()->where(['id_chapter' => $chapter->id]);
 
-        if ($this->request->is('post')) {
+        // Get the current class name for the dropdown
+        $currentClassName = 'unspecified';
+        if ($chapter->class) {
+            $currentClass = $this->Chapters->Classses->find()->where(['id' => $chapter->class])->first();
+            if ($currentClass) {
+                $currentClassName = $currentClass->name;
+            }
+        }
+
+        if ($this->request->is(['post', 'put', 'patch'])) {
             $reqData = $this->request->getData();
 
-            if (isset($reqData['visibility']) && isset($reqData['level-select']) && isset($reqData['tags-input']) && isset($reqData['title']) && isset($reqData['desc'])) {
-                $visibility = $reqData['visibility'];
-                $level = $reqData['level-select'];
-                // $class = $reqData['class-select'];
-                //$tags = $reqData['tags_input'];
+            // Bypass strict isset chain that can reject valid payloads
+            if (isset($reqData['title']) && isset($reqData['desc'])) {
+                $visibility = !empty($reqData['visibility']) ? (int)$reqData['visibility'] : 0;
+                $level = isset($reqData['level-select']) ? (int)$reqData['level-select'] : 0;
                 $title = $reqData['title'];
                 $description = $reqData['desc'];
-                $show_correction_end = isset($reqData['correctionend']) && $reqData['correctionend'] == "on" ? 1 : 0;
-                if (isset ($reqData['timelimit']) && $reqData['timelimit'] == "1" && isset($reqData['timelimit-seconds']) && isset($reqData['timelimit-minutes']) && isset($reqData['timelimit-hours'])) {
-                    $timelimit = $reqData['timelimit-seconds'] + $reqData['timelimit-minutes'] * 60 + $reqData['timelimit-hours'] * 3600;
-                } else {
-                    $timelimit = 0;
-                }
+                $show_correction_end = !empty($reqData['correctionend']) ? 1 : 0;
 
-                if (isset ($reqData['try-number']) && isset ($reqData['limittry']) && $reqData['limittry'] == "on") {
-                    $tryNumber = $reqData['try-number'];
-                } else {
-                    $tryNumber = NULL;
-                }
-                if (isset($reqData['class-select']) && $reqData['class-select'] != 'unspecified') {
-                    $classtmp = $reqData['class-select'];
-                    // $statement = $db->prepare("SELECT id FROM class WHERE name = :class_name ORDER BY created_at DESC LIMIT 1");
-                    // $statement->execute(['class_name' => $classtmp]);
-                    // if ($class = $statement->fetch()) {
-
-                    // } else {
-                    //     $class = null;
-                    // }
-                    
-                    if(isset($reqData['graded'])&&isset($reqData['grade-weight'])&& $reqData['graded']=="on"){
-                        $weight=$reqData['grade-weight'];
-                        
-                    }else{
-                        $weight = 0; 
+                $timelimit = null;
+                if (!empty($reqData['timelimit'])) {
+                    $timelimit = ((int)($reqData['timelimit-hours'] ?? 0) * 3600)
+                        + ((int)($reqData['timelimit-minutes'] ?? 0) * 60)
+                        + ((int)($reqData['timelimit-seconds'] ?? 0));
+                    if ($timelimit === 0) {
+                        $timelimit = null;
                     }
-                } else {
-                    $class = null;
-                    $weight= 0;
                 }
-                
+
+                $tryNumber = null;
+                if (!empty($reqData['limittry'])) {
+                    $tryNumber = isset($reqData['try-number']) ? (int)$reqData['try-number'] : null;
+                }
+
+                $chapterClass = null;
+                if (!empty($reqData['class-select']) && $reqData['class-select'] !== 'unspecified') {
+                    $classEntity = $this->Chapters->Classses->find()->where(['name' => $reqData['class-select']])->first();
+                    $chapterClass = $classEntity ? $classEntity->id : null;
+                }
+
+                $weight = null;
+                if (!empty($reqData['graded'])) {
+                    $weight = isset($reqData['grade-weight']) ? (int)$reqData['grade-weight'] : null;
+                }
+
                 $data = [
                     'title' => $title,
                     'description' => $description,
@@ -194,22 +197,27 @@ class ChaptersController extends AppController
                     'secondstimelimit' => $timelimit,
                     'tries' => $tryNumber,
                     'show_correction_end' => $show_correction_end,
-                    'weight' => $weight
+                    'weight' => $weight,
+                    'class' => $chapterClass,
                 ];
 
-                Debugger::dump($data);
+                // Debugger::dump($data);
 
                 $chapter = $this->Chapters->patchEntity($chapter, $data);
 
-                Debugger::dump($chapter);
+                // Debugger::dump($chapter);
 
                 if ($this->Chapters->save($chapter)) {
                     $this->Flash->success(__('The chapter has been saved.'));
 
-                    $this->redirect(['controller' => 'Classses', "action" => "teachers-space"]);
-                } else {
-                    $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+                    return $this->redirect(['controller' => 'Classses', 'action' => 'teachers-space']);
                 }
+
+                $errors = $chapter->getErrors();
+                if (!empty($errors)) {
+                    Debugger::log($errors, 'warning');
+                }
+                $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
                 // $db->beginTransaction();
                 // $db->prepare("UPDATE chapter SET visible = :visibility, weight = :weight, level = :level, title = :title, description = :description, secondstimelimit = :time_limit, corrend = :show_correction_end, tries = :max_tries, class = :class, updated_at = NOW() WHERE id = :id")
                 //     ->execute([
@@ -231,6 +239,7 @@ class ChaptersController extends AppController
 
         $this->set('listClasses', $listClasses);
         $this->set('listExercises', $listExercises);
+        $this->set('currentClassName', $currentClassName);
         $this->set(compact('chapter'));
     }
 
@@ -241,7 +250,7 @@ class ChaptersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $chapter = $this->Chapters->get($id);

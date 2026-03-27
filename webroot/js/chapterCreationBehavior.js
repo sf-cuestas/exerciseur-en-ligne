@@ -1,3 +1,4 @@
+// we added the null validation to prevent the stop of the script if it does not find the element in the page
 let timeLimitSection = document.getElementById("timelimit-box");
 if(timeLimitSection!=null){
     timeLimitSection.style.display = "none";
