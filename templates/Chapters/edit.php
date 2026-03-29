@@ -107,7 +107,7 @@
         </ul>
     </fieldset>
 
-    <?php echo $this->Form->submit(__('Valider la modifiacation des paramètres du chapitre')); ?>
+    <?php echo $this->Form->submit(__('Valider la modification des paramètres du chapitre')); ?>
     <?= $this->Form->end() ?>
 
     <ul>   

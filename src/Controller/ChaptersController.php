@@ -56,9 +56,18 @@ class ChaptersController extends AppController
 
         $listExercises = $this->Chapters->Exercises->find()->where(['id_chapter' => $chapter->id]);
 
+        $currentClassName = 'unspecified';
+        if ($chapter->class) {
+            $currentClass = $this->Chapters->Classses->find()->where(['id' => $chapter->class])->first();
+            if ($currentClass) {
+                $currentClassName = $currentClass->name;
+            }
+        }
+
         $this->set('listClasses', $listClasses);
         $this->set('listExercises', $listExercises);
         $this->set(compact('chapter'));
+        $this->set(compact('currentClassName'));
     }
 
     /**
