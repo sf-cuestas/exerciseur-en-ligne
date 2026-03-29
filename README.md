@@ -27,7 +27,28 @@ Quelques erreurs que nous avons trouvé sur le nommage des fichiers et variables
 kebab-case (les images et fichiers javascript), autres avec snake_case (pour les fichiers qui ont eu une structure html).
 - Nous avons essayé de standardiser le nommage avec camelCase, mais pour les fichiers avec la vue de pages le framework nous force à
 utiliser snake_case pour les fichiers avec multiples mots.
+### Programmation défensive et control d'erreurs
+Pour la programmation défensive, nous avons ajouté pour quelques fonctions un try catch pour prévenir que le site web s'arrete dans une section critique,
+aussi, nous avons ajouté la verification de nulls pour éviter que les scripts Javascript aient des problèmes d'exécution, car nous sommes contraints par cake php de charger tous les scripts meme si la page actuelle ne les utilise pas.
 
+De plus, pour la gestion d'erreur, nous avons géré l'accès aux pages avec l'authentification, si l'utilisateur n'est pas connecté, le
+Framework l'oblige à se connecter et si l'utilisateur est déjà connecté, nous regardons si le type d'utilisateur (prof/admin/étudiant) a accès à la page et si ce n'est pas le cas nous le redirigons à une page 401 pour notifier l'erreur d'autorisation.
+```
+Exemple
+se connecter en tant qu'étudiant et clicker sur le button space professeur.
+```
+
+### L'IA dans le projet
+Pour le projet, nous avons utilisé l'IA GitHub Copilot.
+Nous avons utilisé l'IA pour faire sortir des fonctions de l'eventListener (de plus de 800 lignes) dans le fichier de JS modularSection.js, cela a marché avec le premier prompt et toutes les fonctions marche bien.
+```prompt
+Please just take all the functions out of the eventlistener and only make it call them when needed while keeping the same functionablility and without modifying ainything from the functions themselves
+```
+
+Le point complexe que nous avons demandé à l'IA à faire, c'est régler un bug dans la sous-garde de l'édition d'un chapitre, l'IA a corrigé le problème avec un seul essay.
+```prompt
+now can you fix the saving of chapters on the function chapters Edit? after getting the answers from the form on the page 'Chapters/edit.php' all the right infos are sent but, for an unknown reason, the chapter cant be saved, feel free to edit the edit function on ChaptersController.php and the form on Chapters/edit.php if needed
+```
 
 Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
 Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.

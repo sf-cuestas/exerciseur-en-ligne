@@ -1,3 +1,4 @@
+// we added the null validation to prevent that the stop of the script if it does not find the element in the page
 let buttonTools = document.getElementById('button-tools')
 let sideBar = document.getElementById('sidebar')
 let columnSidebar = document.getElementsByClassName('columnSideBar')

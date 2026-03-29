@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
     font-family: "Luciole Regular", serif;
     background-image: url(/img/brownTexture.jpg);
-    background-size: cover;
+    background-size: repeat;
 }
 
 ul {
@@ -493,6 +493,13 @@ input[type="search"] {
     display: flex;
     flex-direction: row;
 }
+
+#chapter-creation .module {
+    border-top: 2px solid var(--dark-blue-color);
+    border-bottom: 2px solid var(--dark-blue-color);
+    padding: 1em 0em;
+}
+
 :not(#tries[type="checkbox"]:checked) ~ span {
     display: none;
 }

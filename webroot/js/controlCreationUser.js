@@ -1,3 +1,4 @@
+// we added the null validation to prevent that the stop of the script if it does not find the element in the page
 codeLabel=document.getElementById('teacher-creation-code-label');
 if(codeLabel!=null){
     codeLabel.style.visibility = "hidden";

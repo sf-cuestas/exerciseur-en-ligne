@@ -25,6 +25,8 @@ class UsersExercise extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        'id_user' => true,
+        'id_exercise' => true,
         'answer' => true,
         'grade' => true,
     ];
