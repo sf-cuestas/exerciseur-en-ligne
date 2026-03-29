@@ -277,11 +277,11 @@ class ExercisesController extends AppController
 
 
             if ($this->Exercises->UsersExercises->save($answersData)) {
-                $this->Flash->success(__('The chapter has been saved.'));
+                $this->Flash->success(__('The correction has been saved.'));
 
                 $this->redirect(["controller" => "Exercises", "action" => "copies-to-correct", $exerciseId]);
             } else {
-                $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+                $this->Flash->error(__('The correction could not be saved. Please, try again.'));
             }
         }
             
