@@ -59,15 +59,14 @@
             <table>
                 <?php foreach ($grades as $g) { ?>
                     <tr>
-                        <th><?= $g->id ?></th>
-                        <td><?= $g->title ?></td>
-                        <td><?= $g->grade ?></td>
-                        <td><?= $g->created_at ?></td>
+                        <th><?= 'Exercice ' . $g['id_exercise'] ?></th>
+                        <td><?= ($g['grade'] ?? '??') ?></td>
                     </tr>
                 <?php } ?>
             </table>
             <?php
-            echo $this->Html->link("Télécharger notes en .csv", ['controller' => 'Users', 'action' => 'downloadGrades'], ['class' => 'btn']);
+            // TODO : implement downloading grades
+            // echo $this->Html->link("Télécharger notes en .csv", ['controller' => 'Users', 'action' => 'downloadGrades'], ['class' => 'btn']);
         } else {
             echo "<p>Vous n'avez pas encore de notes. Complétez des exercices pour obtenir des notes.</p>";
         }

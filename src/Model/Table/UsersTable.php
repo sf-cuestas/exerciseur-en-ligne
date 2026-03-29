@@ -42,6 +42,7 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
         $this->hasMany('UsersClassses');
         $this->hasMany('UsersChapters');
+        $this->hasMany('UsersExercises');
         $this->hasMany('Results');
         $this->hasMany('Creationcodes');
         $this->addBehavior('Timestamp',
