@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function(){
         exerciseContainer.innerHTML = '';
         const wrapper = document.createElement('div');
         const sectionTitle = document.createElement('h1');
+        // TODO : mettre le vrai titre de la section
         sectionTitle.textContent = 'Placeholder Title';
         sectionTitle.className = 'section-title';
         reloadMathJax(sectionTitle);
