@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Error\Debugger;
 
 /**
  * Exercises Controller
@@ -338,11 +339,11 @@ class ExercisesController extends AppController
 
 
             if ($this->Exercises->UsersExercises->save($answersData)) {
-                $this->Flash->success(__('The chapter has been saved.'));
+                $this->Flash->success(__('The correction has been saved.'));
 
                 $this->redirect(["controller" => "Exercises", "action" => "copies-to-correct", $exerciseId]);
             } else {
-                $this->Flash->error(__('The chapter could not be saved. Please, try again.'));
+                $this->Flash->error(__('The correction could not be saved. Please, try again.'));
             }
         }
             
@@ -360,5 +361,92 @@ class ExercisesController extends AppController
         ->where(['id_exercise =' => $exercise['id'], 'grade IS ' => NULL])->toArray();
 
         $this->set(compact("exercises"));
+    }
+
+    public function practice($exerciseId = null) {
+        $exercise = null;
+
+        try {
+            $exercise = $this->Exercises->get($exerciseId);
+        } catch (\Throwable $th) {
+            $this->redirect(["controller" => "Classses", "action" => "teachers-space"]);
+        }
+
+        $content = $exercise['content'];
+        $decoded = null;
+
+        if (!empty($content)) {
+            $decoded = json_decode($content, true);
+        }
+
+        //setting up the json to be used in practice mode (removing grades and answers from localstorage as well as adding empty answers)
+        if (is_array($decoded)) {
+            foreach ($decoded as &$module) {
+                if(isset($module['answerProf'])) {
+                    unset($module['answerProf']);
+                }
+
+                if (isset($module['type']) && $module['type'] === 'mcq' && isset($module['choices']) && is_array($module['choices'])) {
+                    // For MCQ modules, delete the 'grade' field from each option
+                    foreach ($module['choices'] as &$choice) {
+                        if (isset($choice['grade'])) {
+                            unset($choice['grade']);
+                        }
+                        if(!isset($choice['answer'])) {
+                            $choice['answer'] = null;
+                        }
+                    }
+                    
+                } else if (isset($module['type']) && $module['type'] === 'truefalse') {
+                    if(isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if(isset($module['answerProf'])) {
+                        unset($module['answerProf']);
+                    }
+                }else if (isset($module['type']) && $module['type'] === 'numericalquestion') {
+                    if (isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if (!isset($module['answerjustification'])) {
+                        $module['answer'] = '';
+                    }
+                    if (!isset($module['answernumber'])) {
+                        $module['answernumber'] = 0;
+                    }
+
+                }else{
+                    if (isset($module['grade'])) {
+                        unset($module['grade']);
+                    }
+                    if (!isset($module['answer'])) {
+                        $module['answer'] = '';
+                    }
+                }
+            }
+            unset($module);
+        }
+
+        if ($this->request->is('post')) {
+            $answeredExercise = $this->Exercises->UsersExercises->newEntity([
+                'id_user' => $this->Authentication->getResult()->getData()['id'],
+                'id_exercise' => intval($exerciseId),
+                'answer' => $this->request->getData()['content'],
+                'grade' => null
+            ]);
+
+            // Debugger::dump(intval($exerciseId));
+
+            if ($this->Exercises->UsersExercises->save($answeredExercise)) {
+                $this->Flash->success("Exercise successfully saved.");
+
+                $this->redirect(['controller' => 'Pages', 'action' => 'index']);
+            } else {
+                $this->Flash->error("Something's wrong");
+            }
+        }
+
+        $this->set("exerciseTitle", $exercise['title']);
+        $this->set(compact('decoded'));
     }
 }

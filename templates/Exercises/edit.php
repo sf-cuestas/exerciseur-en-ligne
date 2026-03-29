@@ -34,6 +34,9 @@
     </div>
 
     <?= $this->Form->create($exercise, ['id' => "dynamic-form", "method" => "post"]) ?>
+    <?= $this->Html->link('Corriger les copies',
+                         ['controller' => 'Exercises', 'action' => 'copies-to-correct', $exercise['id']],
+                         ['class' => 'btn']); ?>
         <fieldset>
             <legend>Paramètres de la section</legend>   
             <ul>

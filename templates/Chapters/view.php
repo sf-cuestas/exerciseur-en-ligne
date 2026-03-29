@@ -109,7 +109,7 @@
                 
         <?php 
             foreach($listExercises as $ex) {
-                echo "<li>" . $this->Html->link($ex['title'], ['controller' => 'Exercises', 'action' => 'edit', $ex['id']], ['escape' => false, 'class' => 'btn']) . "</li>";
+                echo "<li>" . $this->Html->link($ex['title'], ['controller' => 'Exercises', 'action' => 'practice', $ex['id']], ['escape' => false, 'class' => 'btn']) . "</li>";
             }
             
         ?>

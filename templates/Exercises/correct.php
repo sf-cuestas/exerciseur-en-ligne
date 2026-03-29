@@ -19,7 +19,7 @@
         </div>
     </fieldset>
 
-    <?= $this->Form->submit(__('Valider lesq réponses'), ["id" => "accept-changes"]); ?>
+    <?= $this->Form->submit(__('Valider les réponses'), ["id" => "accept-changes"]); ?>
 
     <?= $this->Form->end(); ?>
 
