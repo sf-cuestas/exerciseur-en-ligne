@@ -5,7 +5,7 @@
         <ul>
             <li><h3>Visibilité</h3></li>
             <li>
-                <?= $this->Form->radio('visibility', ['1' => 'Publique', '0' => 'Privée', ], ['value' => '0']) ?>
+                <?= $this->Form->radio('visibility', ['1' => 'Publique', '0' => 'Privée', ], ['value' => $chapter['visible'] ?? '0']) ?>
             </li>
             <li><h3>Niveau</h3></li>
 
@@ -14,26 +14,33 @@
                 <?php echo $this->Form->select('level-select', [
                     "Non spécifié", "Primaire", "CE1", "CE2", "CM1", "CM2", "Collège", "Sixième", "Cinquième", "Quatrième", "Troisième", "Lycée", "Seconde",
                     "Première", "Terminale", "Etudes Supérieures"
-                ], ["id" => "level-select"]); ?>
+                ], ["id" => "level-select", "value" => $chapter['level'] ?? 0]); ?>
             </li>
 
             <li><h3>Limite de temps</h3></li>
 
             <li>
-                <?= $this->Form->checkbox("timelimit", ['hiddenField' => false, "id" => "timelimit"]); ?>
+                <?= $this->Form->checkbox("timelimit", ['hiddenField' => false, "id" => "timelimit", 'value' => 1, 'checked' => !empty($chapter->secondstimelimit)]); ?>
                 <?= $this->Form->label('timelimit', "Ajouter une limite de temps"); ?>
             </li>
 
             <li>
                 <div id="timelimit-box"> <!-- hide everything in this span if checkbox not checked -->
+                    <?php
+                        $timelimit = $chapter->secondstimelimit ?? 0;
+                        $timelimitHours = (int)floor($timelimit / 3600);
+                        $timelimitMinutes = (int)floor(($timelimit % 3600) / 60);
+                        $timelimitSeconds = (int)($timelimit % 60);
+                    ?>
+
                     <?php echo $this->Form->label('timelimit-hours', "Heures"); ?>
-                    <?= $this->Form->number("timelimit-hours", ["id" => "timelimit-hours", "min" => "0", "max" => "2048", "step" => "1", "value" => "0"]); ?>
+                    <?= $this->Form->number("timelimit-hours", ["id" => "timelimit-hours", "min" => "0", "max" => "2048", "step" => "1", "value" => $timelimitHours]); ?>
 
                     <?php echo $this->Form->label('timelimit-minutes', "Minutes"); ?>
-                    <?= $this->Form->number("timelimit-minutes", ["id" => "timelimit-minutes", "min" => "0", "max" => "59", "step" => "1", "value" => "30"]); ?>
+                    <?= $this->Form->number("timelimit-minutes", ["id" => "timelimit-minutes", "min" => "0", "max" => "59", "step" => "1", "value" => $timelimitMinutes]); ?>
 
                     <?php echo $this->Form->label('timelimit-seconds', "Secondes"); ?>
-                    <?= $this->Form->number("timelimit-seconds", ["id" => "timelimit-seconds", "min" => "0", "max" => "59", "step" => "1", "value" => "0"]); ?>
+                    <?= $this->Form->number("timelimit-seconds", ["id" => "timelimit-seconds", "min" => "0", "max" => "59", "step" => "1", "value" => $timelimitSeconds]); ?>
                 </div>
             </li>
 
@@ -47,18 +54,18 @@
                         $classesNames[$class['name']] = $class['name'];
                     }
 
-                    echo $this->Form->select('level-select', $classesNames, ['id' => "class-select"]);
+                    echo $this->Form->select('level-select', $classesNames, ['id' => "class-select", 'value' => $currentClassName]);
                 ?>
             </li>
 
             <li>
                 <div id="grade-options">
-                    <?= $this->Form->checkbox("graded", ['hiddenField' => false, "id" => "graded", "value" => "3"]); ?>
+                    <?= $this->Form->checkbox("graded", ['hiddenField' => false, "id" => "graded", "value" => 1, 'checked' => !empty($chapter->weight)]); ?>
                     <?= $this->Form->label('graded', "Noter ce chapitre?"); ?>
 
                     <div id="coefficient-box">
                         <?= $this->Form->label('grade-weight', "Coefficient :"); ?>
-                        <?= $this->Form->number("grade-weight", ["id" => "grade-weight", "min" => "1", "max" => "100", "step" => "1", "value" => "1"]); ?>
+                        <?= $this->Form->number("grade-weight", ["id" => "grade-weight", "min" => "1", "max" => "100", "step" => "1", "value" => !empty($chapter->weight) ? $chapter->weight : 1]); ?>
                     </div>
                 </div>
             </li>
@@ -100,8 +107,6 @@
             <li><?= $this->Form->textarea('desc', ['id' => "desc", "rows" => "10", "required" => true]); ?></li>
         </ul>
     </fieldset>
-
-    <?php echo $this->Form->submit(__('Valider la modifiacation des paramètres du chapitre')); ?>
     <?= $this->Form->end() ?>
 
     <ul>   

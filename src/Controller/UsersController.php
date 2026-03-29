@@ -53,12 +53,12 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    // TODO : display max grade and exercise name
     public function profile()
     {
         $isAdmin = false;
         $codesCreationTeacher = [];
         $user = $this->Authentication->getResult()->getData();
-        $grades = $this->Users->Results->find()->where(['id_user' => $user->id])->all()->toArray() ?? [];
         $idsClasses = $this->Users->UsersClassses->find()->where(['id_user' => $user->id])->all();
         $listClasses = [];
         foreach ($idsClasses as $idClass) {
@@ -76,12 +76,15 @@ class UsersController extends AppController
         if ($classCode){
             $this->joinClass($user['id'], $classCode);
         }
+
+        $grades = $this->Users->UsersExercises->find()->where(['id_user' => $user->id])->all()->toArray() ?? [];
+
         $this->set('user', $user);
         $this->set('isAdmin', $isAdmin);
         $this->set('codes', $codesCreationTeacher);
         $this->set('grades', $grades);
         $this->set('listClasses', $listClasses);
-
+        $this->set('grades', $grades);
     }
 
     /**

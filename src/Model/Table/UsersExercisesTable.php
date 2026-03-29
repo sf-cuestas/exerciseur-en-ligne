@@ -38,6 +38,8 @@ class UsersExercisesTable extends Table
         parent::initialize($config);
 
         $this->setTable('users_exercises');
+        $this->belongsToMany('Exercises');
+        $this->belongsToMany('Users');
         $this->setDisplayField(['id_user', 'id_exercise']);
         $this->setPrimaryKey(['id_user', 'id_exercise']);
     }
