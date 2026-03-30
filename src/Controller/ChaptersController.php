@@ -6,6 +6,7 @@ namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Error\Debugger;
+use Error;
 
 /**
  * Chapters Controller
@@ -46,28 +47,18 @@ class ChaptersController extends AppController
     public function view(string $id = null)
     {
         $chapter = $this->Chapters->get($id, contain: []);
-        $teacher = $this->Authentication->getResult()->getData();
-
-        $listClasses = [];
-        $listIdsClasses = $this->Chapters->UsersChapters->Users->UsersClassses->find()->where(['id_user' => $teacher->id, 'responsible' => 1])->all()->toArray();
-        foreach ($listIdsClasses as $idClass) {
-            $listClasses[] = $this->Chapters->UsersChapters->Users->UsersClassses->Classses->find()->where(['id' => $idClass->id_class])->first();
-        }
-
         $listExercises = $this->Chapters->Exercises->find()->where(['id_chapter' => $chapter->id]);
+        $currentClass = null;
 
-        $currentClassName = 'unspecified';
-        if ($chapter->class) {
+        try {
             $currentClass = $this->Chapters->Classses->find()->where(['id' => $chapter->class])->first();
-            if ($currentClass) {
-                $currentClassName = $currentClass->name;
-            }
+        } catch (Error $e) {
+            $this->Flash->error($e->getMessage());
         }
 
-        $this->set('listClasses', $listClasses);
         $this->set('listExercises', $listExercises);
-        $this->set(compact('chapter'));
-        $this->set(compact('currentClassName'));
+        $this->set('chapterName', $chapter["title"]);
+        $this->set('classId', $currentClass['id'] ?? null);
     }
 
     /**
