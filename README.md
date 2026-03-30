@@ -81,7 +81,18 @@ for the installation of the page in a self web server you have to:
 composer install --no-dev
 ```
 2. In the file config/app_local.php change the debug for false and add all the credentials for the database
-3. go to the folder bin and execute the command for initialize the data base
+3. In the file config/bootstrap.php comment or delete les lines
+```php
+lines 169-175
+if (!Configure::read('debug') && $httpHost) {
+        throw new CakeException(
+            'SECURITY: App.fullBaseUrl is not configured. ' .
+            'This is required in production to prevent Host Header Injection attacks. ' .
+            'Set APP_FULL_BASE_URL environment variable or configure App.fullBaseUrl in config/app.php',
+        );
+    }
+```
+4. go to the folder bin and execute the command for initialize the data base
 ```bash
 cake migrations migrate
 ```
