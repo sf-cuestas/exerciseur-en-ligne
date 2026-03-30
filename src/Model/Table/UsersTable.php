@@ -42,9 +42,16 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
         $this->hasMany('UsersClassses');
         $this->hasMany('UsersChapters');
+        $this->hasMany('UsersExercises');
         $this->hasMany('Results');
-
         $this->hasMany('Creationcodes');
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always'
+                ]
+            ]]);
     }
 
     /**
@@ -100,9 +107,6 @@ class UsersTable extends Table
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {

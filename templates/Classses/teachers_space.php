@@ -38,12 +38,12 @@
 
                 foreach ($listChapters as $chapter) { ?>
                     <li>
-                        <?= $this->Html->link($chapter->title, ['controller' => 'Classses', 'action' => 'viewChapter', $chapter->id], ['class' => 'btn']) ?>
+                        <?= $this->Html->link($chapter->title, ['controller' => 'Chapters', 'action' => 'edit', $chapter->id], ['class' => 'btn']) ?>
                     </li>
                 <?php }
                 ?>
             </ul>
         </div>
-        <h2><?= $this->Html->link('Créer chapitres', ['controller' => 'Classses', 'action' => 'add'], ['class' => 'btn']) ?></h2>
+        <h2><?= $this->Html->link('Créer chapitres', ['controller' => 'Chapters', 'action' => 'add'], ['class' => 'btn']) ?></h2>
     </div>
 </main>

@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\ChaptersController;
+use App\Controller\ExercisesController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\ChaptersController Test Case
+ * App\Controller\ExercisesController Test Case
  *
- * @link \App\Controller\ChaptersController
+ * @link \App\Controller\ExercisesController
  */
-class ChaptersControllerTest extends TestCase
+class ExercisesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,17 +22,16 @@ class ChaptersControllerTest extends TestCase
      * @var array<string>
      */
     protected array $fixtures = [
-        'app.Chapters',
-        'app.Tagged',
-        'app.UsersChapters',
-        'app.Classses'
+        'app.Exercises',
+        'app.Users',
+        'app.UsersExercises',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @link \App\Controller\ChaptersController::index()
+     * @link \App\Controller\ExercisesController::index()
      */
     public function testIndex(): void
     {
@@ -43,7 +42,7 @@ class ChaptersControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @link \App\Controller\ChaptersController::view()
+     * @link \App\Controller\ExercisesController::view()
      */
     public function testView(): void
     {
@@ -54,7 +53,7 @@ class ChaptersControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @link \App\Controller\ChaptersController::add()
+     * @link \App\Controller\ExercisesController::add()
      */
     public function testAdd(): void
     {
@@ -65,7 +64,7 @@ class ChaptersControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @link \App\Controller\ChaptersController::edit()
+     * @link \App\Controller\ExercisesController::edit()
      */
     public function testEdit(): void
     {
@@ -76,7 +75,7 @@ class ChaptersControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @link \App\Controller\ChaptersController::delete()
+     * @link \App\Controller\ExercisesController::delete()
      */
     public function testDelete(): void
     {

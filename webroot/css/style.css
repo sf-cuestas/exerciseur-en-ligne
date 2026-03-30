@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Luciole Regular';
-    src: url('/font/Luciole-Regular.ttf') format("truetype");
+    src: url('/font/lucioleRegular.ttf') format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -20,8 +20,8 @@ body {
     margin: 0;
     min-height: 100vh;
     font-family: "Luciole Regular", serif;
-    background-image: url(/img/brown-texture.jpg);
-    background-size: cover;
+    background-image: url(/img/brownTexture.jpg);
+    background-size: repeat;
 }
 
 ul {
@@ -493,6 +493,13 @@ input[type="search"] {
     display: flex;
     flex-direction: row;
 }
+
+#chapter-creation .module {
+    border-top: 2px solid var(--dark-blue-color);
+    border-bottom: 2px solid var(--dark-blue-color);
+    padding: 1em 0em;
+}
+
 :not(#tries[type="checkbox"]:checked) ~ span {
     display: none;
 }

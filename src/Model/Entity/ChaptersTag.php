@@ -6,12 +6,15 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * UsersChapter Entity
+ * ChaptersTag Entity
  *
- * @property string $id_user
- * @property string $id_chapter
+ * @property string $tag_id
+ * @property string $chapter_id
+ *
+ * @property \App\Model\Entity\Tag $tag
+ * @property \App\Model\Entity\Chapter $chapter
  */
-class UsersChapter extends Entity
+class ChaptersTag extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -23,8 +26,7 @@ class UsersChapter extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        '*' => true,
-        'id_user' => true,
-        'id_chapter' => true,
+        'tag' => true,
+        'chapter' => true,
     ];
 }

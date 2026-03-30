@@ -4,14 +4,16 @@
 
         <div id="class-responsable">
             <h2>Responsable(s):</h2>
-            <?php foreach ($teachers as $teacher) {echo "<h3>".$teacher['name'] . ' ' . $teacher['surname']."</h3>";} ?>
+            <?php foreach ($teachers as $teacher) {echo "<h3>".$teacher->name . ' ' . $teacher->surname."</h3>";} 
+
+            use Cake\Controller\Controller;?>
         </div>
         <div id="class-description">
             <?= $this->Form->create() ?>
             <fieldset>
                 <legend>Modification de la Classe </legend>
-                <?= $this->Form->control('name')?>
-                <?= $this->Form->control('description') ?>
+                <?= $this->Form->control('name', ['label' => 'Modifier le Nom']) ?>
+                <?= $this->Form->control('description', ['label' => 'Modifier la description']) ?>
             </fieldset>
             <?= $this->Form->control('class', ['type'=>'hidden','value'=>'"'.$class['id'].'"' ]) ?>
             <?= $this->Form->button("Valider la Modification") ?>
@@ -25,16 +27,14 @@
             <h2 <?= empty($listChapters) ? "hidden" : "" ?>>Chapitres de la classe</h2>
             <div id="class-chapitres" <?= empty($listChapters) ? "hidden" : "" ?>>
                 <ul>
-                    <?php
-                    foreach ($listChapters as $chapter) { ?>
+                    <?php foreach ($listChapters as $chapter) { ?>
                         <li class="">
                             <div>
-                                <a href="chapter.php?id-chapter=<?= $chapter['id'] ?>"><?= $chapter['title'] ?></a>
+                                <?= $this->Html->link($chapter['title'], ['controller' => 'Chapters', 'action' => 'view', $chapter['id']]) ?>
                                 <p><?=$chapter['description']?></p>
                             </div>
                         </li>
-                        <?php }
-                    ?>
+                    <?php }?>
                 </ul>
         </div>
     </div>
@@ -47,35 +47,52 @@
             
             <h2>Ajouter Responsables</h2>
             <div class="class-adding">
-                <form action="/editor-class.php" method="get">
-                    <label for="teacher-search"></label><input type="search" id="teacher-search" name="teacher-search" value="<?= $teacherSearch ?>">
-                    <label for="id-class"></label><input type="text" value="<?= $_GET['id-class'] ?>" name="id-class" id="id-class" hidden>
-                    <input type="submit" class="btn" value="Rechercher responsable">
-                </form>
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                <?= $this->Form->control('teacher-search', ['type' => 'search', 'label' => false, 'value' => $teacherSearch]) ?>
+                <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' =>$class['id']]) ?> -->
+                <?php if (isset($studentSearch)) { ?>
+                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                <?php } ?>
+                <?= $this->Form->button("Rechercher responsable", ['class' => 'btn']) ?>
+                <?= $this->Form->end() ?>       
+                
                 <ul>
                     <?php foreach ($listAllTeachers as $teacher) { ?>
                         <li>
                             <div>
-                                <a href="profile.php?id-profil=<?= $teacher['id'] ?>"><?= $teacher['name'] . " " . $teacher['surname'] ?></a>
-                                <form action="/processing-forms/processing-form-class-edition.php" method="post">
-                                    <input type="hidden" name="add-teacher" value="<?= $teacher['id'] ?>">
-                                    <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                                    <input class="btn" type="submit" value="Ajouter">
-                                </form>
+                                <?= $this->Html->link($teacher['name'] . " " . $teacher['surname'], ['controller' => 'Users', 'action' => 'profile', $teacher['id']]) ?> 
+                                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                                <?= $this->Form->control('add-teacher', ['type' => 'hidden', 'value' => $teacher['id']]) ?>
+                                <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                <?php if (isset($teacherSearch)) { ?>
+                                    <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                <?php } ?>
+                                <?php if (isset($studentSearch)) { ?>
+                                    <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                <?php } ?>
+                                <?= $this->Form->button("Ajouter", ['class' => 'btn']) ?>
+                                <?= $this->Form->end() ?>
                             </div>
                         </li>
                     <?php } ?>
                 </ul>
-            <h2 <?= empty($teachers) ? "hidden" : "" ?>>Liste des Responsables inscrits</h2>
-            <ul>
-                <?php foreach ($teachers as $teacher) { ?>
+                <h2 <?= empty($teachers) ? "hidden" : "" ?>>Liste des Responsables inscrits</h2>
+                <ul>
+                    <?php foreach ($teachers as $teacher) { ?>
                     <li>
                         <div>
-                            <a href="profile.php?id-profil=<?= $teacher['id'] ?>"><?= Database::getInstance()->getUser($teacher['id'])['name'] ?></a>
-                            <form action="/processing-forms/processing-form-class-edition.php" method="post">
-                                <input type="hidden" name="delete-teacher" value="<?= $teacher['id'] ?>">
-                                <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                                <input class="btn" type="submit" value="Supprimer">
+                            <?= $this->Html->link($teacher['name'] . " " . $teacher['surname'], ['controller' => 'Users', 'action' => 'profile', $teacher['id']]) ?>
+                            <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                            <?= $this->Form->control('delete-teacher', ['type' => 'hidden', 'value' => $teacher['id']]) ?>
+                            <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                            <?php if (isset($teacherSearch)) { ?>
+                                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                            <?php } ?>
+                            <?php if (isset($studentSearch)) { ?>
+                                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                            <?php } ?>
+                            <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
+                            <?= $this->Form->end() ?>
                             </form>
                         </div>
                     </li>
@@ -90,49 +107,67 @@
 
             <h2>Ajouter étudiants</h2>
             <div class="class-adding">
-                <form action="/editor-class.php" method="get">
-                    <label for="student-search"></label><input type="search" id="student-search" name="student-search" value="<?= $studentSearch ?>">
-                    <label for="id-class"></label><input type="text" value="<?= $_GET['id-class'] ?>" name="id-class" id="id-class" hidden>
-                    <button type="submit" class="btn">Rechercher étudiant</button>
-                </form>
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                <?= $this->Form->control('student-search', ['type' => 'search', 'label' => false, 'value' => $studentSearch]) ?>
+                <!-- <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                <?php if (isset($teacherSearch)) { ?>
+                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                <?php } ?>
+                <?= $this->Form->button("Rechercher étudiant", ['class' => 'btn']) ?>
+                <?= $this->Form->end() ?>
+                
                 <ul>
                 <?php foreach ($listAllStudents as $student) { ?>
                     <li class="">
                         <div>
-                            <a href="profile.php?id-profil=<?= $student['id'] ?>"><?= $student['name'] . " " . $student['surname'] ?></a>
-                            <form action="/processing-forms/processing-form-class-edition.php" method="post">
-                                <input type="hidden" name="add-student" value="<?= $student['id'] ?>">
-                                <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                                <input class="btn" type="submit" value="Ajouter">
-                            </form>
+                            <?= $this->Html->link($student['name'] . " " . $student['surname'], ['controller' => 'Users', 'action' => 'profile', $student['id']]) ?>
+                            <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                            <?= $this->Form->control('add-student', ['type' => 'hidden', 'value' => $student['id']]) ?>
+                            <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                            <?php if (isset($studentSearch)) { ?>
+                                <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                            <?php } ?>
+                            <?php if (isset($teacherSearch)) { ?>
+                                <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                            <?php } ?>
+                            <?= $this->Form->button("Ajouter", ['class' => 'btn']) ?>
+                            <?= $this->Form->end() ?>
                         </div>
                     </li>
                 <?php } ?>
                 </ul>
                 <div>
-                    <h2 <?= (isset($_SESSION['studentsToAdd']) && !empty($_SESSION['studentsToAdd'])) ? "" : "hidden" ?>>Liste des étudiants à ajouter</h2>
+                    <h2 <?= empty($studentsToAdd) ? "hidden" : "" ?>>Liste des étudiants à ajouter</h2>
                     <ul>
+
+                    <!-- TODO : delete the link leading to students/teachers profile -->
                         <?php
-                        if (isset($_SESSION['studentsToAdd'])) {
-                            foreach ($_SESSION['studentsToAdd'] as $student) { ?>
+                        if (isset($studentsToAdd) && !empty($studentsToAdd)) {
+                            foreach ($studentsToAdd as $student) { ?>
                                 <li>
                                     <div id="class-delete-students">
-                                        <a href="profile.php?id-profil=<?= $student ?>"><?= Database::getInstance()->getUser($student)['name'] ?></a>
-                                        <form action="/processing-forms/processing-form-class-edition.php" method="post">
-                                            <input type="hidden" name="delete-student" value="<?= $student ?>">
-                                            <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                                            <input class="btn" type="submit" value="Supprimer">
+                                        <?= $this->Html->link($student['name'] . " " . $student['surname'], ['controller' => 'Users', 'action' => 'profile', $student['id']]) ?>
+                                        <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                                        <?= $this->Form->control('delete-student', ['type' => 'hidden', 'value' => $student['id']]) ?>
+                                        <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                        <?php if (isset($studentSearch)) { ?>
+                                            <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                        <?php } ?>
+                                        <?php if (isset($teacherSearch)) { ?>
+                                            <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                        <?php } ?>
+                                        <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
+                                        <?= $this->Form->end() ?>
                                         </form>
                                     </div>
                                 </li>
                         <?php } } ?>
                     </ul>
-                    <form action="/processing-forms/processing-form-class-edition.php"
-                    method="post" <?= (isset($_SESSION['studentsToAdd'])) && !empty($_SESSION['studentsToAdd']) ? "" : "hidden" ?>>
-                    <input type="hidden" name="add-student-db" value="true">
-                        <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                        <input class="btn" type="submit" value="Ajouter les étudiants">
-                        </form>
+                    <!-- <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                    <?= $this->Form->control('add-student-db',['type' => 'hidden', 'value'=>"true"]) ?>
+                    <?= $this->Form->control('id-class', ['type' => 'hidden', 'value' => $class['id']]) ?>
+                    <?= $this->Form->button("Ajouter les étudiants", ['class' => 'btn']) ?>
+                    <?= $this->Form->end() ?>         -->
                     </div>
                     
                     <h2 <?= empty($listStudents) ? "hidden" : "" ?>>Liste des étudiants inscrits</h2>
@@ -140,12 +175,18 @@
                         <?php foreach ($listStudents as $student) { ?>
                             <li class="">
                                 <div>
-                                    <a href="profile.php?id-profil=<?= $student['id_user'] ?>"><?= Database::getInstance()->getUser($student['id_user'])['name'] ?></a>
-                                    <form action="/processing-forms/processing-form-class-edition.php" method="post">
-                                        <input type="hidden" name="delete-student-db" value="<?= $student['id_user'] ?>">
-                                        <input type="hidden" name="class" value="<?= $class['id'] ?>">
-                                        <input class="btn" type="submit" value="Supprimer">
-                                    </form>
+                                    <?= $this->Html->link($student['name'] . " " . $student['surname'], ['controller' => 'Users', 'action' => 'profile', $student['id']]) ?>
+                                    <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Classses', 'action' => 'edit', $class['id']]]) ?>
+                                    <?= $this->Form->control('delete-student-db', ['type' => 'hidden', 'value' => $student['id']]) ?>
+                                    <!-- <?= $this->Form->control('class', ['type' => 'hidden', 'value' => $class['id']]) ?> -->
+                                    <?php if (isset($studentSearch)) { ?>
+                                        <?= $this->Form->control('student-search', ['type' => 'hidden', 'value' => $studentSearch]) ?>
+                                    <?php } ?>
+                                    <?php if (isset($teacherSearch)) { ?>
+                                        <?= $this->Form->control('teacher-search', ['type' => 'hidden', 'value' => $teacherSearch]) ?>
+                                    <?php } ?>
+                                    <?= $this->Form->button("Supprimer", ['class' => 'btn']) ?>
+                                    <?= $this->Form->end() ?>
                                 </div>
                             </li>
                         <?php } ?>
@@ -157,13 +198,14 @@
     
     <h2>Generation de codes d'invitation à la classe</h2>
     <div id="class-codes">
-        <form action="/processing-forms/processing-form-class-edition.php" method="post">
-            <label>Nombre d'usages:
-                <input type="number" name="number-usages-code" value="1" min="1" max="67000">
-            </label>
-            <input type="hidden" name="class" value="<?= $class['id'] ?>">
-            <input type="submit" name="generate-code-class" value="Créer code">
-        </form>
+
+        <?= $this->Form->create()?>
+        <?= $this->Form->hidden('create-code-class',)?>
+        <?= $this->Form->control('num_usages', ['label' => "Nombre d'usages:", 'value' => 1, 'min' => 1, 'max' => 67000, 'step' => 1]) ?>
+        <?= $this->Form->control('isCode', ['type' => 'hidden', 'value' => 'true']) ?>
+        <?= $this->Form->Button('Créer code')?>
+        <?= $this->Form->end()?>
+            
     <div>
         <h4>Codes Actifs</h4>
         <ul>
@@ -178,4 +220,9 @@
             <?php } ?>
         </ul>
     </div>
+    </div>
+
+    <?= $this->Html->link("Revenir à la vue", ['controller'=>'Classses','action' => 'viewClass', $class['id']],['class' => 'btn'])?>
+
+    
 </main>

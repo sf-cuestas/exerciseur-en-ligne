@@ -41,8 +41,17 @@ class ClasssesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
         $this->hasMany('UsersClassses');
-        $this->hasMany("Chapters");
+        $this->hasMany('Chapters', [
+            'foreignKey' => 'class',
+        ]);
         $this->hasMany('CodesClass');
+        $this->addBehavior('Timestamp',
+            ['events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always'
+                ]
+            ]]);
     }
 
     /**

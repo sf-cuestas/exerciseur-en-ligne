@@ -11,7 +11,7 @@ window.MathJax = {
     }
 };
 
-
+// array wich stores the buttons to show the characters (like "Lettres greques (majuscules)")
 let addElementsBtnArray = [];
 
 
@@ -82,7 +82,7 @@ function insertToContentEditable(text) {
     if (el && el.isContentEditable) el.dispatchEvent(new Event('input', {bubbles: true}));
 }
 
-
+// class for the elements buttons, wich will then be added to the addElementsBtnArray array
 class ElementsBtn {
     constructor(btnId, displayDiv, dataArray, prefix="\\", suffix="") {
         this.btn = document.getElementById(btnId);
@@ -91,10 +91,12 @@ class ElementsBtn {
         this.dataArray = dataArray;
         this.prefix = prefix;
         this.suffix = suffix;
-        
-        this.btn.addEventListener("click", ()=>this.addElements());
+        if(this.btn!=null){
+            this.btn.addEventListener("click", ()=>this.addElements());
+        }
     }
     
+    // adds the characters buttons in the displayDiv and reloads Mathjax in the div
     async addElements() {
         if (this.addElementsBtnActivated == false) {
             let div = document.createElement("div");
@@ -118,6 +120,8 @@ class ElementsBtn {
     }
 }
 
+
+// function to reload MathJax in the div because it doesn't does it itself
 async function reloadMathJax(elem) {
     if (!window.MathJax) return;
 
@@ -147,6 +151,7 @@ async function reloadMathJax(elem) {
     }
 }
 
+// creates a div in the symbols div from an array containing the symbols in plain text
 function addSymbolSection(div, array, prefix="", suffix="") {
     for (let i = 0; i < array.length; i++) {
         let btn = document.createElement("button");
@@ -164,13 +169,16 @@ function addSymbolSection(div, array, prefix="", suffix="") {
     }
 }
 
+
 function addElementsBtn(id, btnDiv, symbolsDiv, symbolsArray, innerHtml) {
     let newBtn = document.createElement("button");
     newBtn.setAttribute("id", id);
     newBtn.innerHTML = innerHtml;
     
     let div = document.getElementById(btnDiv);
+    if(div!=null){
     div.appendChild(newBtn);
+    }
     addElementsBtnArray.push(new ElementsBtn(id, symbolsDiv, symbolsArray));
 }
 
