@@ -17,6 +17,7 @@ class FirstMigration extends BaseMigration
     {
         $this->table('chapters', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -101,6 +102,7 @@ class FirstMigration extends BaseMigration
 
         $this->table('classses', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -174,6 +176,7 @@ class FirstMigration extends BaseMigration
 
         $this->table('exercises', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -254,6 +257,7 @@ class FirstMigration extends BaseMigration
 
         $this->table('results', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -308,6 +312,7 @@ class FirstMigration extends BaseMigration
 
         $this->table('tags', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -324,8 +329,9 @@ class FirstMigration extends BaseMigration
             ])
             ->create();
 
-        $this->table('users', ['id' => false, 'primary_key' => ['id']])
+        $this->table('users', ['id' => true, 'primary_key' => ['id']])
             ->addColumn('id', 'integer', [
+                'autoincrement' => true,
                 'limit' => null,
                 'null' => false,
             ])
