@@ -180,7 +180,7 @@ class ExercisesController extends AppController
                 if ($this->Exercises->save($exercise)) {
                     $this->Flash->success(__('The exercise has been saved.'));
 
-                    $this->redirect(['controller' => 'Chapters', "action" => "view", $exercise["id_chapter"]]);
+                    $this->redirect(['controller' => 'Chapters', "action" => "edit", $exercise["id_chapter"]]);
                 } else {
                     $this->Flash->error(__('The exercise could not be saved. Please, try again.'));
                 }

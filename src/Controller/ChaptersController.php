@@ -52,8 +52,8 @@ class ChaptersController extends AppController
 
         try {
             $currentClass = $this->Chapters->Classses->find()->where(['id' => $chapter->class])->first();
-        } catch (Error $e) {
-            $this->Flash->error($e->getMessage());
+        } catch (\Throwable $th) {
+            $currentClass = null;
         }
 
         $this->set('listExercises', $listExercises);
