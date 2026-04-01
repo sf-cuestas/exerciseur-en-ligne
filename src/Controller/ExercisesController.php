@@ -116,8 +116,7 @@ class ExercisesController extends AppController
             $this->set('resetLocalStorage', false);
         }
         $this->set('idChapter', $idChapter);
-        $users = $this->Exercises->Users->find('list', limit: 200)->all();
-        $this->set(compact('exercise', 'users'));
+        $this->set(compact('exercise'));
 
         
     }
