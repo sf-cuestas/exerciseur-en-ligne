@@ -1,4 +1,8 @@
-<main id="chapter-creation">     
+<main id="chapter-creation">   
+    <script>
+        let answers = <?= json_encode($answersDecoded) ?>;
+        localStorage.setItem('studentAnswers', JSON.stringify(answers));
+    </script>
     <aside id=chapter-creation-aside-1>
         <h2>Outils</h2>
         <div>

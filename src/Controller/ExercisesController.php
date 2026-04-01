@@ -217,7 +217,7 @@ class ExercisesController extends AppController
         
         $exercise = null;
         $user = null;
-        
+
         try {
             $exercise = $this->Exercises->get($exerciseId);
             $user = $this->Exercises->Users->get($userId);
@@ -232,6 +232,10 @@ class ExercisesController extends AppController
             $decoded = json_decode($content, true);
         }
 
+        // the answers completed by the student
+        $answersData = $this->Exercises->UsersExercises->get([$userId, $exerciseId]);
+        $answersDecoded = json_decode($answersData["answer"], true);
+
         if ($this->request->is('post')) {
             // the content straight from the database
             $exercise = $this->Exercises->get($exerciseId);
@@ -241,14 +245,8 @@ class ExercisesController extends AppController
             $gradedData = $this->request->getData();
             $gradedDecoded = json_decode($gradedData["content"], true);
 
-            // the answers completed by the student
-            $answersData = $this->Exercises->UsersExercises->get([$userId, $exerciseId]);
-            $answersDecoded = json_decode($answersData["answer"], true);
-
             $finalMaxGrades = array();
             $finalGrades = array();
-
-            
 
 
             // filling up $finalMaxGrades
@@ -344,9 +342,10 @@ class ExercisesController extends AppController
                 $this->Flash->error(__('The correction could not be saved. Please, try again.'));
             }
         }
-            
+
         $this->set(compact("exercise"));
         $this->set(compact("user"));
+        $this->set(compact('answersDecoded'));
     }
 
     // TODO : get users names so thats what being displayed in the view

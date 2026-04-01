@@ -38,8 +38,16 @@ document.addEventListener('DOMContentLoaded', function(){
             if (!raw) return;
             const data = JSON.parse(raw);
             if (!Array.isArray(data)) return;
-            
-            data.forEach(item => {
+
+            const rawAnswers = localStorage.getItem('studentAnswers');
+            if (!rawAnswers) return;
+            const dataAnswers = JSON.parse(rawAnswers);
+            if (!Array.isArray(dataAnswers)) return;
+
+
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i];
+
                 if (item.type === 'openquestion') {
                     const container = document.createElement('div');
                     container.className = "module";
@@ -50,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     openElem.innerHTML = "Question : ".concat(item.value || '');
                     reloadMathJax(openElem);
                     const answer = document.createElement('p');
-                    answer.innerHTML = "Réponse : ".concat(item.answer || "empty answer");
+                    answer.innerHTML = "Réponse : ".concat(dataAnswers[i].answer || "empty answer");
 
                     const noteLabel = createLabel('Note : ', `grade-field-${item.index}}`);
                     const gradeField = createSpinner(`grade-field-${item.index}`, `grade-field-${item.index}}`, -67000, grade, 0.01);
@@ -77,9 +85,8 @@ document.addEventListener('DOMContentLoaded', function(){
                     console.warn('Unsupported module type during load:', item.type);
                 }
             }
-        );
-            exerciseContainer.appendChild(wrapper);
 
+            exerciseContainer.appendChild(wrapper);
         }catch (e) {
             console.warn('Failed to load saved modules:', e);
         }
@@ -126,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
             }
 
-            console.log('data', data);
         } catch (e) {
             console.warn('Failed to reload modules during save:', e);
         }
@@ -160,5 +166,11 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     loadExercise();
-    saveExercise();
+    saveExercise(); 
+});
+
+document.getElementById("accept-changes").addEventListener('click', () => {
+    localStorage.removeItem('studentAnswers');
+    localStorage.removeItem('dynamicModules');
+    localStorage.removeItem('graded-answers');
 });
