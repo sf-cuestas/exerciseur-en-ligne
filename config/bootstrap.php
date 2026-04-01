@@ -166,6 +166,14 @@ if (!$fullBaseUrl) {
      * Only enforce fullBaseUrl requirement when we're in a web request context.
      * This allows CLI tools (like PHPStan) to load the bootstrap without throwing.
      */
+
+    if (!Configure::read('debug') && $httpHost) {
+        throw new CakeException(
+            'SECURITY: App.fullBaseUrl is not configured. ' .
+            'This is required in production to prevent Host Header Injection attacks. ' .
+            'Set APP_FULL_BASE_URL environment variable or configure App.fullBaseUrl in config/app.php',
+        );
+    }
     
     /*
      * Development mode fallback: Use HTTP_HOST for convenience.
