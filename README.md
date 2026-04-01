@@ -1,5 +1,5 @@
 # Exerciseur en ligne
-Salut celui-là c'est un projet dans le cadre de la SAÉ pour le deuxième année de BUT Informatique, le projet
+Celui-là c'est un projet dans le cadre de la SAÉ pour le deuxième année de BUT Informatique, le projet
 consiste d'une page web pour la realisation et la creation d'exercices pour les étudiants
 Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakePHP
 voici le lien au projet https://github.com/JeromeTardivon/Exerciseur-en-Ligne
@@ -55,8 +55,11 @@ now can you fix the saving of chapters on the function chapters Edit? after gett
 ### Débogage
 Comme le projet est Web, ce n'est pas possible utiliser le déboguer de l'IDE, notre stratégie est de montrer les données avec `var_dump` ou la fonction de cakePHP `dd` car en temps normal les origines des problèmes sont des variables vides ou null et pour les fichiers JS, nous utilisons la console du navigateur parce que c'est la seule manière d'observer le problème.
 
-Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
-Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
+### Concepts de programmation
+Le projet utilise de manière general l'architecture MVC qui propose cakePHP, cette architecture est basic, cependant elle permet d'isoler les parties du projet pour travailler en groupe et continue, aussi avec l'utilisation du framework, nous avons utilisé l'héritage pour éviter les répétions de code, par exemple
+dans la classe `appController` il y a une fonction commune `generateCode` qui est utilisé dans les deux controller et le comportement est le même, la difference est la table de la base de données qui utilise.
+
+Un deuxième concept de programmation, c'est le patron singleton qui est géré et appliqué par le framework.
 ## Installation develop
 1. Download and install PHP 8.2
 2. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
