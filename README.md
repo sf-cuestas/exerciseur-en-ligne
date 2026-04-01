@@ -96,15 +96,7 @@ composer install --no-dev
 ```bash
 cake migrations migrate
 ```
-4. In the file `config/bootstrpap.php` comment the lines with the code
+4. In the file `config/app.php`
 ```php
-lines 169-175
-if (!Configure::read('debug') && $httpHost) {
-        throw new CakeException(
-            'SECURITY: App.fullBaseUrl is not configured. ' .
-            'This is required in production to prevent Host Header Injection attacks. ' .
-            'Set APP_FULL_BASE_URL environment variable or configure App.fullBaseUrl in config/app.php',
-        );
-    }
+'fullBaseUrl' => 'addresse of the website'
 ```
-
