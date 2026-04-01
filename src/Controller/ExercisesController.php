@@ -231,7 +231,6 @@ class ExercisesController extends AppController
         if (!empty($content)) {
             $decoded = json_decode($content, true);
         }
-        $john = null;
 
         if ($this->request->is('post')) {
             // the content straight from the database
@@ -348,7 +347,6 @@ class ExercisesController extends AppController
             
         $this->set(compact("exercise"));
         $this->set(compact("user"));
-        $this->set("john", $this->request->is("POST"));
     }
 
     // TODO : get users names so thats what being displayed in the view
