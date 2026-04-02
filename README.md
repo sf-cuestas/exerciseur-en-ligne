@@ -1,10 +1,10 @@
 # Exerciseur en ligne
-Salut celui-là c'est un projet dans le cadre de la SAÉ pour le deuxième année de BUT Informatique, le projet
+Le projet est réalisé dans le cadre de la SAÉ pour le deuxième année de BUT Informatique, le projet
 consiste d'une page web pour la realisation et la creation d'exercices pour les étudiants
-Cet projet est déjà le refacto du projet SAÉ créé dans une premiere stance sans le framework de cakePHP
+Ce projet est déjà la refactorisation du projet SAÉ créé dans une premiere stance sans le framework de cakePHP
 voici le lien au projet https://github.com/JeromeTardivon/Exerciseur-en-Ligne
 
-## Convention de nommage des variables
+### Convention de nommage des variables
 Pour les contrôleurs, entités, tables et variables, nous allons suivre la convention de [cakePHP](https://book.cakephp.org/5.x/intro/conventions.html).
 ```
 UsersController.php ->
@@ -22,11 +22,14 @@ ce type de nommage pour suivre l'idée de cake php mais dans la documentation du
 ```
 fichier javascript -> controlCreationUser.js
 ```
-Quelques erreurs que nous avons trouvé sur le nommage des fichiers et variables:
+Quelques erreurs que nous avons trouvées sur le nommage des fichiers et variables :
 - Quand nous avons commencé le projet, nous nommions quelques fichiers avec
-kebab-case (les images et fichiers javascript), autres avec snake_case (pour les fichiers qui ont eu une structure html).
+  kebab-case (les images et fichiers javascript), autres avec snake_case (pour les fichiers qui ont eu une structure html).
 - Nous avons essayé de standardiser le nommage avec camelCase, mais pour les fichiers avec la vue de pages le framework nous force à
-utiliser snake_case pour les fichiers avec multiples mots.
+  utiliser snake_case pour les fichiers avec multiples mots.
+
+### Commentaires
+Pour cette partie, nous avons écrit quelques commentaires pendant que nous faisions le projet s'il y a eu besoin d'expliquer pour expliquer une fonction ou la façon de faire quelque chose dans une fonction, par exemple dans le fichier src/Controller/ExercisesController.php.
 ### Programmation défensive et control d'erreurs
 Pour la programmation défensive, nous avons ajouté pour quelques fonctions un try catch pour prévenir que le site web s'arrete dans une section critique,
 aussi, nous avons ajouté la verification de nulls pour éviter que les scripts Javascript aient des problèmes d'exécution, car nous sommes contraints par cake php de charger tous les scripts meme si la page actuelle ne les utilise pas.
@@ -49,9 +52,17 @@ Le point complexe que nous avons demandé à l'IA à faire, c'est régler un bug
 ```prompt
 now can you fix the saving of chapters on the function chapters Edit? after getting the answers from the form on the page 'Chapters/edit.php' all the right infos are sent but, for an unknown reason, the chapter cant be saved, feel free to edit the edit function on ChaptersController.php and the form on Chapters/edit.php if needed
 ```
+### Débogage
+Comme le projet est Web, ce n'est pas possible utiliser le déboguer de l'IDE, notre stratégie est de montrer les données avec `var_dump` ou la fonction de cakePHP `dd` car en temps normal les origines des problèmes sont des variables vides ou null et pour les fichiers JS, nous utilisons la console du navigateur parce que c'est la seule manière d'observer le problème.
 
-Nous avons amélioré le projet avec la mise en place d'une architecture MVC plus claire.
-Nous avons refactorisé les fonctions qui sont difficiles à comprendre, qui se répètent.
+### Concepts de programmation et architecture
+Le projet utilise de manière general l'architecture MVC que propose cakePHP, cette architecture est basique, cependant elle permet d'isoler les parties du projet pour travailler en groupe plus efficacement, en plus de l'utilisation du framework, nous avons utilisé l'héritage pour éviter les répétions de code, par exemple
+dans la classe `appController` il y a une fonction commune `generateCode` qui est utilisé dans les deux contrôleurs et le comportement est le même, la difference est la table de la base de données qui l'utilise.
+
+Un deuxième concept de programmation, le patron singleton, est géré et appliqué par le framework pour la connexion à la base de données.
+![img.png](projectStructure.png)
+# Installation
+C'est important à dire que la difference entre l'installation en développement et production est dans la partie de libraries, pour le développement il y a de libraries specialisés pour le débogage qui aident aux développeurs avec les erreurs.
 ## Installation develop
 1. Download and install PHP 8.2
 2. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
@@ -81,19 +92,11 @@ for the installation of the page in a self web server you have to:
 composer install --no-dev
 ```
 2. In the file config/app_local.php change the debug for false and add all the credentials for the database
-3. In the file config/bootstrap.php comment or delete les lines
-```php
-lines 169-175
-if (!Configure::read('debug') && $httpHost) {
-        throw new CakeException(
-            'SECURITY: App.fullBaseUrl is not configured. ' .
-            'This is required in production to prevent Host Header Injection attacks. ' .
-            'Set APP_FULL_BASE_URL environment variable or configure App.fullBaseUrl in config/app.php',
-        );
-    }
-```
-4. go to the folder bin and execute the command for initialize the data base
+3. go to the folder bin and execute the command for initialize the database
 ```bash
 cake migrations migrate
 ```
-
+4. In the file `config/app.php`
+```php
+'fullBaseUrl' => 'address of the website'
+```
